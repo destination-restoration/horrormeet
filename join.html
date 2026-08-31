@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Register · HorrorMeet</title>
+<meta name="theme-color" content="#0b0b0e">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Frijole&family=Rye&display=swap">
+<link rel="stylesheet" href="styles.css?v=2">
+<style>
+  .join-title{font-family:'Frijole',Impact,fantasy;font-size:26px;color:var(--white);text-shadow:3px 3px 0 var(--red-deep);margin:22px 0 4px}
+  .join-sub{color:var(--dim);font-size:14.5px;margin:0 0 18px}
+  label{display:block;font-family:'Rye',Georgia,serif;font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--red);margin:14px 0 6px}
+  label .opt{color:var(--faint);text-transform:none;letter-spacing:0;font-family:Georgia,serif;font-style:italic}
+  .avail{font-size:12.5px;margin-top:5px}
+  .avail.ok{color:var(--good)} .avail.no{color:var(--red)}
+  .divider{border-top:2px dashed var(--line);margin:22px 0 6px;position:relative}
+  .divider span{position:absolute;top:-11px;left:0;background:var(--black);padding-right:10px;font-family:'Rye',Georgia,serif;font-size:11px;letter-spacing:.14em;color:var(--faint);text-transform:uppercase}
+</style>
+</head>
+<body>
+<header class="app"><div class="tagline-bar"><div class="inner">every board needs new blood.</div></div><div class="app-bar"><a class="logo" href="index.html">HORRORMEET</a></div></header>
+<main class="wrap">
+  <div class="join-title">REGISTER</div>
+  <p class="join-sub">Claim your handle. No passwords, ever: we email you a sign-in link. Already a member? <a href="index.html">Sign in here</a>.</p>
+
+  <div class="card"><div class="pad" id="step1">
+    <label>Username</label>
+    <input id="jUsername" maxlength="24" placeholder="3-24 letters, numbers, underscores" autocomplete="off">
+    <div class="avail" id="jAvail"></div>
+
+    <label>Email</label>
+    <input id="jEmail" type="email" placeholder="you@email.com" autocomplete="email">
+
+    <label>Phone <span class="opt">(optional: never shown publicly)</span></label>
+    <input id="jPhone" type="tel" maxlength="20" placeholder="(555) 555-5555" autocomplete="tel">
+
+    <div class="divider"><span>Flavor · all optional</span></div>
+
+    <label>Favorite horror movie <span class="opt">(optional)</span></label>
+    <input id="jMovie" maxlength="120" placeholder="The one you make everyone watch">
+
+    <label>Scariest place you've ever been <span class="opt">(optional)</span></label>
+    <input id="jHaunt" maxlength="120" placeholder="A real place. We know you have one.">
+
+    <div class="actions" style="margin-top:18px">
+      <button class="btn" id="jSend">Create my account</button>
+      <span class="hint">We email you a sign-in link to verify it's you.</span>
+    </div>
+  </div>
+
+  <div class="pad hidden" id="step2">
+    <h3 style="margin:0 0 6px">Check your email</h3>
+    <p class="hint" style="margin:0 0 10px">We sent a sign-in link to <span id="jEmailEcho" style="color:var(--white)"></span>. Click it and your account (with your reserved handle) is created automatically. Check spam if it's shy.</p>
+    <div class="actions"><button class="btn ghost" id="jBack">Use a different email</button></div>
+  </div></div>
+
+  <footer>By registering you agree to the <a href="terms.html">terms of use</a> and the <a href="rules.html">house rules</a>.</footer>
+</main>
+<div class="toast" id="toast"></div>
+<script type="module">
+import { sb, toast } from './app-core.js';
+const $ = (id) => document.getElementById(id);
+const USER_RE = /^[A-Za-z0-9_]{3,24}$/;
+
+let checkTimer = null;
+$('jUsername').addEventListener('input', () => {
+  clearTimeout(checkTimer);
+  const u = $('jUsername').value.trim();
+  const el = $('jAvail');
+  if (!u) { el.textContent = ''; return; }
+  if (!USER_RE.test(u)) { el.textContent = 'Letters, numbers, underscores only. 3-24 characters.'; el.className = 'avail no'; return; }
+  el.textContent = 'Checking...'; el.className = 'avail';
+  checkTimer = setTimeout(async () => {
+    const { data } = await sb.from('profiles').select('id').ilike('username', u).limit(1);
+    if (data && data.length) { el.textContent = '@' + u + ' is taken.'; el.className = 'avail no'; }
+    else { el.textContent = '@' + u + ' is available.'; el.className = 'avail ok'; }
+  }, 400);
+});
+
+$('jSend').addEventListener('click', async () => {
+  const u = $('jUsername').value.trim();
+  const email = $('jEmail').value.trim();
+  if (!USER_RE.test(u)) return toast('Pick a valid username first.');
+  if (!email.includes('@')) return toast('Enter your email.');
+  const { data: taken } = await sb.from('profiles').select('id').ilike('username', u).limit(1);
+  if (taken && taken.length) return toast('That username is taken.');
+  $('jSend').disabled = true;
+  const { error } = await sb.auth.signInWithOtp({ email, options: { shouldCreateUser: true } });
+  $('jSend').disabled = false;
+  if (error) return toast(error.message);
+  localStorage.setItem('hm_join', JSON.stringify({
+    u, phone: $('jPhone').value.trim() || null,
+    fav_movie: $('jMovie').value.trim() || null,
+    fav_haunt: $('jHaunt').value.trim() || null
+  }));
+  $('jEmailEcho').textContent = email;
+  $('step1').classList.add('hidden');
+  $('step2').classList.remove('hidden');
+  toast('Code sent. Check your email (and spam).');
+});
+
+$('jBack').addEventListener('click', () => { $('step2').classList.add('hidden'); $('step1').classList.remove('hidden'); });
+
+  if (error) { $('jVerify').disabled = false; return toast('Wrong or expired code. Try again.'); }
+  const pending = JSON.parse(sessionStorage.getItem('hm_join') || '{}');
+  const { data: { session } } = await sb.auth.getSession();
+  if (session && pending.u) {
+    const { error: pErr } = await sb.from('profiles').update({
+      username: pending.u, phone: pending.phone,
+      fav_movie: pending.fav_movie, fav_haunt: pending.fav_haunt
+    }).eq('id', session.user.id);
+    if (pErr && pErr.message.includes('duplicate')) toast('That username got claimed. Pick a new one on your profile.');
+  }
+  sessionStorage.removeItem('hm_join');
+  toast('Welcome to the board.');
+  setTimeout(() => (location.href = 'index.html'), 900);
+});
+</script>
+</body>
+</html>

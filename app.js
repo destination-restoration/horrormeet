@@ -34,7 +34,17 @@ async function refreshSession() {
   const { data } = await sb.auth.getSession();
   session = data.session;
   if (session) {
-    const { data: p } = await sb.from('profiles').select('*').eq('id', session.user.id).single();
+    let { data: p } = await sb.from('profiles').select('*').eq('id', session.user.id).single();
+    const pending = JSON.parse(localStorage.getItem('hm_join') || 'null');
+    if (pending?.u && p && !p.username) {
+      const { error: applyErr } = await sb.from('profiles').update({
+        username: pending.u, phone: pending.phone || null,
+        fav_movie: pending.fav_movie || null, fav_haunt: pending.fav_haunt || null
+      }).eq('id', session.user.id);
+      if (!applyErr) { localStorage.removeItem('hm_join'); toast('Welcome to the board, @' + pending.u); }
+      const { data: p2 } = await sb.from('profiles').select('*').eq('id', session.user.id).single();
+      p = p2;
+    }
     myProfile = p;
   } else {
     myProfile = null;
@@ -75,11 +85,10 @@ $('sendCodeBtn')?.addEventListener('click', async () => {
   const email = $('emailInput').value.trim();
   if (!email) return toast('Enter your email first.');
   $('sendCodeBtn').disabled = true;
-  const { error } = await sb.auth.signInWithOtp({ email, options: { shouldCreateUser: true } });
+  const { error } = await sb.auth.signInWithOtp({ email, options: { shouldCreateUser: false } });
   $('sendCodeBtn').disabled = false;
-  if (error) return toast(error.message);
-  $('codeRow').classList.remove('hidden');
-  toast('Code sent. Check your email (and spam).');
+  if (error) return toast(error.message.includes('not allowed') || error.message.includes('Signups') ? 'No account with that email yet. Hit Register below.' : error.message);
+  toast('Check your email and click the sign-in link.');
 });
 
 $('verifyBtn')?.addEventListener('click', async () => {
