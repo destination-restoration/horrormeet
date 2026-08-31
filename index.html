@@ -23,7 +23,9 @@
   </div>
   <nav class="tabs">
     <button class="tab active" data-tab="feed">Sightings</button>
+    <button class="tab" data-tab="board">Board</button>
     <button class="tab" data-tab="meetups">Meetups</button>
+    <button class="tab" data-tab="me">Me</button>
   </nav>
 </header>
 
@@ -62,6 +64,30 @@
     </div>
     <div class="section-note">Latest sightings</div>
     <div id="feed"><div class="empty">Tuning the antenna...</div></div>
+  </section>
+
+  <!-- BOARD TAB -->
+  <section id="tab-board" class="hidden">
+    <div class="composer">
+      <h3>Start a thread</h3>
+      <div id="threadAuthed" class="hidden">
+        <div class="row"><input id="threadTitle" maxlength="120" placeholder="Topic. What are we talking about."></div>
+        <div class="row"><textarea id="threadBody" rows="3" maxlength="5000" placeholder="Say it. The board is live: threads post instantly and the mods can pull anything."></textarea></div>
+        <div class="actions"><button class="btn" id="threadBtn">Post thread</button><span class="hint">Live posting. Behave. <a href="rules.html">House rules</a> apply.</span></div>
+      </div>
+      <div id="threadAnon"><p class="hint" style="margin:0">Sign in on the Sightings tab to post here.</p></div>
+    </div>
+    <div class="section-note">The board</div>
+    <div id="threads"><div class="empty">Loading...</div></div>
+  </section>
+
+  <!-- ME TAB -->
+  <section id="tab-me" class="hidden">
+    <div class="card"><div class="pad" id="meProfile"><span class="hint">Sign in to see your profile and history.</span></div></div>
+    <div class="section-note">My sightings (all statuses)</div>
+    <div id="mySightings"><div class="empty">Nothing yet.</div></div>
+    <div class="section-note">My threads</div>
+    <div id="myThreads"><div class="empty">Nothing yet.</div></div>
   </section>
 
   <!-- MEETUPS TAB -->

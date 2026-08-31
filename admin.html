@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mod Panel · HorrorMeet</title>
+<meta name="theme-color" content="#0b0b0e">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Frijole&family=Rye&display=swap">
+<link rel="stylesheet" href="styles.css?v=2">
+</head>
+<body>
+<header class="app"><div class="tagline-bar"><div class="inner">the mods keep the walls.</div></div><div class="app-bar"><a class="logo" href="index.html">HORRORMEET</a><div class="spacer"></div><span class="chip red">MOD PANEL</span></div></header>
+<main class="wrap">
+  <div id="gate" class="card"><div class="pad"><span class="hint">Checking credentials...</span></div></div>
+
+  <div id="panel" class="hidden">
+    <div class="section-note">Pending sightings</div>
+    <div id="pending"><div class="empty">Loading...</div></div>
+
+    <div class="section-note">Reports</div>
+    <div id="reports"><div class="empty">Loading...</div></div>
+
+    <div class="section-note">Create meetup</div>
+    <div class="composer">
+      <div class="row"><input id="evTitle" placeholder="Event title"></div>
+      <div class="row"><input id="evVenue" placeholder="Venue"></div>
+      <div class="row"><input id="evCity" placeholder="City"></div>
+      <div class="row"><input id="evWhen" type="datetime-local"></div>
+      <div class="row"><input id="evLink" placeholder="Details link (optional)"></div>
+      <div class="actions"><button class="btn" id="evBtn">Create event</button></div>
+    </div>
+
+    <div class="section-note">Board moderation (latest threads)</div>
+    <div id="modThreads"><div class="empty">Loading...</div></div>
+  </div>
+</main>
+<div class="toast" id="toast"></div>
+<script type="module">
+import { sb, toast } from './app-core.js';
+
+const $ = (id) => document.getElementById(id);
+const esc = (s) => { const d = document.createElement('div'); d.textContent = s ?? ''; return d.innerHTML; };
+
+const { data: { session } } = await sb.auth.getSession();
+let isAdmin = false;
+if (session) {
+  const { data: p } = await sb.from('profiles').select('is_admin').eq('id', session.user.id).single();
+  isAdmin = !!p?.is_admin;
+}
+if (!isAdmin) {
+  $('gate').innerHTML = `<div class="pad"><h3>Mods only</h3><p class="hint">Sign in on the <a href="index.html">main board</a> with a mod account, then come back.</p></div>`;
+} else {
+  $('gate').classList.add('hidden');
+  $('panel').classList.remove('hidden');
+  loadPending(); loadReports(); loadModThreads();
+}
+
+async function loadPending() {
+  const { data } = await sb.from('sightings').select('id,title,body,photo_url,created_at,profiles(username)').eq('status', 'pending').order('created_at');
+  $('pending').innerHTML = (data || []).length ? data.map((s) => `
+    <div class="card" data-id="${s.id}"><div class="pad">
+      <div class="post-head"><span class="u">@${esc(s.profiles?.username || '?')}</span></div>
+      <h3>${esc(s.title)}</h3><p class="body-text">${esc(s.body)}</p>
+      ${s.photo_url ? `<img class="photo" src="${esc(s.photo_url)}" style="margin-top:8px;max-height:220px">` : ''}
+      <div class="admin-row"><button class="btn good approve">Approve</button><button class="btn danger remove">Remove</button></div>
+    </div></div>`).join('') : `<div class="empty">Queue is clear. The walls hold.</div>`;
+  $('pending').querySelectorAll('.card').forEach((c) => {
+    c.querySelector('.approve').onclick = async () => { await sb.from('sightings').update({ status: 'approved' }).eq('id', c.dataset.id); toast('Approved.'); loadPending(); };
+    c.querySelector('.remove').onclick = async () => { await sb.from('sightings').update({ status: 'removed' }).eq('id', c.dataset.id); toast('Removed.'); loadPending(); };
+  });
+}
+
+async function loadReports() {
+  const { data } = await sb.from('reports').select('id,target_type,target_id,reason,created_at').order('created_at', { ascending: false }).limit(30);
+  $('reports').innerHTML = (data || []).length ? data.map((r) => `
+    <div class="card" data-id="${r.id}"><div class="pad">
+      <div class="post-head">${esc(r.target_type)} #${r.target_id}</div>
+      <p class="body-text">${esc(r.reason || 'no reason given')}</p>
+      <div class="admin-row"><button class="btn danger pull">Pull content</button></div>
+    </div></div>`).join('') : `<div class="empty">No reports. Suspiciously quiet.</div>`;
+  $('reports').querySelectorAll('.card').forEach((c, i) => {
+    c.querySelector('.pull').onclick = async () => {
+      const r = data[i];
+      const table = { sighting: 'sightings', comment: 'comments', thread: 'threads', reply: 'thread_replies' }[r.target_type];
+      await sb.from(table).update({ status: 'removed' }).eq('id', r.target_id);
+      toast('Content pulled.');
+      loadReports(); loadPending(); loadModThreads();
+    };
+  });
+}
+
+$('evBtn').onclick = async () => {
+  const starts_at = $('evWhen').value ? new Date($('evWhen').value).toISOString() : null;
+  if (!$('evTitle').value.trim() || !starts_at) return toast('Title and date required.');
+  const { error } = await sb.from('events').insert({
+    title: $('evTitle').value.trim(), venue: $('evVenue').value.trim() || null,
+    city: $('evCity').value.trim() || null, starts_at, link: $('evLink').value.trim() || null,
+    created_by: session.user.id
+  });
+  if (error) return toast(error.message);
+  toast('Event created.');
+  ['evTitle','evVenue','evCity','evWhen','evLink'].forEach((id) => $(id).value = '');
+};
+
+async function loadModThreads() {
+  const { data } = await sb.from('threads').select('id,title,created_at,profiles(username)').eq('status', 'approved').order('created_at', { ascending: false }).limit(20);
+  $('modThreads').innerHTML = (data || []).length ? data.map((t) => `
+    <div class="card" data-id="${t.id}"><div class="pad">
+      <div class="post-head"><span class="u">@${esc(t.profiles?.username || '?')}</span></div>
+      <h3>${esc(t.title)}</h3>
+      <div class="admin-row"><button class="btn danger pullthread">Pull thread</button></div>
+    </div></div>`).join('') : `<div class="empty">No threads.</div>`;
+  $('modThreads').querySelectorAll('.card').forEach((c) => {
+    c.querySelector('.pullthread').onclick = async () => { await sb.from('threads').update({ status: 'removed' }).eq('id', c.dataset.id); toast('Thread pulled.'); loadModThreads(); };
+  });
+}
+</script>
+</body>
+</html>

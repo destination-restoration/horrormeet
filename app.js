@@ -49,12 +49,16 @@ function renderAuthState() {
     chip.classList.add('red');
     $('composerAuthed')?.classList.remove('hidden');
     $('composerAnon')?.classList.add('hidden');
+    $('threadAuthed')?.classList.remove('hidden');
+    $('threadAnon')?.classList.add('hidden');
     if (!myProfile?.username) promptUsername();
   } else {
     chip.textContent = 'Sign in';
     chip.classList.remove('red');
     $('composerAuthed')?.classList.add('hidden');
     $('composerAnon')?.classList.remove('hidden');
+    $('threadAuthed')?.classList.add('hidden');
+    $('threadAnon')?.classList.remove('hidden');
   }
 }
 
@@ -99,8 +103,11 @@ document.querySelectorAll('.tab').forEach((t) =>
   t.addEventListener('click', () => {
     document.querySelectorAll('.tab').forEach((x) => x.classList.remove('active'));
     t.classList.add('active');
-    $('tab-feed').classList.toggle('hidden', t.dataset.tab !== 'feed');
-    $('tab-meetups').classList.toggle('hidden', t.dataset.tab !== 'meetups');
+    for (const name of ['feed', 'board', 'meetups', 'me']) {
+      $('tab-' + name).classList.toggle('hidden', t.dataset.tab !== name);
+    }
+    if (t.dataset.tab === 'board') loadThreads();
+    if (t.dataset.tab === 'me') loadMe();
   })
 );
 
@@ -241,6 +248,110 @@ async function loadEvents() {
     });
     box.appendChild(el);
   }
+}
+
+/* ---------- community board ---------- */
+$('threadBtn')?.addEventListener('click', async () => {
+  if (!session) return toast('Sign in first.');
+  const title = $('threadTitle').value.trim();
+  const body = $('threadBody').value.trim();
+  if (title.length < 3 || !body) return toast('Give it a topic and a first post.');
+  $('threadBtn').disabled = true;
+  const { error } = await sb.from('threads').insert({ author: session.user.id, title, body });
+  $('threadBtn').disabled = false;
+  if (error) return toast(error.message);
+  $('threadTitle').value = ''; $('threadBody').value = '';
+  toast('Thread posted.');
+  loadThreads();
+});
+
+async function loadThreads() {
+  const { data, error } = await sb
+    .from('threads')
+    .select('id,title,body,created_at,pinned,profiles(username)')
+    .eq('status', 'approved')
+    .order('pinned', { ascending: false })
+    .order('created_at', { ascending: false })
+    .limit(50);
+  const box = $('threads');
+  if (error) { box.innerHTML = `<div class="empty">Signal lost. Refresh.</div>`; return; }
+  if (!data.length) { box.innerHTML = `<div class="empty">No threads yet. Start the first conversation.</div>`; return; }
+  box.innerHTML = data.map((t) => `
+    <article class="card" data-tid="${t.id}">
+      <div class="pad">
+        <div class="post-head">${t.pinned ? '📌 ' : ''}<span class="u">@${esc(t.profiles?.username || 'anonymous')}</span> · ${timeAgo(t.created_at)}</div>
+        <h3>${esc(t.title)}</h3>
+        <p class="body-text">${esc(t.body)}</p>
+      </div>
+      <div class="card-actions">
+        <button class="t-toggle">💬 Replies</button>
+        <button class="t-report">Report</button>
+      </div>
+      <div class="comments">
+        <div class="t-list"><span class="hint">Loading...</span></div>
+        <div class="comment-form"><input maxlength="2000" placeholder="Reply"><button>Send</button></div>
+      </div>
+    </article>`).join('');
+
+  box.querySelectorAll('.card').forEach((card) => {
+    const id = card.dataset.tid;
+    card.querySelector('.t-toggle').addEventListener('click', () => {
+      const c = card.querySelector('.comments');
+      c.classList.toggle('open');
+      if (c.classList.contains('open')) loadReplies(id, card);
+    });
+    card.querySelector('.t-report').addEventListener('click', async () => {
+      if (!session) return toast('Sign in to report.');
+      const reason = prompt('What is wrong with this thread?');
+      if (reason === null) return;
+      await sb.from('reports').insert({ target_type: 'thread', target_id: Number(id), reporter: session.user.id, reason });
+      toast('Reported. Thank you for keeping the walls.');
+    });
+    const form = card.querySelector('.comment-form');
+    form.querySelector('button').addEventListener('click', async () => {
+      if (!session) return toast('Sign in to reply.');
+      const input = form.querySelector('input');
+      const body = input.value.trim();
+      if (!body) return;
+      const { error } = await sb.from('thread_replies').insert({ thread_id: Number(id), author: session.user.id, body });
+      if (error) return toast(error.message);
+      input.value = '';
+      loadReplies(id, card);
+    });
+  });
+}
+
+async function loadReplies(id, card) {
+  const { data } = await sb
+    .from('thread_replies')
+    .select('body,created_at,profiles(username)')
+    .eq('thread_id', id)
+    .order('created_at');
+  const list = card.querySelector('.t-list');
+  list.innerHTML = (data || []).length
+    ? data.map((r) => `<div class="comment"><span class="u">@${esc(r.profiles?.username || 'anonymous')}</span>${esc(r.body)}</div>`).join('')
+    : `<span class="hint">No replies yet.</span>`;
+}
+
+/* ---------- me / history ---------- */
+async function loadMe() {
+  const prof = $('meProfile');
+  if (!session) { prof.innerHTML = `<span class="hint">Sign in on the Sightings tab to see your profile and history.</span>`; return; }
+  const badges = (myProfile?.badges || []).map((b) => `<span class="badge">${esc(b)}</span>`).join(' ');
+  prof.innerHTML = `
+    <h3 style="margin:0 0 4px">@${esc(myProfile?.username || 'no username yet')}</h3>
+    <div class="hint">Member since ${new Date(myProfile?.created_at).toLocaleDateString()}${myProfile?.is_admin ? ' · <b style="color:var(--red)">MOD</b> · <a href="admin.html">admin panel</a>' : ''}</div>
+    <div style="margin-top:8px">${badges || '<span class="hint">No badges yet.</span>'}</div>`;
+
+  const { data: mine } = await sb.from('sightings').select('id,title,status,created_at').eq('author', session.user.id).order('created_at', { ascending: false });
+  $('mySightings').innerHTML = (mine || []).length
+    ? mine.map((s) => `<div class="card"><div class="pad"><div class="post-head">${timeAgo(s.created_at)} · <span class="pill ${s.status === 'pending' ? 'pending' : ''}">${s.status.toUpperCase()}</span></div><h3>${esc(s.title)}</h3></div></div>`).join('')
+    : `<div class="empty">No sightings submitted yet.</div>`;
+
+  const { data: myT } = await sb.from('threads').select('id,title,status,created_at').eq('author', session.user.id).order('created_at', { ascending: false });
+  $('myThreads').innerHTML = (myT || []).length
+    ? myT.map((t) => `<div class="card"><div class="pad"><div class="post-head">${timeAgo(t.created_at)} · <span class="pill">${t.status.toUpperCase()}</span></div><h3>${esc(t.title)}</h3></div></div>`).join('')
+    : `<div class="empty">No threads started yet.</div>`;
 }
 
 /* ---------- boot ---------- */
