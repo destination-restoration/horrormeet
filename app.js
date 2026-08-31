@@ -114,8 +114,17 @@ $('authChip')?.addEventListener('click', async () => {
     return;
   }
   if (!myProfile?.username) return promptUsername();
-  if (confirm('Sign out of HORRORMEET?')) { await sb.auth.signOut(); await refreshSession(); }
+  openAccount();
 });
+
+function openAccount() {
+  document.querySelectorAll('.tab').forEach((x) => x.classList.remove('active'));
+  for (const name of ['feed', 'board', 'films', 'meetups', 'me']) {
+    $('tab-' + name).classList.toggle('hidden', name !== 'me');
+  }
+  loadMe();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
 
 /* ---------- tabs ---------- */
 document.querySelectorAll('.tab').forEach((t) =>
@@ -496,6 +505,7 @@ async function loadMe() {
       <img src="${esc(myProfile?.avatar_url || 'icon-180.png')}" alt="avatar" style="width:72px;height:72px;object-fit:cover;border:2px solid var(--red)">
       <div style="flex:1">
         <h3 style="margin:0 0 4px">@${esc(myProfile?.username || 'no username yet')}</h3>
+        <div style="margin:0 0 6px"><button class="btn danger" id="logoutBtn" style="font-size:12px;padding:4px 12px">Log out</button></div>
         <div class="hint">Member since ${new Date(myProfile?.created_at).toLocaleDateString()}${myProfile?.is_admin ? ' · <b style="color:var(--red)">MOD</b> · <a href="admin.html">admin panel</a>' : ''}</div>
         <div style="margin:8px 0 6px">${badges || '<span class="hint">No badges yet.</span>'}</div>
         ${d.hot_take ? `<div class="body-text" style="font-style:italic;font-size:14px">"${esc(d.hot_take)}"</div>` : ''}
@@ -504,6 +514,12 @@ async function loadMe() {
     ${identity ? `<div style="margin-top:12px;border-top:1px dashed var(--line);padding-top:10px">${identity}</div>` : ''}
     ${myProfile?.short_film_url ? `<div class="hint" style="margin-top:8px">Short film pick: <a href="${esc(myProfile.short_film_url)}" target="_blank" rel="noopener">watch</a></div>` : ''}
     ${myProfile?.website_url ? `<div class="hint">Site: <a href="${esc(myProfile.website_url)}" target="_blank" rel="noopener">${esc(myProfile.website_url)}</a></div>` : ''}`;
+  $('logoutBtn').onclick = async () => {
+    await sb.auth.signOut();
+    await refreshSession();
+    toast('Logged out. Sleep with the lights on.');
+    document.querySelector('.tab[data-tab="feed"]')?.click();
+  };
   $('meEditorWrap')?.classList.remove('hidden');
   fillEditor();
 
