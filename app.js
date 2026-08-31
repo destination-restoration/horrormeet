@@ -93,7 +93,13 @@ $('verifyBtn')?.addEventListener('click', async () => {
 });
 
 $('authChip')?.addEventListener('click', async () => {
-  if (!session) { $('emailInput')?.focus(); return; }
+  if (!session) {
+    document.querySelector('.tab[data-tab="feed"]')?.click();
+    $('emailInput')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    setTimeout(() => $('emailInput')?.focus(), 400);
+    toast('Enter your email below: we send a code, no password.');
+    return;
+  }
   if (!myProfile?.username) return promptUsername();
   if (confirm('Sign out of HORRORMEET?')) { await sb.auth.signOut(); await refreshSession(); }
 });
