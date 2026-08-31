@@ -17,6 +17,16 @@
     <div class="section-note">Pending sightings</div>
     <div id="pending"><div class="empty">Loading...</div></div>
 
+    <div class="section-note">Pending films</div>
+    <div id="pendingFilms"><div class="empty">Loading...</div></div>
+
+    <div class="section-note">Grant a badge</div>
+    <div class="composer">
+      <div class="row"><input id="bUser" placeholder="username (without @)"></div>
+      <div class="row"><input id="bBadge" maxlength="40" placeholder="badge name, e.g. Horror OG"></div>
+      <div class="actions"><button class="btn" id="bBtn">Grant badge</button></div>
+    </div>
+
     <div class="section-note">Reports</div>
     <div id="reports"><div class="empty">Loading...</div></div>
 
@@ -52,8 +62,39 @@ if (!isAdmin) {
 } else {
   $('gate').classList.add('hidden');
   $('panel').classList.remove('hidden');
-  loadPending(); loadReports(); loadModThreads();
+  loadPending(); loadPendingFilms(); loadReports(); loadModThreads();
 }
+
+async function loadPendingFilms() {
+  const { data } = await sb.from('films').select('id,title,year,roles,synopsis,watch_url,poster_url,profiles(username)').eq('status', 'pending').order('created_at');
+  $('pendingFilms').innerHTML = (data || []).length ? data.map((f) => `
+    <div class="card" data-id="${f.id}"><div class="pad">
+      <div class="post-head"><span class="u">@${esc(f.profiles?.username || '?')}</span>${f.roles ? ' · ' + esc(f.roles) : ''}</div>
+      <h3>${esc(f.title)}${f.year ? ' (' + f.year + ')' : ''}</h3>
+      ${f.synopsis ? `<p class="body-text">${esc(f.synopsis)}</p>` : ''}
+      <div class="hint" style="margin:6px 0"><a href="${esc(f.watch_url)}" target="_blank" rel="noopener">Open watch link and VERIFY before approving</a></div>
+      ${f.poster_url ? `<img class="photo" src="${esc(f.poster_url)}" style="margin-top:8px;max-height:220px">` : ''}
+      <div class="admin-row"><button class="btn good f-approve">Approve</button><button class="btn danger f-remove">Remove</button></div>
+    </div></div>`).join('') : `<div class="empty">No films waiting.</div>`;
+  $('pendingFilms').querySelectorAll('.card').forEach((c) => {
+    c.querySelector('.f-approve').onclick = async () => { await sb.from('films').update({ status: 'approved' }).eq('id', c.dataset.id); toast('Film on the shelf.'); loadPendingFilms(); };
+    c.querySelector('.f-remove').onclick = async () => { await sb.from('films').update({ status: 'removed' }).eq('id', c.dataset.id); toast('Removed.'); loadPendingFilms(); };
+  });
+}
+
+$('bBtn').onclick = async () => {
+  const uname = $('bUser').value.trim().replace(/^@/, '');
+  const badge = $('bBadge').value.trim();
+  if (!uname || !badge) return toast('Username and badge name required.');
+  const { data: target } = await sb.from('profiles').select('id,badges').ilike('username', uname).single();
+  if (!target) return toast('No such user.');
+  const badges = target.badges || [];
+  if (badges.includes(badge)) return toast('They already have that badge.');
+  const { error } = await sb.from('profiles').update({ badges: [...badges, badge] }).eq('id', target.id);
+  if (error) return toast(error.message);
+  toast(`Granted "${badge}" to @${uname}.`);
+  $('bBadge').value = '';
+};
 
 async function loadPending() {
   const { data } = await sb.from('sightings').select('id,title,body,photo_url,created_at,profiles(username)').eq('status', 'pending').order('created_at');

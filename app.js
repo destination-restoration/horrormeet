@@ -61,6 +61,8 @@ function renderAuthState() {
     $('composerAnon')?.classList.add('hidden');
     $('threadAuthed')?.classList.remove('hidden');
     $('threadAnon')?.classList.add('hidden');
+    $('filmAuthed')?.classList.remove('hidden');
+    $('filmAnon')?.classList.add('hidden');
     if (!myProfile?.username) promptUsername();
   } else {
     chip.textContent = 'Sign in';
@@ -69,6 +71,8 @@ function renderAuthState() {
     $('composerAnon')?.classList.remove('hidden');
     $('threadAuthed')?.classList.add('hidden');
     $('threadAnon')?.classList.remove('hidden');
+    $('filmAuthed')?.classList.add('hidden');
+    $('filmAnon')?.classList.remove('hidden');
   }
 }
 
@@ -118,10 +122,11 @@ document.querySelectorAll('.tab').forEach((t) =>
   t.addEventListener('click', () => {
     document.querySelectorAll('.tab').forEach((x) => x.classList.remove('active'));
     t.classList.add('active');
-    for (const name of ['feed', 'board', 'meetups', 'me']) {
+    for (const name of ['feed', 'board', 'films', 'meetups', 'me']) {
       $('tab-' + name).classList.toggle('hidden', t.dataset.tab !== name);
     }
     if (t.dataset.tab === 'board') loadThreads();
+    if (t.dataset.tab === 'films') loadFilms();
     if (t.dataset.tab === 'me') loadMe();
   })
 );
@@ -348,15 +353,164 @@ async function loadReplies(id, card) {
     : `<span class="hint">No replies yet.</span>`;
 }
 
+/* ---------- films ---------- */
+$('filmBtn')?.addEventListener('click', async () => {
+  if (!session) return toast('Sign in first.');
+  const title = $('fTitle').value.trim();
+  const watch_url = $('fWatch').value.trim();
+  if (!title || !watch_url.startsWith('http')) return toast('Title and a valid watch link are required.');
+  $('filmBtn').disabled = true;
+  let poster_url = null;
+  try {
+    const file = $('fPoster').files[0];
+    if (file) {
+      const blob = await resizeImage(file, 800);
+      const path = `${session.user.id}/${Date.now()}.jpg`;
+      const { error: upErr } = await sb.storage.from('posters').upload(path, blob, { contentType: 'image/jpeg' });
+      if (upErr) throw upErr;
+      poster_url = sb.storage.from('posters').getPublicUrl(path).data.publicUrl;
+    }
+    const { error } = await sb.from('films').insert({
+      submitter: session.user.id, title, watch_url,
+      year: Number($('fYear').value) || null,
+      runtime_min: Number($('fRuntime').value) || null,
+      subgenre: $('fSubgenre').value.trim() || null,
+      roles: $('fRoles').value.trim() || null,
+      synopsis: $('fSynopsis').value.trim() || null,
+      trailer_url: $('fTrailer').value.trim() || null,
+      poster_url
+    });
+    if (error) throw error;
+    ['fTitle','fYear','fRuntime','fSubgenre','fRoles','fSynopsis','fWatch','fTrailer','fPoster'].forEach((id) => ($(id).value = ''));
+    toast('Submitted. A mod will review it before it hits the shelf.');
+  } catch (e) { toast(e.message || 'Submission failed.'); }
+  $('filmBtn').disabled = false;
+});
+
+async function loadFilms() {
+  const { data, error } = await sb
+    .from('films')
+    .select('id,title,year,roles,synopsis,watch_url,trailer_url,poster_url,runtime_min,subgenre,featured,created_at,profiles(username)')
+    .eq('status', 'approved')
+    .order('featured', { ascending: false })
+    .order('created_at', { ascending: false })
+    .limit(50);
+  const box = $('films');
+  if (error) { box.innerHTML = `<div class="empty">Signal lost. Refresh.</div>`; return; }
+  if (!data.length) { box.innerHTML = `<div class="empty">The shelf is waiting for its first film. Filmmakers: that could be yours.</div>`; return; }
+  box.innerHTML = data.map((f) => `
+    <article class="card">
+      ${f.poster_url ? `<img class="photo" src="${esc(f.poster_url)}" alt="${esc(f.title)} poster" loading="lazy" style="max-height:340px">` : ''}
+      <div class="pad">
+        <div class="post-head">${f.featured ? '🏆 ' : ''}submitted by <span class="u">@${esc(f.profiles?.username || '?')}</span>${f.roles ? ' · ' + esc(f.roles) : ''}</div>
+        <h3>${esc(f.title)}${f.year ? ` <span style="color:var(--faint);font-weight:400">(${f.year})</span>` : ''}</h3>
+        <div class="hint" style="margin-bottom:6px">${[f.subgenre, f.runtime_min ? f.runtime_min + ' min' : null].filter(Boolean).map(esc).join(' · ')}</div>
+        ${f.synopsis ? `<p class="body-text">${esc(f.synopsis)}</p>` : ''}
+        <div class="admin-row">
+          <a class="btn" href="${esc(f.watch_url)}" target="_blank" rel="noopener">▶ Watch</a>
+          ${f.trailer_url ? `<a class="btn ghost" href="${esc(f.trailer_url)}" target="_blank" rel="noopener">Trailer</a>` : ''}
+        </div>
+      </div>
+    </article>`).join('');
+}
+
+/* ---------- profile editor ---------- */
+function fillEditor() {
+  if (!myProfile) return;
+  const d = myProfile.details || {};
+  if (myProfile.avatar_url) $('eAvatarPreview').src = myProfile.avatar_url;
+  $('ePhone').value = myProfile.phone || '';
+  $('eWebsite').value = myProfile.website_url || '';
+  $('eShortFilm').value = myProfile.short_film_url || '';
+  $('eFavMovie').value = myProfile.fav_movie || '';
+  $('eFavHaunt').value = myProfile.fav_haunt || '';
+  $('eSubgenre').value = d.subgenre || '';
+  $('eEra').value = d.era || '';
+  $('eArchetype').value = d.archetype || '';
+  $('eVillain').value = d.villain || '';
+  $('eFirstHorror').value = d.first_horror || '';
+  $('eComfort').value = d.comfort_movie || '';
+  $('eHotTake').value = d.hot_take || '';
+}
+
+$('eAvatar')?.addEventListener('change', () => {
+  const f = $('eAvatar').files[0];
+  if (f) $('eAvatarPreview').src = URL.createObjectURL(f);
+});
+
+$('saveProfileBtn')?.addEventListener('click', async () => {
+  if (!session) return toast('Sign in first.');
+  $('saveProfileBtn').disabled = true;
+  try {
+    let avatar_url = myProfile?.avatar_url || null;
+    const f = $('eAvatar').files[0];
+    if (f) {
+      const blob = await resizeImage(f, 400);
+      const path = `${session.user.id}/avatar.jpg`;
+      const { error: upErr } = await sb.storage.from('avatars').upload(path, blob, { contentType: 'image/jpeg', upsert: true });
+      if (upErr) throw upErr;
+      avatar_url = sb.storage.from('avatars').getPublicUrl(path).data.publicUrl + '?t=' + Date.now();
+    }
+    const { error } = await sb.from('profiles').update({
+      avatar_url,
+      phone: $('ePhone').value.trim() || null,
+      website_url: $('eWebsite').value.trim() || null,
+      short_film_url: $('eShortFilm').value.trim() || null,
+      fav_movie: $('eFavMovie').value.trim() || null,
+      fav_haunt: $('eFavHaunt').value.trim() || null,
+      details: {
+        subgenre: $('eSubgenre').value || null,
+        era: $('eEra').value || null,
+        archetype: $('eArchetype').value || null,
+        villain: $('eVillain').value.trim() || null,
+        first_horror: $('eFirstHorror').value.trim() || null,
+        comfort_movie: $('eComfort').value.trim() || null,
+        hot_take: $('eHotTake').value.trim() || null
+      }
+    }).eq('id', session.user.id);
+    if (error) throw error;
+    await refreshSession();
+    toast('Profile saved. Looking sharp.');
+  } catch (e) { toast(e.message || 'Save failed.'); }
+  $('saveProfileBtn').disabled = false;
+});
+
 /* ---------- me / history ---------- */
 async function loadMe() {
   const prof = $('meProfile');
-  if (!session) { prof.innerHTML = `<span class="hint">Sign in on the Sightings tab to see your profile and history.</span>`; return; }
+  if (!session) { prof.innerHTML = `<span class="hint">Sign in on the Sightings tab to see your profile and history.</span>`; $('meEditorWrap')?.classList.add('hidden'); return; }
+  const d = myProfile?.details || {};
   const badges = (myProfile?.badges || []).map((b) => `<span class="badge">${esc(b)}</span>`).join(' ');
+  const identity = [
+    d.subgenre && `Subgenre: <b>${esc(d.subgenre)}</b>`,
+    d.era && `Era: <b>${esc(d.era)}</b>`,
+    d.archetype && `Archetype: <b>${esc(d.archetype)}</b>`,
+    d.villain && `Villain: <b>${esc(d.villain)}</b>`,
+    myProfile?.fav_movie && `Favorite: <b>${esc(myProfile.fav_movie)}</b>`,
+    d.comfort_movie && `Comfort watch: <b>${esc(d.comfort_movie)}</b>`,
+    d.first_horror && `First scar: <b>${esc(d.first_horror)}</b>`,
+    myProfile?.fav_haunt && `Scariest place: <b>${esc(myProfile.fav_haunt)}</b>`
+  ].filter(Boolean).map((x) => `<div class="hint" style="margin:2px 0">${x}</div>`).join('');
   prof.innerHTML = `
-    <h3 style="margin:0 0 4px">@${esc(myProfile?.username || 'no username yet')}</h3>
-    <div class="hint">Member since ${new Date(myProfile?.created_at).toLocaleDateString()}${myProfile?.is_admin ? ' · <b style="color:var(--red)">MOD</b> · <a href="admin.html">admin panel</a>' : ''}</div>
-    <div style="margin-top:8px">${badges || '<span class="hint">No badges yet.</span>'}</div>`;
+    <div style="display:flex;gap:14px;align-items:flex-start">
+      <img src="${esc(myProfile?.avatar_url || 'icon-180.png')}" alt="avatar" style="width:72px;height:72px;object-fit:cover;border:2px solid var(--red)">
+      <div style="flex:1">
+        <h3 style="margin:0 0 4px">@${esc(myProfile?.username || 'no username yet')}</h3>
+        <div class="hint">Member since ${new Date(myProfile?.created_at).toLocaleDateString()}${myProfile?.is_admin ? ' · <b style="color:var(--red)">MOD</b> · <a href="admin.html">admin panel</a>' : ''}</div>
+        <div style="margin:8px 0 6px">${badges || '<span class="hint">No badges yet.</span>'}</div>
+        ${d.hot_take ? `<div class="body-text" style="font-style:italic;font-size:14px">"${esc(d.hot_take)}"</div>` : ''}
+      </div>
+    </div>
+    ${identity ? `<div style="margin-top:12px;border-top:1px dashed var(--line);padding-top:10px">${identity}</div>` : ''}
+    ${myProfile?.short_film_url ? `<div class="hint" style="margin-top:8px">Short film pick: <a href="${esc(myProfile.short_film_url)}" target="_blank" rel="noopener">watch</a></div>` : ''}
+    ${myProfile?.website_url ? `<div class="hint">Site: <a href="${esc(myProfile.website_url)}" target="_blank" rel="noopener">${esc(myProfile.website_url)}</a></div>` : ''}`;
+  $('meEditorWrap')?.classList.remove('hidden');
+  fillEditor();
+
+  const { data: myF } = await sb.from('films').select('id,title,status,created_at').eq('submitter', session.user.id).order('created_at', { ascending: false });
+  $('myFilms').innerHTML = (myF || []).length
+    ? myF.map((f) => `<div class="card"><div class="pad"><div class="post-head">${timeAgo(f.created_at)} · <span class="pill ${f.status === 'pending' ? 'pending' : ''}">${f.status.toUpperCase()}</span></div><h3>${esc(f.title)}</h3></div></div>`).join('')
+    : `<div class="empty">No films submitted yet.</div>`;
 
   const { data: mine } = await sb.from('sightings').select('id,title,status,created_at').eq('author', session.user.id).order('created_at', { ascending: false });
   $('mySightings').innerHTML = (mine || []).length

@@ -24,6 +24,7 @@
   <nav class="tabs">
     <button class="tab active" data-tab="feed">Sightings</button>
     <button class="tab" data-tab="board">Board</button>
+    <button class="tab" data-tab="films">Films</button>
     <button class="tab" data-tab="meetups">Meetups</button>
     <button class="tab" data-tab="me">Me</button>
   </nav>
@@ -82,11 +83,74 @@
     <div id="threads"><div class="empty">Loading...</div></div>
   </section>
 
+  <!-- FILMS TAB -->
+  <section id="tab-films" class="hidden">
+    <div class="composer">
+      <h3>Submit your film</h3>
+      <div id="filmAuthed" class="hidden">
+        <p class="hint" style="margin:0 0 10px">Directors, producers, actors: put your horror film where horror fans actually are. Link to wherever it streams. Every submission is reviewed by a human before it appears.</p>
+        <div class="row"><input id="fTitle" maxlength="160" placeholder="Film title"></div>
+        <div class="row" style="display:flex;gap:8px"><input id="fYear" inputmode="numeric" maxlength="4" placeholder="Year" style="max-width:110px"><input id="fRuntime" inputmode="numeric" maxlength="3" placeholder="Minutes" style="max-width:120px"><input id="fSubgenre" maxlength="60" placeholder="Subgenre (slasher, found footage...)"></div>
+        <div class="row"><input id="fRoles" maxlength="120" placeholder="Your role(s): director, producer, actor..."></div>
+        <div class="row"><textarea id="fSynopsis" rows="3" maxlength="2000" placeholder="Logline / synopsis"></textarea></div>
+        <div class="row"><input id="fWatch" maxlength="300" placeholder="Watch link (YouTube, Vimeo, Tubi, your site...)"></div>
+        <div class="row"><input id="fTrailer" maxlength="300" placeholder="Trailer link (optional)"></div>
+        <div class="row"><label class="hint">Poster (optional)</label><input id="fPoster" type="file" accept="image/*"></div>
+        <div class="actions"><button class="btn" id="filmBtn">Submit for review</button><span class="hint">Reviewed before posting. You must hold the rights. <a href="terms.html">Terms</a>.</span></div>
+      </div>
+      <div id="filmAnon"><p class="hint" style="margin:0">Sign in on the Sightings tab to submit your film.</p></div>
+    </div>
+    <div class="section-note">The film shelf</div>
+    <div id="films"><div class="empty">Loading...</div></div>
+    <p class="hint" style="margin-top:14px">🏆 Films on the shelf are eligible for the annual <a href="awards.html"><b>HorrorMeet Awards</b></a>.</p>
+  </section>
+
   <!-- ME TAB -->
   <section id="tab-me" class="hidden">
     <div class="card"><div class="pad" id="meProfile"><span class="hint">Sign in to see your profile and history.</span></div></div>
+
+    <div id="meEditorWrap" class="hidden">
+      <div class="section-note">Edit my profile</div>
+      <div class="composer" id="meEditor">
+        <div class="row" style="display:flex;align-items:center;gap:12px">
+          <img id="eAvatarPreview" src="icon-180.png" alt="avatar" style="width:64px;height:64px;object-fit:cover;border:2px solid var(--red)">
+          <div style="flex:1"><label class="hint">Profile picture / icon</label><input id="eAvatar" type="file" accept="image/*"></div>
+        </div>
+        <div class="row"><input id="ePhone" maxlength="20" placeholder="Phone (optional, never public)"></div>
+        <div class="row"><input id="eWebsite" maxlength="300" placeholder="Your site or social link (optional)"></div>
+        <div class="row"><input id="eShortFilm" maxlength="300" placeholder="Link to your favorite under-seen short film (optional)"></div>
+        <div class="section-note" style="margin-top:16px">Horror identity · all optional</div>
+        <div class="row"><input id="eFavMovie" maxlength="120" placeholder="Favorite horror movie"></div>
+        <div class="row"><input id="eFavHaunt" maxlength="120" placeholder="Scariest place you've ever been"></div>
+        <div class="row"><select id="eSubgenre">
+          <option value="">Favorite subgenre...</option>
+          <option>Slasher</option><option>Found footage</option><option>Supernatural</option><option>Folk horror</option>
+          <option>Body horror</option><option>Cosmic horror</option><option>Psychological</option><option>Creature feature</option>
+          <option>Zombie</option><option>Vampire</option><option>Analog horror</option><option>Splatter</option><option>Horror comedy</option>
+        </select></div>
+        <div class="row"><select id="eEra">
+          <option value="">Favorite horror era...</option>
+          <option>Universal monsters (30s-40s)</option><option>Atomic age (50s)</option><option>Hammer years (60s)</option>
+          <option>New Hollywood dread (70s)</option><option>VHS golden age (80s)</option><option>Post-Scream (90s)</option>
+          <option>Torture/J-horror (00s)</option><option>Elevated + indie (10s)</option><option>Right now (20s)</option>
+        </select></div>
+        <div class="row"><select id="eArchetype">
+          <option value="">In a horror movie, you are...</option>
+          <option>The Final Girl/Guy</option><option>First to die</option><option>The Skeptic</option><option>The Believer</option>
+          <option>Comic relief (dies third)</option><option>The one who says "let's split up"</option><option>Secretly the killer</option><option>The dog (survives)</option>
+        </select></div>
+        <div class="row"><input id="eVillain" maxlength="120" placeholder="Favorite villain or monster"></div>
+        <div class="row"><input id="eFirstHorror" maxlength="120" placeholder="First horror movie that ever got you"></div>
+        <div class="row"><input id="eComfort" maxlength="120" placeholder="Your comfort horror movie (we all have one)"></div>
+        <div class="row"><input id="eHotTake" maxlength="200" placeholder="Your horror hot take (one sentence, own it)"></div>
+        <div class="actions"><button class="btn" id="saveProfileBtn">Save profile</button><span class="hint" id="saveHint"></span></div>
+      </div>
+    </div>
+
     <div class="section-note">My sightings (all statuses)</div>
     <div id="mySightings"><div class="empty">Nothing yet.</div></div>
+    <div class="section-note">My films</div>
+    <div id="myFilms"><div class="empty">Nothing yet.</div></div>
     <div class="section-note">My threads</div>
     <div id="myThreads"><div class="empty">Nothing yet.</div></div>
   </section>
