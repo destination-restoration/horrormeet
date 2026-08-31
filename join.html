@@ -97,25 +97,10 @@ $('jSend').addEventListener('click', async () => {
   $('jEmailEcho').textContent = email;
   $('step1').classList.add('hidden');
   $('step2').classList.remove('hidden');
-  toast('Code sent. Check your email (and spam).');
+  toast('Link sent. Check your email (and spam).');
 });
 
 $('jBack').addEventListener('click', () => { $('step2').classList.add('hidden'); $('step1').classList.remove('hidden'); });
-
-  if (error) { $('jVerify').disabled = false; return toast('Wrong or expired code. Try again.'); }
-  const pending = JSON.parse(sessionStorage.getItem('hm_join') || '{}');
-  const { data: { session } } = await sb.auth.getSession();
-  if (session && pending.u) {
-    const { error: pErr } = await sb.from('profiles').update({
-      username: pending.u, phone: pending.phone,
-      fav_movie: pending.fav_movie, fav_haunt: pending.fav_haunt
-    }).eq('id', session.user.id);
-    if (pErr && pErr.message.includes('duplicate')) toast('That username got claimed. Pick a new one on your profile.');
-  }
-  sessionStorage.removeItem('hm_join');
-  toast('Welcome to the board.');
-  setTimeout(() => (location.href = 'index.html'), 900);
-});
 </script>
 </body>
 </html>
