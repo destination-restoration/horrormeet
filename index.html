@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>HorrorMeet</title>
+<meta name="description" content="The horror fans' own app. Sightings, meetups, and the bounty.">
+<meta name="theme-color" content="#0b0b0e">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icon-180.png">
+<link rel="icon" href="icon-180.png">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<header class="app">
+  <div class="app-bar">
+    <div class="logo"><span class="skull">🕯️</span> HORRORMEET <span class="beta">BETA</span></div>
+    <div class="spacer"></div>
+    <button id="authChip" class="chip">Sign in</button>
+  </div>
+  <nav class="tabs">
+    <button class="tab active" data-tab="feed">Sightings</button>
+    <button class="tab" data-tab="meetups">Meetups</button>
+  </nav>
+</header>
+
+<main class="wrap">
+  <!-- pinned bounty -->
+  <section class="bounty" id="bounty">
+    <div class="pin">📌 Pinned · The Bounty</div>
+    <div class="body">
+      <h2><span class="amount">$5,000</span> for verifiable footage</h2>
+      <p>Real, untouched, verifiable footage of a genuine paranormal event. Location metadata intact. No cuts, no filters, no AI. Producers are watching this board.</p>
+      <p class="meta">posted by <b>RhondaProduces</b> · pinned for 2 years · <b>never collected</b> · <a href="rules.html#bounty">terms</a></p>
+    </div>
+  </section>
+
+  <!-- FEED TAB -->
+  <section id="tab-feed">
+    <div class="composer" id="composer">
+      <h3 id="composerTitle">Post a sighting</h3>
+      <div id="composerAuthed" class="hidden">
+        <div class="row"><input id="postTitle" maxlength="120" placeholder="Title. Where and what."></div>
+        <div class="row"><textarea id="postBody" rows="4" maxlength="5000" placeholder="What happened. Be specific. The mods keep the walls."></textarea></div>
+        <div class="row"><input id="postPhoto" type="file" accept="image/*"></div>
+        <div class="actions">
+          <button class="btn" id="postBtn">Submit for review</button>
+          <span class="hint">Everything is reviewed by a human before it appears.</span>
+        </div>
+      </div>
+      <div id="composerAnon">
+        <p class="hint" style="margin:0 0 10px">Sign in to post sightings, comment, and RSVP. No password: we email you a code.</p>
+        <div class="auth-panel" style="padding:0">
+          <div class="row"><input id="emailInput" type="email" placeholder="you@email.com" autocomplete="email"><button class="btn" id="sendCodeBtn">Send code</button></div>
+          <div class="row hidden" id="codeRow" style="margin-top:8px"><input id="codeInput" inputmode="numeric" placeholder="6-digit code from your email"><button class="btn" id="verifyBtn">Enter</button></div>
+        </div>
+      </div>
+    </div>
+    <div class="section-note">Latest sightings</div>
+    <div id="feed"><div class="empty">Tuning the antenna...</div></div>
+  </section>
+
+  <!-- MEETUPS TAB -->
+  <section id="tab-meetups" class="hidden">
+    <div class="section-note">Upcoming meetups</div>
+    <div id="events"><div class="empty">Loading...</div></div>
+    <p class="hint" style="margin-top:14px">Meetups are curated by the mods. Got one worth listing? Post it as a sighting titled "EVENT:" and we'll take a look.</p>
+  </section>
+
+  <footer>
+    HORRORMEET is a community for people who like being scared on purpose.<br>
+    Be kind. Be skeptical. Be home before the humming starts.<br>
+    <a href="rules.html">house rules</a>
+  </footer>
+</main>
+
+<div class="toast" id="toast"></div>
+<script type="module" src="app.js"></script>
+</body>
+</html>
