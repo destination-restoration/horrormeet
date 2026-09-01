@@ -25,6 +25,7 @@
     <button class="tab active" data-tab="feed">Sightings</button>
     <button class="tab" data-tab="board">Board</button>
     <button class="tab" data-tab="films">Films</button>
+    <button class="tab" data-tab="news">News</button>
     <button class="tab" data-tab="meetups">Meetups</button>
   </nav>
 </header>
@@ -152,6 +153,20 @@
     <div id="myFilms"><div class="empty">Nothing yet.</div></div>
     <div class="section-note">My threads</div>
     <div id="myThreads"><div class="empty">Nothing yet.</div></div>
+  </section>
+
+  <!-- NEWS TAB -->
+  <section id="tab-news" class="hidden">
+    <div class="section-note">The wire · every horror and paranormal headline · refreshed hourly</div>
+    <div class="composer" style="padding:10px 14px">
+      <div class="actions" style="margin:0">
+        <button class="btn" id="newsAll">All</button>
+        <button class="btn" id="newsHorror">Horror</button>
+        <button class="btn" id="newsPara">Paranormal</button>
+        <span class="hint">Stories open on the source's site. The wire never sleeps.</span>
+      </div>
+    </div>
+    <div id="news"><div class="empty">Tuning the wire...</div></div>
   </section>
 
   <!-- MEETUPS TAB -->

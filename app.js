@@ -131,14 +131,34 @@ document.querySelectorAll('.tab').forEach((t) =>
   t.addEventListener('click', () => {
     document.querySelectorAll('.tab').forEach((x) => x.classList.remove('active'));
     t.classList.add('active');
-    for (const name of ['feed', 'board', 'films', 'meetups', 'me']) {
+    for (const name of ['feed', 'board', 'films', 'news', 'meetups', 'me']) {
       $('tab-' + name).classList.toggle('hidden', t.dataset.tab !== name);
     }
     if (t.dataset.tab === 'board') loadThreads();
     if (t.dataset.tab === 'films') loadFilms();
+    if (t.dataset.tab === 'news') loadNews();
     if (t.dataset.tab === 'me') loadMe();
   })
 );
+
+/* ---------- the wire (news) ---------- */
+let newsCat = 'all';
+async function loadNews() {
+  const el = $('news');
+  let q = sb.from('news_items').select('title,url,source,category,summary,published_at').order('published_at', { ascending: false }).limit(60);
+  if (newsCat !== 'all') q = q.eq('category', newsCat);
+  const { data, error } = await q;
+  if (error) { el.innerHTML = `<div class="empty">${esc(error.message)}</div>`; return; }
+  el.innerHTML = (data || []).length ? data.map((n) => `
+    <div class="card"><div class="pad">
+      <div class="post-head"><span class="chip ${n.category === 'paranormal' ? '' : 'red'}">${n.category === 'paranormal' ? '👻 PARANORMAL' : '🎬 HORROR'}</span> · ${esc(n.source)} · ${timeAgo(n.published_at)}</div>
+      <h3><a href="${esc(n.url)}" target="_blank" rel="noopener">${esc(n.title)}</a></h3>
+      ${n.summary ? `<p class="body-text" style="font-size:14px">${esc(n.summary)}</p>` : ''}
+    </div></div>`).join('') : `<div class="empty">The wire is quiet. Suspiciously quiet.</div>`;
+}
+for (const [id, cat] of [['newsAll', 'all'], ['newsHorror', 'horror'], ['newsPara', 'paranormal']]) {
+  $(id)?.addEventListener('click', () => { newsCat = cat; loadNews(); });
+}
 
 /* ---------- posting ---------- */
 async function resizeImage(file, maxW = 1280) {
