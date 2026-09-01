@@ -148,8 +148,8 @@ async function loadMap() {
   if (!window.L) { setTimeout(loadMap, 300); return; }
   if (!map) {
     map = L.map('mapEl', { worldCopyJump: true }).setView([37.5, -96], 4);
-    L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
-      attribution: '&copy; OpenStreetMap &copy; CARTO', maxZoom: 19
+    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '&copy; OpenStreetMap contributors', maxZoom: 19, className: 'dark-tiles'
     }).addTo(map);
     mapLayer = L.layerGroup().addTo(map);
     map.on('click', (e) => {

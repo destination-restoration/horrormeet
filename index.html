@@ -16,6 +16,7 @@
 <script defer src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <style>
   #mapEl{height:62vh;min-height:380px;border:2px solid var(--line);background:#111}
+  #mapEl .dark-tiles{filter:invert(1) hue-rotate(180deg) brightness(.85) contrast(.9) saturate(.4)}
   .leaflet-popup-content-wrapper,.leaflet-popup-tip{background:#161014;color:#eee;border:1px solid #b3121b;border-radius:0}
   .leaflet-popup-content{font-family:Georgia,serif;font-size:14px}
   .leaflet-popup-content b{color:#e8babf}
