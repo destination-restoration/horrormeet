@@ -12,6 +12,16 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Frijole&family=Rye&display=swap">
 <link rel="stylesheet" href="styles.css?v=2">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<script defer src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<style>
+  #mapEl{height:62vh;min-height:380px;border:2px solid var(--line);background:#111}
+  .leaflet-popup-content-wrapper,.leaflet-popup-tip{background:#161014;color:#eee;border:1px solid #b3121b;border-radius:0}
+  .leaflet-popup-content{font-family:Georgia,serif;font-size:14px}
+  .leaflet-popup-content b{color:#e8babf}
+  .leaflet-popup-content .cat{color:#b3121b;font-size:11px;letter-spacing:.12em;text-transform:uppercase}
+  .addmode #mapEl{cursor:crosshair;outline:2px dashed #b3121b}
+</style>
 </head>
 <body>
 <header class="app">
@@ -26,6 +36,7 @@
     <button class="tab" data-tab="board">Board</button>
     <button class="tab" data-tab="films">Films</button>
     <button class="tab" data-tab="news">News</button>
+    <button class="tab" data-tab="map">Map</button>
     <button class="tab" data-tab="meetups">Meetups</button>
   </nav>
 </header>
@@ -167,6 +178,30 @@
       </div>
     </div>
     <div id="news"><div class="empty">Tuning the wire...</div></div>
+  </section>
+
+  <!-- MAP TAB -->
+  <section id="tab-map" class="hidden">
+    <div class="section-note">The atlas · where horror actually lives</div>
+    <div class="composer" style="padding:10px 14px;margin-bottom:10px">
+      <div class="actions" style="margin:0;flex-wrap:wrap">
+        <button class="btn" id="mapAll">All</button>
+        <button class="btn" id="mapFilm">🎬 Filming locations</button>
+        <button class="btn" id="mapReal">👻 Real horror</button>
+        <span class="spacer"></span>
+        <button class="btn red" id="mapAddBtn">+ Add a location</button>
+      </div>
+      <p class="hint" id="mapAddHint" style="margin:8px 0 0">Members can add spots: filming locations, true-crime and haunted sites. Every submission is reviewed by a human before it appears.</p>
+    </div>
+    <div id="mapEl"></div>
+    <div class="composer hidden" id="spotForm" style="margin-top:10px">
+      <h3>New location</h3>
+      <p class="hint" id="spotCoords" style="margin:0 0 8px"></p>
+      <div class="row"><input id="spotTitle" maxlength="120" placeholder="Name of the place"></div>
+      <div class="row"><select id="spotCat"><option value="film">Filming location</option><option value="real">Real horror / haunted site</option></select></div>
+      <div class="row"><textarea id="spotDesc" rows="3" maxlength="1000" placeholder="Why it matters. What happened here, or what was shot here."></textarea></div>
+      <div class="actions"><button class="btn" id="spotSubmit">Submit for review</button><button class="btn" id="spotCancel">Cancel</button><span class="hint">Reviewed before posting. No private homes' interiors, no addresses of living victims. <a href="rules.html">House rules</a>.</span></div>
+    </div>
   </section>
 
   <!-- MEETUPS TAB -->

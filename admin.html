@@ -20,6 +20,9 @@
     <div class="section-note">Pending films</div>
     <div id="pendingFilms"><div class="empty">Loading...</div></div>
 
+    <div class="section-note">Pending map locations</div>
+    <div id="pendingSpots"><div class="empty">Loading...</div></div>
+
     <div class="section-note">Grant a badge</div>
     <div class="composer">
       <div class="row"><input id="bUser" placeholder="username (without @)"></div>
@@ -62,7 +65,23 @@ if (!isAdmin) {
 } else {
   $('gate').classList.add('hidden');
   $('panel').classList.remove('hidden');
-  loadPending(); loadPendingFilms(); loadReports(); loadModThreads();
+  loadPending(); loadPendingFilms(); loadPendingSpots(); loadReports(); loadModThreads();
+}
+
+async function loadPendingSpots() {
+  const { data } = await sb.from('map_spots').select('id,title,category,description,lat,lng,profiles(username)').eq('status', 'pending').order('created_at');
+  $('pendingSpots').innerHTML = (data || []).length ? data.map((s) => `
+    <div class="card" data-id="${s.id}"><div class="pad">
+      <div class="post-head"><span class="u">@${esc(s.profiles?.username || '?')}</span> · ${s.category === 'film' ? '🎬 filming location' : '👻 real horror'}</div>
+      <h3>${esc(s.title)}</h3>
+      ${s.description ? `<p class="body-text">${esc(s.description)}</p>` : ''}
+      <div class="hint" style="margin:6px 0"><a href="https://www.openstreetmap.org/?mlat=${s.lat}&mlon=${s.lng}#map=15/${s.lat}/${s.lng}" target="_blank" rel="noopener">Open the pin on a map and VERIFY before approving</a> (${s.lat.toFixed(4)}, ${s.lng.toFixed(4)})</div>
+      <div class="admin-row"><button class="btn good s-approve">Approve</button><button class="btn danger s-remove">Remove</button></div>
+    </div></div>`).join('') : `<div class="empty">No locations waiting.</div>`;
+  $('pendingSpots').querySelectorAll('.card').forEach((c) => {
+    c.querySelector('.s-approve').onclick = async () => { await sb.from('map_spots').update({ status: 'approved' }).eq('id', c.dataset.id); toast('On the atlas.'); loadPendingSpots(); };
+    c.querySelector('.s-remove').onclick = async () => { await sb.from('map_spots').update({ status: 'removed' }).eq('id', c.dataset.id); toast('Removed.'); loadPendingSpots(); };
+  });
 }
 
 async function loadPendingFilms() {

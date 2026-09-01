@@ -131,15 +131,84 @@ document.querySelectorAll('.tab').forEach((t) =>
   t.addEventListener('click', () => {
     document.querySelectorAll('.tab').forEach((x) => x.classList.remove('active'));
     t.classList.add('active');
-    for (const name of ['feed', 'board', 'films', 'news', 'meetups', 'me']) {
+    for (const name of ['feed', 'board', 'films', 'news', 'map', 'meetups', 'me']) {
       $('tab-' + name).classList.toggle('hidden', t.dataset.tab !== name);
     }
     if (t.dataset.tab === 'board') loadThreads();
     if (t.dataset.tab === 'films') loadFilms();
     if (t.dataset.tab === 'news') loadNews();
+    if (t.dataset.tab === 'map') loadMap();
     if (t.dataset.tab === 'me') loadMe();
   })
 );
+
+/* ---------- the atlas (map) ---------- */
+let map = null, mapLayer = null, mapCat = 'all', addMode = false, pendingPin = null;
+async function loadMap() {
+  if (!window.L) { setTimeout(loadMap, 300); return; }
+  if (!map) {
+    map = L.map('mapEl', { worldCopyJump: true }).setView([37.5, -96], 4);
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+      attribution: '&copy; OpenStreetMap &copy; CARTO', maxZoom: 19
+    }).addTo(map);
+    mapLayer = L.layerGroup().addTo(map);
+    map.on('click', (e) => {
+      if (!addMode) return;
+      pendingPin?.remove();
+      pendingPin = L.circleMarker(e.latlng, { radius: 9, color: '#fff', fillColor: '#b3121b', fillOpacity: 1 }).addTo(map);
+      $('spotCoords').textContent = `Pin dropped at ${e.latlng.lat.toFixed(4)}, ${e.latlng.lng.toFixed(4)}`;
+      $('spotForm').classList.remove('hidden');
+      $('spotForm').scrollIntoView({ behavior: 'smooth', block: 'center' });
+    });
+  }
+  setTimeout(() => map.invalidateSize(), 100);
+  let q = sb.from('map_spots').select('id,title,category,description,lat,lng,profiles(username)').eq('status', 'approved');
+  if (mapCat !== 'all') q = q.eq('category', mapCat);
+  const { data } = await q;
+  mapLayer.clearLayers();
+  (data || []).forEach((s) => {
+    const isFilm = s.category === 'film';
+    L.circleMarker([s.lat, s.lng], {
+      radius: 8, weight: 2,
+      color: isFilm ? '#b3121b' : '#e8d9a0',
+      fillColor: isFilm ? '#b3121b' : '#e8d9a0',
+      fillOpacity: 0.75
+    }).bindPopup(
+      `<div class="cat">${isFilm ? '🎬 Filming location' : '👻 Real horror'}</div>` +
+      `<b>${esc(s.title)}</b><br>${esc(s.description || '')}` +
+      (s.profiles?.username ? `<br><span style="color:#8b7f84;font-size:12px">added by @${esc(s.profiles.username)}</span>` : '')
+    ).addTo(mapLayer);
+  });
+}
+for (const [id, cat] of [['mapAll', 'all'], ['mapFilm', 'film'], ['mapReal', 'real']]) {
+  $(id)?.addEventListener('click', () => { mapCat = cat; loadMap(); });
+}
+$('mapAddBtn')?.addEventListener('click', () => {
+  if (!session) return toast('Sign in on the Sightings tab to add locations.');
+  addMode = !addMode;
+  document.body.classList.toggle('addmode', addMode);
+  $('mapAddBtn').textContent = addMode ? 'Click the map to drop your pin...' : '+ Add a location';
+  if (!addMode) { $('spotForm').classList.add('hidden'); pendingPin?.remove(); pendingPin = null; }
+});
+$('spotCancel')?.addEventListener('click', () => {
+  addMode = false; document.body.classList.remove('addmode');
+  $('mapAddBtn').textContent = '+ Add a location';
+  $('spotForm').classList.add('hidden'); pendingPin?.remove(); pendingPin = null;
+});
+$('spotSubmit')?.addEventListener('click', async () => {
+  if (!session || !pendingPin) return;
+  const title = $('spotTitle').value.trim();
+  if (!title) return toast('Name the place.');
+  const ll = pendingPin.getLatLng();
+  const { error } = await sb.from('map_spots').insert({
+    title, category: $('spotCat').value, description: $('spotDesc').value.trim() || null,
+    lat: ll.lat, lng: ll.lng, submitter: session.user.id, status: 'pending'
+  });
+  if (error) return toast(error.message);
+  toast('Submitted. A mod will walk the grounds before it posts.');
+  $('spotTitle').value = ''; $('spotDesc').value = '';
+  $('spotCancel').click();
+});
 
 /* ---------- the wire (news) ---------- */
 let newsCat = 'all';
