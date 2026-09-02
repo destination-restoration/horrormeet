@@ -228,3 +228,63 @@ nav.tabs{gap:7px;align-items:stretch;padding-bottom:10px}
 .tab.active span{background:rgba(10,6,7,.92);color:var(--white)}
 a.tab{text-decoration:none;color:var(--dim);font-family:'Rye',Georgia,serif;font-weight:400}
 .guides a.on{border-style:solid;border-color:var(--red);color:var(--white)}
+
+
+/* ---------- DOORS v8: guides become doors, unique boarding, scroll-collapse ---------- */
+
+/* second row of doors: the guides */
+.guides{gap:7px;align-items:stretch}
+.guides a{
+  flex:1;min-width:0;height:64px;position:relative;overflow:hidden;
+  display:flex;align-items:flex-end;justify-content:center;padding:0 0 6px !important;
+  border:2px solid var(--red-deep);border-top-width:4px;border-style:solid;border-radius:2px 2px 0 0;
+  background:repeating-linear-gradient(90deg, #16090a 0 9px, #1d0c0e 9px 10px, #170a0b 10px 18px, #0f0607 18px 19px);
+  box-shadow: inset 0 0 0 1px rgba(0,0,0,.6), inset 3px 0 6px rgba(0,0,0,.45), 0 2px 0 rgba(0,0,0,.5);
+  white-space:normal;text-transform:uppercase;
+}
+.guides a span{
+  position:relative;z-index:2;display:block;font-size:9.5px;line-height:1.1;text-align:center;
+  background:rgba(10,6,7,.88);border:1px solid var(--red-deep);padding:2px 3px;max-width:94%;
+}
+.guides a.on{border-color:var(--red)}
+.guides a.on span{color:var(--white)}
+.guides a:hover{border-color:var(--red);color:var(--white)}
+.guides a::after{ /* small knob */
+  content:'';position:absolute;right:9%;top:48%;width:4px;height:4px;border-radius:50%;
+  background:var(--red);box-shadow:0 0 4px rgba(179,18,27,.8);
+}
+
+/* unique boarding per door: stripes layered over planks, clear of the plaques */
+.tabs .tab:nth-child(1){background:
+  linear-gradient(28deg, transparent 0 62%, #241012 62% 70%, transparent 70%),
+  repeating-linear-gradient(90deg, #16090a 0 10px, #1d0c0e 10px 11px, #170a0b 11px 20px, #0f0607 20px 21px)}
+.tabs .tab:nth-child(2){background:
+  linear-gradient(35deg, transparent 0 12%, #241012 12% 20%, transparent 20%),
+  linear-gradient(-35deg, transparent 0 12%, #1f0e10 12% 20%, transparent 20%),
+  repeating-linear-gradient(90deg, #16090a 0 10px, #1d0c0e 10px 11px, #170a0b 11px 20px, #0f0607 20px 21px)}
+.tabs .tab:nth-child(3){background:
+  linear-gradient(180deg, transparent 0 6%, #241012 6% 13%, transparent 13%),
+  repeating-linear-gradient(90deg, #16090a 0 10px, #1d0c0e 10px 11px, #170a0b 11px 20px, #0f0607 20px 21px)}
+.tabs .tab:nth-child(4){background:
+  linear-gradient(-24deg, transparent 0 64%, #241012 64% 72%, transparent 72%),
+  repeating-linear-gradient(90deg, #16090a 0 10px, #1d0c0e 10px 11px, #170a0b 11px 20px, #0f0607 20px 21px)}
+.tabs .tab:nth-child(5){background:
+  linear-gradient(180deg, transparent 0 87%, #241012 87% 94%, transparent 94%),
+  linear-gradient(22deg, transparent 0 8%, #1f0e10 8% 15%, transparent 15%),
+  repeating-linear-gradient(90deg, #16090a 0 10px, #1d0c0e 10px 11px, #170a0b 11px 20px, #0f0607 20px 21px)}
+.tabs .tab:nth-child(6){background:
+  linear-gradient(90deg, transparent 0 8%, #241012 8% 14%, transparent 14%),
+  linear-gradient(90deg, transparent 0 88%, #1f0e10 88% 94%, transparent 94%),
+  repeating-linear-gradient(90deg, #16090a 0 10px, #1d0c0e 10px 11px, #170a0b 11px 20px, #0f0607 20px 21px)}
+.tabs .tab.active:nth-child(n){background:
+  repeating-linear-gradient(90deg, #8e0e15 0 10px, #a11017 10px 11px, #900f16 11px 20px, #7d0c12 20px 21px)}
+
+/* guides row boarding variety */
+.guides a:nth-child(1){background:linear-gradient(32deg, transparent 0 60%, #241012 60% 69%, transparent 69%),repeating-linear-gradient(90deg, #16090a 0 9px, #1d0c0e 9px 10px, #170a0b 10px 18px, #0f0607 18px 19px)}
+.guides a:nth-child(3){background:linear-gradient(-30deg, transparent 0 58%, #241012 58% 67%, transparent 67%),repeating-linear-gradient(90deg, #16090a 0 9px, #1d0c0e 9px 10px, #170a0b 10px 18px, #0f0607 18px 19px)}
+.guides a:nth-child(5){background:linear-gradient(180deg, transparent 0 8%, #241012 8% 16%, transparent 16%),repeating-linear-gradient(90deg, #16090a 0 9px, #1d0c0e 9px 10px, #170a0b 10px 18px, #0f0607 18px 19px)}
+
+/* scroll-collapse: doors fold away, blood bar and logo stay */
+nav.tabs, .guides{transition:max-height .3s ease, opacity .22s ease, padding-bottom .3s ease;max-height:170px}
+header.app.doors-hidden nav.tabs, header.app.doors-hidden .guides{
+  max-height:0;opacity:0;padding-top:0;padding-bottom:0;overflow:hidden;pointer-events:none}
