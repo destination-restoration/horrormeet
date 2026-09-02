@@ -21,8 +21,7 @@ input:focus,textarea:focus{border-color:var(--red)}
 /* diagonal two-tone header, poster-style */
 header.app{position:sticky;top:0;z-index:20;background:var(--black);border-bottom:3px solid var(--red)}
 .tagline-bar{background:var(--red);color:var(--white);font-family:'Rye',Georgia,serif;
-  font-size:12px;letter-spacing:.14em;text-transform:lowercase;padding:5px 14px;
-  clip-path:polygon(0 0,100% 0,100% 100%,0 100%)}
+  font-size:12px;letter-spacing:.14em;text-transform:lowercase;padding:5px 14px}
 .tagline-bar .inner{max-width:640px;margin:0 auto}
 .app-bar{max-width:640px;margin:0 auto;display:flex;align-items:center;gap:10px;padding:12px 14px 8px}
 .logo{font-family:'Frijole',Impact,fantasy;font-size:21px;color:var(--white);
