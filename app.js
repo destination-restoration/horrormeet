@@ -519,7 +519,7 @@ async function loadFilms() {
   });
   const { data, error } = await sb
     .from('films')
-    .select('id,title,year,roles,synopsis,watch_url,trailer_url,poster_url,runtime_min,subgenre,featured,created_at,profiles(username)')
+    .select('id,title,year,roles,synopsis,watch_url,trailer_url,poster_url,runtime_min,subgenre,featured,created_at,profiles!submitter(username)')
     .eq('status', 'approved')
     .order('featured', { ascending: false })
     .order('created_at', { ascending: false })

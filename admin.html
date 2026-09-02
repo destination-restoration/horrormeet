@@ -87,7 +87,7 @@ async function loadPendingSpots() {
 }
 
 async function loadPendingFilms() {
-  const { data } = await sb.from('films').select('id,title,year,roles,synopsis,watch_url,poster_url,profiles(username)').eq('status', 'pending').order('created_at');
+  const { data } = await sb.from('films').select('id,title,year,roles,synopsis,watch_url,poster_url,profiles!submitter(username)').eq('status', 'pending').order('created_at');
   $('pendingFilms').innerHTML = (data || []).length ? data.map((f) => `
     <div class="card" data-id="${f.id}"><div class="pad">
       <div class="post-head"><span class="u">@${esc(f.profiles?.username || '?')}</span>${f.roles ? ' · ' + esc(f.roles) : ''}</div>
