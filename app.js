@@ -725,3 +725,11 @@ async function loadAlmanac() {
     data.map((d) => `<p class="body-text" style="font-size:14.5px">${d.year ? `<b>${d.year}.</b> ` : ''}${esc(d.entry)}</p>`).join('') + `</div>`;
 }
 loadAlmanac();
+
+
+/* deep-link tabs: index.html#films etc */
+const wantedTab = location.hash.slice(1);
+if (wantedTab) {
+  const btn = document.querySelector(`.tab[data-tab="${wantedTab}"]`);
+  if (btn && !btn.classList.contains('active')) btn.click();
+}
