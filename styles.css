@@ -288,3 +288,39 @@ a.tab{text-decoration:none;color:var(--dim);font-family:'Rye',Georgia,serif;font
 nav.tabs, .guides{transition:max-height .3s ease, opacity .22s ease, padding-bottom .3s ease;max-height:170px}
 header.app.doors-hidden nav.tabs, header.app.doors-hidden .guides{
   max-height:0;opacity:0;padding-top:0;padding-bottom:0;overflow:hidden;pointer-events:none}
+
+
+/* ---------- DOORS v9: bolder doors, visible boards ---------- */
+.tab{border-color:var(--red);border-width:3px;border-top-width:6px}
+.tab span{font-size:12px;font-weight:700;color:var(--white);border-color:var(--red)}
+.tab::after{width:8px;height:8px;box-shadow:0 0 8px rgba(214,22,34,.95)}
+.guides a{border-width:3px;border-top-width:5px}
+.guides a span{font-size:10px;font-weight:700;color:var(--white)}
+
+/* boards recut in pale weathered wood so they READ */
+.tabs .tab:nth-child(1){background:
+  linear-gradient(28deg, transparent 0 60%, #6b4a33 60% 62%, #4a2c1d 62% 70%, #2a150e 70% 71.5%, transparent 71.5%),
+  repeating-linear-gradient(90deg, #16090a 0 10px, #1d0c0e 10px 11px, #170a0b 11px 20px, #0f0607 20px 21px)}
+.tabs .tab:nth-child(2){background:
+  linear-gradient(35deg, transparent 0 10%, #6b4a33 10% 12%, #4a2c1d 12% 20%, #2a150e 20% 21.5%, transparent 21.5%),
+  linear-gradient(-35deg, transparent 0 10%, #5d3f2b 10% 12%, #3f2418 12% 20%, #241009 20% 21.5%, transparent 21.5%),
+  repeating-linear-gradient(90deg, #16090a 0 10px, #1d0c0e 10px 11px, #170a0b 11px 20px, #0f0607 20px 21px)}
+.tabs .tab:nth-child(3){background:
+  linear-gradient(180deg, transparent 0 5%, #6b4a33 5% 7%, #4a2c1d 7% 14%, #2a150e 14% 15.5%, transparent 15.5%),
+  repeating-linear-gradient(90deg, #16090a 0 10px, #1d0c0e 10px 11px, #170a0b 11px 20px, #0f0607 20px 21px)}
+.tabs .tab:nth-child(4){background:
+  linear-gradient(-24deg, transparent 0 62%, #6b4a33 62% 64%, #4a2c1d 64% 72%, #2a150e 72% 73.5%, transparent 73.5%),
+  repeating-linear-gradient(90deg, #16090a 0 10px, #1d0c0e 10px 11px, #170a0b 11px 20px, #0f0607 20px 21px)}
+.tabs .tab:nth-child(5){background:
+  linear-gradient(180deg, transparent 0 85%, #6b4a33 85% 87%, #4a2c1d 87% 94%, #2a150e 94% 95.5%, transparent 95.5%),
+  linear-gradient(22deg, transparent 0 6%, #5d3f2b 6% 8%, #3f2418 8% 15%, transparent 15%),
+  repeating-linear-gradient(90deg, #16090a 0 10px, #1d0c0e 10px 11px, #170a0b 11px 20px, #0f0607 20px 21px)}
+.tabs .tab:nth-child(6){background:
+  linear-gradient(90deg, transparent 0 6%, #6b4a33 6% 8%, #4a2c1d 8% 14%, transparent 14%),
+  linear-gradient(90deg, transparent 0 86%, #5d3f2b 86% 88%, #3f2418 88% 94%, transparent 94%),
+  repeating-linear-gradient(90deg, #16090a 0 10px, #1d0c0e 10px 11px, #170a0b 11px 20px, #0f0607 20px 21px)}
+.tabs .tab.active:nth-child(n){background:
+  repeating-linear-gradient(90deg, #8e0e15 0 10px, #a11017 10px 11px, #900f16 11px 20px, #7d0c12 20px 21px)}
+.guides a:nth-child(1){background:linear-gradient(32deg, transparent 0 58%, #6b4a33 58% 60%, #4a2c1d 60% 69%, transparent 69%),repeating-linear-gradient(90deg, #16090a 0 9px, #1d0c0e 9px 10px, #170a0b 10px 18px, #0f0607 18px 19px)}
+.guides a:nth-child(3){background:linear-gradient(-30deg, transparent 0 56%, #6b4a33 56% 58%, #4a2c1d 58% 67%, transparent 67%),repeating-linear-gradient(90deg, #16090a 0 9px, #1d0c0e 9px 10px, #170a0b 10px 18px, #0f0607 18px 19px)}
+.guides a:nth-child(5){background:linear-gradient(180deg, transparent 0 7%, #6b4a33 7% 9%, #4a2c1d 9% 17%, transparent 17%),repeating-linear-gradient(90deg, #16090a 0 9px, #1d0c0e 9px 10px, #170a0b 10px 18px, #0f0607 18px 19px)}
