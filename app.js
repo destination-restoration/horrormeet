@@ -736,5 +736,6 @@ document.querySelectorAll('[data-open]').forEach((el) =>
     sb.from('sightings').select('id', { count: 'exact', head: true }).eq('status', 'approved'),
     sb.from('films').select('id', { count: 'exact', head: true }).eq('status', 'approved'),
   ]);
-  el.textContent = `${m.count ?? 0} members inside · ${s.count ?? 0} sightings on record · ${f.count ?? 0} films on the shelf · founded 2026, Laurel Canyon`;
+  const pl = (n, w) => `${n ?? 0} ${w}${(n ?? 0) === 1 ? '' : 's'}`;
+  el.textContent = `${pl(m.count, 'member')} inside · ${pl(s.count, 'sighting')} on record · ${pl(f.count, 'film')} on the shelf · founded 2026, Laurel Canyon`;
 })();
