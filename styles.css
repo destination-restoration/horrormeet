@@ -157,12 +157,15 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:40;
   box-shadow: inset 0 0 0 1px rgba(0,0,0,.6), inset 3px 3px 6px rgba(0,0,0,.5);
   transition: transform .18s;
 }
-.tab::before{ /* nailed board across the door */
-  content:'';position:absolute;left:-8%;right:-8%;top:38%;height:7px;
-  background:#241012;transform:rotate(-7deg);
-  box-shadow:0 1px 0 rgba(0,0,0,.8), inset 0 0 0 1px rgba(179,18,27,.25);
+.tab{padding-top:13px;padding-bottom:13px}
+.tab::before{ /* vertical board nailed at the door's edge, clear of the title */
+  content:'';position:absolute;left:6px;top:-8%;bottom:-8%;width:6px;
+  background:#241012;transform:rotate(4deg);
+  box-shadow:1px 0 0 rgba(0,0,0,.8), inset 0 0 0 1px rgba(179,18,27,.25);
   pointer-events:none;opacity:.9;
 }
+.tab span, .tab{z-index:0}
+
 .tab::after{ /* door knob */
   content:'';position:absolute;right:7px;top:50%;width:5px;height:5px;border-radius:50%;
   background:var(--red);box-shadow:0 0 4px rgba(179,18,27,.8);transform:translateY(-50%);
