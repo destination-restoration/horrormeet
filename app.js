@@ -127,19 +127,30 @@ function openAccount() {
 }
 
 /* ---------- tabs ---------- */
+function throughTheDoor(fn) {
+  const fx = document.getElementById('doorFx');
+  if (!fx || window.matchMedia('(prefers-reduced-motion: reduce)').matches) { fn(); return; }
+  fx.classList.remove('go');
+  void fx.offsetWidth;
+  fx.classList.add('go');
+  setTimeout(fn, 300);
+  setTimeout(() => fx.classList.remove('go'), 700);
+}
 document.querySelectorAll('.tab').forEach((t) =>
   t.addEventListener('click', () => {
     if (t.classList.contains('active')) return;
     document.querySelectorAll('.tab').forEach((x) => x.classList.remove('active'));
     t.classList.add('active');
-    for (const name of ['feed', 'board', 'films', 'news', 'map', 'meetups', 'me']) {
-      $('tab-' + name).classList.toggle('hidden', t.dataset.tab !== name);
-    }
-    if (t.dataset.tab === 'board') loadThreads();
-    if (t.dataset.tab === 'films') loadFilms();
-    if (t.dataset.tab === 'news') loadNews();
-    if (t.dataset.tab === 'map') loadMap();
-    if (t.dataset.tab === 'me') loadMe();
+    throughTheDoor(() => {
+      for (const name of ['feed', 'board', 'films', 'news', 'map', 'meetups', 'me']) {
+        $('tab-' + name).classList.toggle('hidden', t.dataset.tab !== name);
+      }
+      if (t.dataset.tab === 'board') loadThreads();
+      if (t.dataset.tab === 'films') loadFilms();
+      if (t.dataset.tab === 'news') loadNews();
+      if (t.dataset.tab === 'map') loadMap();
+      if (t.dataset.tab === 'me') loadMe();
+    });
   })
 );
 
