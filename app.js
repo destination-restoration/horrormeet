@@ -132,7 +132,6 @@ document.querySelectorAll('.tab').forEach((t) =>
     if (t.classList.contains('active')) return;
     document.querySelectorAll('.tab').forEach((x) => x.classList.remove('active'));
     t.classList.add('active');
-    (() => {
     for (const name of ['feed', 'board', 'films', 'news', 'map', 'meetups', 'me']) {
       $('tab-' + name).classList.toggle('hidden', t.dataset.tab !== name);
     }
@@ -141,7 +140,6 @@ document.querySelectorAll('.tab').forEach((t) =>
     if (t.dataset.tab === 'news') loadNews();
     if (t.dataset.tab === 'map') loadMap();
     if (t.dataset.tab === 'me') loadMe();
-    });
   })
 );
 
