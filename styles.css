@@ -330,3 +330,6 @@ header.app.doors-hidden nav.tabs, header.app.doors-hidden .guides{
 .guides a{height:98px;border-top-width:6px;align-items:center;padding:0 !important}
 .guides a span{font-size:11px;line-height:1.2;font-weight:700;padding:3px 4px;max-width:92%;margin-top:26px;white-space:normal;word-break:break-word}
 .guides a::after{width:8px;height:8px;top:56%;box-shadow:0 0 8px rgba(214,22,34,.95)}
+
+/* v11: guide plaque wrapping fix */
+.guides a span{word-break:normal;overflow-wrap:normal;hyphens:none;font-size:10.5px;letter-spacing:.02em}
