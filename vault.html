@@ -40,6 +40,13 @@
   <div class="vx-sub">The public-domain masters · free to watch, forever, legally</div>
   <p style="color:var(--dim);font-size:15px;max-width:60ch">These films built the genre, and their copyrights lapsed into the public domain, which means they belong to all of us now. Streams served by the Internet Archive. Watch them like you owe them something, because you do.</p>
 
+  <div class="composer" style="padding:12px 14px;margin:14px 0">
+    <div class="row" style="margin:0"><input id="vq" maxlength="80" placeholder="Search the vault... (title, director, year)"></div>
+    <div class="actions" style="margin-top:8px"><button class="btn" id="deepBtn">🔦 Search the deeper vault</button>
+    <span class="hint">The shelf filters as you type. The deeper vault searches the entire Internet Archive live: rights vary down there, the shelf above is our verified picks.</span></div>
+  </div>
+  <div id="deepResults"></div>
+
   <div class="vfilm"><h3>Night of the Living Dead</h3><div class="yr">1968 · dir. George A. Romero</div><p>The modern zombie is invented in a Pittsburgh farmhouse for $114,000. A copyright filing error put it in the public domain, which is the only reason half of horror exists: everyone could study it for free.</p><a class="watch" href="https://archive.org/details/Night.Of.The.Living.Dead_1080p" target="_blank" rel="noopener">▶ WATCH FREE</a></div>
   <div class="vfilm"><h3>Nosferatu</h3><div class="yr">1922 · dir. F.W. Murnau</div><p>The unauthorized Dracula a court ordered destroyed. It survives because the copies had already spread too far to catch: which is also why our first hundred members are called Surviving Print.</p><a class="watch" href="https://archive.org/details/nosferatu_1922" target="_blank" rel="noopener">▶ WATCH FREE</a></div>
   <div class="vfilm"><h3>Carnival of Souls</h3><div class="yr">1962 · dir. Herk Harvey</div><p>An industrial-film director from Kansas makes one feature, on a whim, for $33,000, and accidentally invents the American art-horror film. The organ score alone is worth the visit.</p><a class="watch" href="https://archive.org/details/carnival_of_souls" target="_blank" rel="noopener">▶ WATCH FREE</a></div>
@@ -51,5 +58,43 @@
   <p class="hint" style="margin-top:18px">More masters get shelved as we verify clean public-domain prints. Got a favorite that belongs here? Say so on the board.</p>
   <footer>THE VAULT · a HorrorMeet library · <a href="index.html">back to the board</a> · <a href="festivals.html">the circuit</a></footer>
 </main>
+
+<script>
+(function () {
+  var q = document.getElementById('vq');
+  var films = Array.prototype.slice.call(document.querySelectorAll('.vfilm'));
+  q.addEventListener('input', function () {
+    var t = q.value.trim().toLowerCase();
+    films.forEach(function (f) {
+      f.style.display = !t || f.textContent.toLowerCase().indexOf(t) !== -1 ? '' : 'none';
+    });
+  });
+
+  function esc(s) { var d = document.createElement('div'); d.textContent = s == null ? '' : s; return d.innerHTML; }
+
+  document.getElementById('deepBtn').addEventListener('click', async function () {
+    var t = q.value.trim();
+    var box = document.getElementById('deepResults');
+    if (!t) { box.innerHTML = '<div class="empty">Type something first. The deep vault is not browsed idly.</div>'; return; }
+    box.innerHTML = '<div class="empty">Descending...</div>';
+    try {
+      var url = 'https://archive.org/advancedsearch.php?q=' + encodeURIComponent('title:(' + t + ') AND mediatype:movies') +
+        '&fl=identifier,title,year,downloads&rows=12&sort%5B%5D=downloads+desc&output=json';
+      var d = await (await fetch(url)).json();
+      var docs = (d.response && d.response.docs) || [];
+      if (!docs.length) { box.innerHTML = '<div class="empty">Nothing stirs by that name. Try fewer words.</div>'; return; }
+      box.innerHTML = '<div class="section-note">From the deeper vault · ' + docs.length + ' found</div>' + docs.map(function (x) {
+        var title = Array.isArray(x.title) ? x.title[0] : x.title;
+        return '<div class="vfilm"><h3>' + esc(title || x.identifier) + '</h3>' +
+          '<div class="yr">' + (x.year ? esc(String(x.year)) + ' · ' : '') + Number(x.downloads || 0).toLocaleString() + ' downloads</div>' +
+          '<a class="watch" href="https://archive.org/details/' + encodeURIComponent(x.identifier) + '" target="_blank" rel="noopener">▶ OPEN ON ARCHIVE.ORG</a></div>';
+      }).join('');
+    } catch (e) {
+      box.innerHTML = '<div class="empty">The deep vault is sealed right now. <a href="https://archive.org/search?query=' + encodeURIComponent(t) + '" target="_blank" rel="noopener">Search it directly</a>.</div>';
+    }
+  });
+  q.addEventListener('keydown', function (e) { if (e.key === 'Enter') document.getElementById('deepBtn').click(); });
+})();
+</script>
 </body>
 </html>
