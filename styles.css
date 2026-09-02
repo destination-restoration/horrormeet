@@ -145,3 +145,48 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:40;
   color:var(--dim);padding:6px 4px;font-family:'Rye',Georgia,serif;font-size:11.5px;letter-spacing:.08em;
   text-transform:uppercase;text-decoration:none;white-space:nowrap}
 .guides a:hover{color:var(--white);border-color:var(--red);border-style:solid}
+
+
+/* ---------- DOORS v4: every tab is a boarded door ---------- */
+.tab{
+  position:relative;overflow:hidden;
+  background:
+    linear-gradient(180deg, rgba(255,255,255,.04) 0 2px, transparent 2px),
+    repeating-linear-gradient(90deg, #16090a 0 14px, #1d0c0e 14px 15px, #170a0b 15px 28px, #0f0607 28px 29px);
+  border:2px solid var(--red);
+  box-shadow: inset 0 0 0 1px rgba(0,0,0,.6), inset 3px 3px 6px rgba(0,0,0,.5);
+  transition: transform .18s;
+}
+.tab::before{ /* nailed board across the door */
+  content:'';position:absolute;left:-8%;right:-8%;top:38%;height:7px;
+  background:#241012;transform:rotate(-7deg);
+  box-shadow:0 1px 0 rgba(0,0,0,.8), inset 0 0 0 1px rgba(179,18,27,.25);
+  pointer-events:none;opacity:.9;
+}
+.tab::after{ /* door knob */
+  content:'';position:absolute;right:7px;top:50%;width:5px;height:5px;border-radius:50%;
+  background:var(--red);box-shadow:0 0 4px rgba(179,18,27,.8);transform:translateY(-50%);
+  pointer-events:none;
+}
+.tab:hover{transform:perspective(300px) rotateY(-4deg)}
+.tab.active{color:var(--white);background:
+  repeating-linear-gradient(90deg, #8e0e15 0 14px, #a11017 14px 15px, #900f16 15px 28px, #7d0c12 28px 29px)}
+.tab.active::before{background:#5a0a0f}
+
+/* the passage: fullscreen door-open transition */
+#doorFx{position:fixed;inset:0;z-index:90;background:#000;display:none;perspective:900px;overflow:hidden}
+#doorFx.go{display:block;animation:passage .68s ease-in forwards}
+#doorFx .frame{position:absolute;inset:8% 18%;border:6px solid #241012;background:#050203;
+  box-shadow:0 0 0 3px var(--red-deep), 0 0 80px rgba(0,0,0,.9) inset}
+#doorFx .panel{position:absolute;inset:0;transform-origin:left center;
+  background:
+    repeating-linear-gradient(90deg, #1a0b0d 0 30px, #221012 30px 32px, #190a0c 32px 62px, #120708 62px 64px);
+  box-shadow:inset 4px 0 14px rgba(0,0,0,.7);
+  animation:dooropen .68s ease-in forwards}
+#doorFx .panel::before{content:'';position:absolute;left:-6%;right:-6%;top:34%;height:14px;
+  background:#2b1315;transform:rotate(-8deg);box-shadow:0 2px 0 rgba(0,0,0,.9)}
+#doorFx .panel::after{content:'';position:absolute;right:16px;top:50%;width:12px;height:12px;border-radius:50%;
+  background:var(--red);box-shadow:0 0 12px rgba(179,18,27,.9)}
+@keyframes dooropen{0%{transform:rotateY(0)}55%{transform:rotateY(-2deg)}100%{transform:rotateY(-84deg)}}
+@keyframes passage{0%{opacity:1;transform:scale(1)}70%{opacity:1}100%{opacity:0;transform:scale(2.1)}}
+@media (prefers-reduced-motion: reduce){#doorFx{display:none !important}}

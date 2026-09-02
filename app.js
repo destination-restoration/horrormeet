@@ -127,10 +127,22 @@ function openAccount() {
 }
 
 /* ---------- tabs ---------- */
+const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+function throughTheDoor(fn) {
+  const fx = $('doorFx');
+  if (!fx || reducedMotion) { fn(); return; }
+  fx.classList.remove('go');
+  void fx.offsetWidth; // restart animation
+  fx.classList.add('go');
+  setTimeout(fn, 300);
+  setTimeout(() => fx.classList.remove('go'), 700);
+}
 document.querySelectorAll('.tab').forEach((t) =>
   t.addEventListener('click', () => {
+    if (t.classList.contains('active')) return;
     document.querySelectorAll('.tab').forEach((x) => x.classList.remove('active'));
     t.classList.add('active');
+    throughTheDoor(() => {
     for (const name of ['feed', 'board', 'films', 'news', 'map', 'meetups', 'me']) {
       $('tab-' + name).classList.toggle('hidden', t.dataset.tab !== name);
     }
@@ -139,6 +151,19 @@ document.querySelectorAll('.tab').forEach((t) =>
     if (t.dataset.tab === 'news') loadNews();
     if (t.dataset.tab === 'map') loadMap();
     if (t.dataset.tab === 'me') loadMe();
+    });
+  })
+);
+
+/* guides chips exit through the door too */
+document.querySelectorAll('.guides a').forEach((g) =>
+  g.addEventListener('click', (e) => {
+    if (reducedMotion) return;
+    e.preventDefault();
+    const href = g.getAttribute('href');
+    const fx = $('doorFx');
+    if (fx) { fx.classList.remove('go'); void fx.offsetWidth; fx.classList.add('go'); }
+    setTimeout(() => { window.location.href = href; }, 340);
   })
 );
 

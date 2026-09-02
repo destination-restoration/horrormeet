@@ -6,7 +6,7 @@
 <title>Mod Panel · HorrorMeet</title>
 <meta name="theme-color" content="#0b0b0e">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Frijole&family=Rye&display=swap">
-<link rel="stylesheet" href="styles.css?v=3">
+<link rel="stylesheet" href="styles.css?v=4">
 </head>
 <body>
 <header class="app"><div class="tagline-bar"><div class="inner">the mods keep the walls.</div></div><div class="app-bar"><a class="logo" href="index.html">HORRORMEET</a><div class="spacer"></div><span class="chip red">MOD PANEL</span></div></header>
@@ -22,6 +22,12 @@
 
     <div class="section-note">Pending films</div>
     <div id="pendingFilms"><div class="empty">Loading...</div></div>
+
+    <div class="section-note">Pending market listings</div>
+    <div id="pendingListings"><div class="empty">Loading...</div></div>
+
+    <div class="section-note">Broken links (weekly patrol)</div>
+    <div id="brokenLinks"><div class="empty">Loading...</div></div>
 
     <div class="section-note">Pending map locations</div>
     <div id="pendingSpots"><div class="empty">Loading...</div></div>
@@ -70,7 +76,30 @@ if (!isAdmin) {
 } else {
   $('gate').classList.add('hidden');
   $('panel').classList.remove('hidden');
-  loadPending(); loadPendingFilms(); loadPendingSpots(); loadReports(); loadModThreads(); loadNewMembers();
+  loadPending(); loadPendingFilms(); loadPendingSpots(); loadReports(); loadModThreads(); loadNewMembers(); loadPendingListings(); loadBrokenLinks();
+}
+
+async function loadPendingListings() {
+  const { data } = await sb.from('listings').select('id,title,price_usd,category,description,photo_url,city,profiles!seller(username)').eq('status', 'pending').order('created_at');
+  document.getElementById('pendingListings').innerHTML = (data || []).length ? data.map((l) => `
+    <div class="card" data-id="${l.id}"><div class="pad">
+      <div class="post-head"><span class="u">@${esc(l.profiles?.username || '?')}</span> · ${esc(l.category)} · ${l.price_usd != null ? '$' + l.price_usd : 'offer'}</div>
+      <h3>${esc(l.title)}</h3>
+      ${l.description ? `<p class="body-text">${esc(l.description)}</p>` : ''}
+      ${l.photo_url ? `<img class="photo" src="${esc(l.photo_url)}" style="margin-top:8px;max-height:220px">` : ''}
+      <div class="admin-row"><button class="btn good li-approve">Approve</button><button class="btn danger li-remove">Remove</button></div>
+    </div></div>`).join('') : `<div class="empty">Nothing on consignment.</div>`;
+  document.getElementById('pendingListings').querySelectorAll('.card').forEach((c) => {
+    c.querySelector('.li-approve').onclick = async () => { await sb.from('listings').update({ status: 'active' }).eq('id', c.dataset.id); toast('On the block.'); loadPendingListings(); };
+    c.querySelector('.li-remove').onclick = async () => { await sb.from('listings').update({ status: 'removed' }).eq('id', c.dataset.id); toast('Removed.'); loadPendingListings(); };
+  });
+}
+
+async function loadBrokenLinks() {
+  const { data } = await sb.from('broken_links').select('url,source,status_code,checked_at').order('checked_at', { ascending: false }).limit(30);
+  document.getElementById('brokenLinks').innerHTML = (data || []).length ? data.map((b) => `
+    <div class="card"><div class="pad" style="padding:10px 14px"><span class="hint">${b.status_code} · ${esc(b.source)} · </span><a href="${esc(b.url)}" target="_blank" rel="noopener">${esc(b.url.slice(0, 60))}</a></div></div>`).join('')
+    : `<div class="empty">All links alive at last patrol.</div>`;
 }
 
 async function loadNewMembers() {

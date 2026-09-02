@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Estate Sale · HorrorMeet</title>
+<meta name="theme-color" content="#0b0b0e">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Frijole&family=Rye&display=swap">
+<link rel="stylesheet" href="styles.css?v=4">
+<style>
+  .mx-title{font-family:'Frijole',Impact,fantasy;font-size:30px;color:var(--white);text-shadow:3px 3px 0 var(--red-deep);margin:24px 0 4px;line-height:1.2}
+  .mx-sub{font-family:'Rye',Georgia,serif;color:var(--red);font-size:13px;letter-spacing:.16em;text-transform:uppercase;margin:0 0 18px}
+  .price{font-family:'Rye',Georgia,serif;color:var(--white);background:var(--red);display:inline-block;padding:2px 10px;font-size:14px}
+  .sold .price{background:var(--faint)}
+  .sold img{filter:grayscale(1) brightness(.7)}
+  .cat{color:var(--red);font-size:11.5px;letter-spacing:.1em;text-transform:uppercase}
+</style>
+</head>
+<body>
+<header class="app"><div class="tagline-bar"><div class="inner">everything must go. some of it will follow you home.</div></div><div class="app-bar"><a class="logo" href="index.html">HORRORMEET</a></div></header>
+<main class="wrap">
+  <div class="mx-title">THE ESTATE SALE</div>
+  <div class="mx-sub">Buy · sell · trade the macabre · member to member</div>
+
+  <div class="composer">
+    <h3>List an item</h3>
+    <div id="sellAuthed" class="hidden">
+      <p class="hint" style="margin:0 0 10px">Props, masks, posters, tapes, wardrobe, toys, art. Every listing is human-reviewed before it posts. Deals happen member to member: HorrorMeet holds no money and takes no cut. No counterfeits, no weapons. <a href="terms.html">Terms</a>.</p>
+      <div class="row"><input id="lTitle" maxlength="120" placeholder="What is it? Be specific: year, size, provenance."></div>
+      <div class="row" style="display:flex;gap:8px">
+        <input id="lPrice" inputmode="decimal" placeholder="Price USD" style="max-width:130px">
+        <select id="lCat"><option value="props">Props</option><option value="masks">Masks</option><option value="posters">Posters</option><option value="media">Tapes / Media</option><option value="wardrobe">Wardrobe</option><option value="toys">Toys</option><option value="art">Art</option><option value="other">Other</option></select>
+      </div>
+      <div class="row"><input id="lCity" maxlength="60" placeholder="City (for local pickup, optional)"></div>
+      <div class="row"><textarea id="lDesc" rows="3" maxlength="2000" placeholder="Condition, story, provenance. Collectors read every word."></textarea></div>
+      <div class="row"><label class="hint">Photo</label><input id="lPhoto" type="file" accept="image/*"></div>
+      <div class="actions"><button class="btn" id="lBtn">Submit for review</button><span class="hint">Buyers contact you on the board or at meetups. Mark it sold from this page when it goes.</span></div>
+    </div>
+    <div id="sellAnon"><p class="hint" style="margin:0">Sign in on the <a href="index.html">main board</a> to list an item.</p></div>
+  </div>
+
+  <div class="section-note">On the block</div>
+  <div id="listings"><div class="empty">Dusting off the shelves...</div></div>
+
+  <p class="hint" style="margin-top:16px">HorrorMeet is a bulletin board, not a broker: we process no payments, hold no escrow, and are not a party to any sale. Meet in public, verify before you pay, and treat provenance claims with a collector's skepticism.</p>
+  <footer>THE ESTATE SALE · a HorrorMeet market · <a href="index.html">back to the board</a></footer>
+</main>
+<div class="toast" id="toast"></div>
+<script type="module">
+import { sb, toast } from './app-core.js';
+const $ = (id) => document.getElementById(id);
+const esc = (s) => { const d = document.createElement('div'); d.textContent = s ?? ''; return d.innerHTML; };
+
+const { data: { session } } = await sb.auth.getSession();
+$(session ? 'sellAnon' : 'sellAuthed').classList.add('hidden');
+$(session ? 'sellAuthed' : 'sellAnon').classList.remove('hidden');
+
+async function resize(file, max = 1280) {
+  const img = await createImageBitmap(file);
+  const scale = Math.min(1, max / Math.max(img.width, img.height));
+  const c = document.createElement('canvas');
+  c.width = Math.round(img.width * scale); c.height = Math.round(img.height * scale);
+  c.getContext('2d').drawImage(img, 0, 0, c.width, c.height);
+  return new Promise((r) => c.toBlob(r, 'image/jpeg', 0.85));
+}
+
+$('lBtn')?.addEventListener('click', async () => {
+  if (!session) return;
+  const title = $('lTitle').value.trim();
+  if (!title) return toast('Name the item.');
+  const price = parseFloat($('lPrice').value) || null;
+  let photo_url = null;
+  const f = $('lPhoto').files[0];
+  $('lBtn').disabled = true;
+  try {
+    if (f) {
+      const blob = await resize(f);
+      const path = `${session.user.id}/${Date.now()}.jpg`;
+      const { error: upErr } = await sb.storage.from('listing-photos').upload(path, blob, { contentType: 'image/jpeg' });
+      if (upErr) throw upErr;
+      photo_url = sb.storage.from('listing-photos').getPublicUrl(path).data.publicUrl;
+    }
+    const { error } = await sb.from('listings').insert({
+      seller: session.user.id, title, price_usd: price, category: $('lCat').value,
+      description: $('lDesc').value.trim() || null, city: $('lCity').value.trim() || null,
+      photo_url, status: 'pending'
+    });
+    if (error) throw error;
+    toast('Submitted. A mod appraises before it hits the block.');
+    ['lTitle','lPrice','lCity','lDesc'].forEach((id) => $(id).value = '');
+    $('lPhoto').value = '';
+    load();
+  } catch (e) { toast(e.message); }
+  $('lBtn').disabled = false;
+});
+
+async function load() {
+  const { data } = await sb.from('listings')
+    .select('id,seller,title,price_usd,category,description,photo_url,city,status,created_at,profiles!seller(username)')
+    .in('status', ['active','sold']).order('created_at', { ascending: false }).limit(60);
+  const mine = session ? (await sb.from('listings').select('id,title,status').eq('seller', session.user.id).eq('status', 'pending')).data : [];
+  let html = '';
+  if (mine?.length) html += mine.map((m) => `<div class="card"><div class="pad" style="padding:10px 14px"><span class="hint">⏳ pending review: ${esc(m.title)}</span></div></div>`).join('');
+  html += (data || []).length ? data.map((l) => `
+    <div class="card ${l.status === 'sold' ? 'sold' : ''}"><div class="pad">
+      <div class="post-head"><span class="u">@${esc(l.profiles?.username || '?')}</span> · <span class="cat">${esc(l.category)}</span>${l.city ? ' · ' + esc(l.city) : ''}</div>
+      <h3>${esc(l.title)} ${l.status === 'sold' ? '<span class="cat">· SOLD</span>' : ''}</h3>
+      ${l.price_usd != null ? `<div class="price">$${Number(l.price_usd).toLocaleString()}</div>` : '<div class="price">Make an offer</div>'}
+      ${l.description ? `<p class="body-text" style="font-size:14px;margin-top:8px">${esc(l.description)}</p>` : ''}
+      <p class="hint" style="margin-top:6px">To buy: reach the seller on the <a href="index.html">board</a>.</p>
+      ${session && l.seller === session.user.id && l.status === 'active' ? `<div class="admin-row"><button class="btn markSold" data-id="${l.id}">Mark sold</button></div>` : ''}
+    </div>${l.photo_url ? `<img class="photo" src="${esc(l.photo_url)}" loading="lazy">` : ''}</div>`).join('')
+    : `<div class="empty">The block is bare. List the first relic.</div>`;
+  $('listings').innerHTML = html;
+  document.querySelectorAll('.markSold').forEach((b) => b.onclick = async () => {
+    await sb.from('listings').update({ status: 'sold' }).eq('id', b.dataset.id);
+    toast('Sold. Congratulations, ghoul.'); load();
+  });
+}
+load();
+</script>
+</body>
+</html>
