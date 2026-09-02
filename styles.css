@@ -333,3 +333,7 @@ header.app.doors-hidden nav.tabs, header.app.doors-hidden .guides{
 
 /* v11: guide plaque wrapping fix */
 .guides a span{word-break:normal;overflow-wrap:normal;hyphens:none;font-size:10.5px;letter-spacing:.02em}
+
+/* v12: scroll-collapse removed: the doors hold their ground */
+nav.tabs, .guides{max-height:none;transition:none}
+header.app.doors-hidden nav.tabs, header.app.doors-hidden .guides{max-height:none;opacity:1;pointer-events:auto}
