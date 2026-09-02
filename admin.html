@@ -14,6 +14,9 @@
   <div id="gate" class="card"><div class="pad"><span class="hint">Checking credentials...</span></div></div>
 
   <div id="panel" class="hidden">
+    <div class="section-note">Newest members</div>
+    <div id="newMembers"><div class="empty">Loading...</div></div>
+
     <div class="section-note">Pending sightings</div>
     <div id="pending"><div class="empty">Loading...</div></div>
 
@@ -67,7 +70,17 @@ if (!isAdmin) {
 } else {
   $('gate').classList.add('hidden');
   $('panel').classList.remove('hidden');
-  loadPending(); loadPendingFilms(); loadPendingSpots(); loadReports(); loadModThreads();
+  loadPending(); loadPendingFilms(); loadPendingSpots(); loadReports(); loadModThreads(); loadNewMembers();
+}
+
+async function loadNewMembers() {
+  const { data } = await sb.from('member_emails').select('id,email,created_at').order('created_at', { ascending: false }).limit(25);
+  const { data: profs } = await sb.from('profiles').select('id,username');
+  const uname = Object.fromEntries((profs || []).map((p) => [p.id, p.username]));
+  document.getElementById('newMembers').innerHTML = (data || []).length ? data.map((m) => `
+    <div class="card"><div class="pad" style="padding:10px 14px">
+      <span class="u">@${esc(uname[m.id] || 'no username yet')}</span> · ${esc(m.email)} · <span class="hint">${new Date(m.created_at).toLocaleDateString()}</span>
+    </div></div>`).join('') : `<div class="empty">Nobody yet.</div>`;
 }
 
 async function loadPendingSpots() {
