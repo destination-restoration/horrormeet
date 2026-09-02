@@ -19,6 +19,7 @@
 <body>
 <header class="app"><div class="tagline-bar"><div class="inner">everything must go. some of it will follow you home.</div></div><div class="app-bar"><a class="logo" href="index.html">HORRORMEET</a></div>
   <nav class="tabs">
+    <a class="tab" href="index.html#home"><span>Home</span></a>
     <a class="tab" href="index.html#feed"><span>Sightings</span></a>
     <a class="tab" href="index.html#board"><span>Board</span></a>
     <a class="tab" href="index.html#films"><span>Films</span></a>
@@ -126,7 +127,7 @@ async function load() {
       ${l.description ? `<p class="body-text" style="font-size:14px;margin-top:8px">${esc(l.description)}</p>` : ''}
       <p class="hint" style="margin-top:6px">To buy: reach the seller on the <a href="index.html">board</a>.</p>
       ${session && l.seller === session.user.id && l.status === 'active' ? `<div class="admin-row"><button class="btn markSold" data-id="${l.id}">Mark sold</button></div>` : ''}
-    </div>${l.photo_url ? `<img class="photo" src="${esc(l.photo_url)}" loading="lazy">` : ''}</div>`).join('')
+    </div>${l.photo_url ? `<img class="photo" src="${esc(l.photo_url)}" loading="lazy" width="600" height="400" style="height:auto;aspect-ratio:3/2;object-fit:cover">` : ''}</div>`).join('')
     : `<div class="empty">The block is bare. List the first relic.</div>`;
   $('listings').innerHTML = html;
   document.querySelectorAll('.markSold').forEach((b) => b.onclick = async () => {
@@ -136,6 +137,6 @@ async function load() {
 }
 load();
 </script>
-<script defer src="nav.js?v=3"></script>
+<script defer src="nav.js?v=4"></script>
 </body>
 </html>

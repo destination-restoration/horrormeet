@@ -150,6 +150,7 @@ document.querySelectorAll('.tab').forEach((t) =>
       if (t.dataset.tab === 'news') loadNews();
       if (t.dataset.tab === 'map') loadMap();
       if (t.dataset.tab === 'me') loadMe();
+      window.scrollTo(0, 0);
     });
   })
 );
@@ -721,6 +722,7 @@ const wantedTab = location.hash.slice(1);
 if (wantedTab) {
   const btn = document.querySelector(`.tab[data-tab="${wantedTab}"]`);
   if (btn && !btn.classList.contains('active')) btn.click();
+  window.scrollTo(0, 0);
 }
 
 
