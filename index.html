@@ -11,7 +11,7 @@
 <link rel="icon" href="icon-180.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Frijole&family=Rye&display=swap">
-<link rel="stylesheet" href="styles.css?v=12">
+<link rel="stylesheet" href="styles.css?v=13">
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 <script defer src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <style>
@@ -54,7 +54,8 @@
     <button id="authChip" class="chip">Join / Sign in</button>
   </div>
   <nav class="tabs">
-    <button class="tab active" data-tab="feed"><span>Sightings</span></button>
+    <button class="tab active" data-tab="home"><span>Home</span></button>
+    <button class="tab" data-tab="feed"><span>Sightings</span></button>
     <button class="tab" data-tab="board"><span>Board</span></button>
     <button class="tab" data-tab="films"><span>Films</span></button>
     <button class="tab" data-tab="news"><span>News</span></button>
@@ -72,6 +73,9 @@
 </header>
 
 <main class="wrap">
+
+  <!-- HOME TAB -->
+  <section id="tab-home">
   <!-- pinned bounty -->
   <section class="bounty" id="bounty">
     <div class="pin">📌 Pinned · The Bounty</div>
@@ -83,8 +87,28 @@
     </div>
   </section>
 
+    <div class="section-note">What this place is</div>
+    <p style="color:var(--dim);font-size:15px;margin:6px 0 14px;max-width:60ch">HorrorMeet is the horror fans' own house: built by working horror filmmakers, moderated by humans, free forever, no algorithm, no ads. Pick a door.</p>
+    <div class="card"><div class="pad" style="padding:12px 14px">
+      <p class="body-text" style="font-size:14.5px;margin:0">👻 <b data-open="feed" style="color:var(--red);cursor:pointer">Sightings</b>: real encounters, every post reviewed by a human mod<br>
+      🗣 <b data-open="board" style="color:var(--red);cursor:pointer">The Board</b>: live threads, no junk feed<br>
+      🎬 <b data-open="films" style="color:var(--red);cursor:pointer">The Film Shelf</b>: indie horror free to watch, filmmakers list free, fans rate in tombstones<br>
+      🗞 <b data-open="news" style="color:var(--red);cursor:pointer">The Wire</b>: every horror and paranormal headline, refreshed hourly<br>
+      🗺 <b data-open="map" style="color:var(--red);cursor:pointer">The Atlas</b>: a map of real horror, Amityville to Elm Street, add your own<br>
+      📅 <b data-open="meetups" style="color:var(--red);cursor:pointer">Meetups</b>: conventions, festivals, and crew captains<br>
+      🎟 <a href="festivals.html">The Circuit</a>: every horror festival worth your submission fee, ranked<br>
+      🗝 <a href="vault.html">The Vault</a>: the public-domain masters, streaming free<br>
+      🏆 <a href="awards.html">The Awards</a>: annual, lore-verified, gleefully subjective<br>
+      🕯 <a href="seance.html">The Séance</a>: live Q&amp;As with the people who make horror<br>
+      🩸 <a href="market.html">The Estate Sale</a>: buy, sell, trade the macabre<br>
+      🔦 <a href="basement.html">The Basement</a>: the live room, right now</p>
+    </div>
+    <p class="hint" id="homeStats" style="margin-top:10px"></p>
+    <p style="margin-top:8px"><a href="join.html"><b>Register now</b></a>: claim your handle, get counted among the first hundred. <span class="hint">The first 100 members carry the Surviving Print badge forever.</span></p>
+  </section>
+
   <!-- FEED TAB -->
-  <section id="tab-feed">
+  <section id="tab-feed" class="hidden">
     <div class="composer" id="composer">
       <h3 id="composerTitle">Post a sighting</h3>
       <div id="composerAuthed" class="hidden">
@@ -252,7 +276,7 @@
 
 <div id="doorFx"><div class="frame"><div class="panel"></div></div></div>
 <div class="toast" id="toast"></div>
-<script type="module" src="app.js?v=11"></script>
+<script type="module" src="app.js?v=12"></script>
 <script defer src="nav.js?v=3"></script>
 </body>
 </html>

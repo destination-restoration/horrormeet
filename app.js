@@ -119,7 +119,7 @@ $('authChip')?.addEventListener('click', async () => {
 
 function openAccount() {
   document.querySelectorAll('.tab').forEach((x) => x.classList.remove('active'));
-  for (const name of ['feed', 'board', 'films', 'news', 'map', 'meetups', 'me']) {
+  for (const name of ['home', 'feed', 'board', 'films', 'news', 'map', 'meetups', 'me']) {
     $('tab-' + name).classList.toggle('hidden', name !== 'me');
   }
   loadMe();
@@ -142,7 +142,7 @@ document.querySelectorAll('.tab').forEach((t) =>
     document.querySelectorAll('.tab').forEach((x) => x.classList.remove('active'));
     t.classList.add('active');
     throughTheDoor(() => {
-      for (const name of ['feed', 'board', 'films', 'news', 'map', 'meetups', 'me']) {
+      for (const name of ['home', 'feed', 'board', 'films', 'news', 'map', 'meetups', 'me']) {
         $('tab-' + name).classList.toggle('hidden', t.dataset.tab !== name);
       }
       if (t.dataset.tab === 'board') loadThreads();
@@ -722,3 +722,19 @@ if (wantedTab) {
   const btn = document.querySelector(`.tab[data-tab="${wantedTab}"]`);
   if (btn && !btn.classList.contains('active')) btn.click();
 }
+
+
+/* home screen: open-a-door links + live stats */
+document.querySelectorAll('[data-open]').forEach((el) =>
+  el.addEventListener('click', () => document.querySelector(`.tab[data-tab="${el.dataset.open}"]`)?.click())
+);
+(async () => {
+  const el = $('homeStats');
+  if (!el) return;
+  const [m, s, f] = await Promise.all([
+    sb.from('profiles').select('id', { count: 'exact', head: true }),
+    sb.from('sightings').select('id', { count: 'exact', head: true }).eq('status', 'approved'),
+    sb.from('films').select('id', { count: 'exact', head: true }).eq('status', 'approved'),
+  ]);
+  el.textContent = `${m.count ?? 0} members inside · ${s.count ?? 0} sightings on record · ${f.count ?? 0} films on the shelf · founded 2026, Laurel Canyon`;
+})();

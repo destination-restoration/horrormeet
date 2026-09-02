@@ -337,3 +337,11 @@ header.app.doors-hidden nav.tabs, header.app.doors-hidden .guides{
 /* v12: scroll-collapse removed: the doors hold their ground */
 nav.tabs, .guides{max-height:none;transition:none}
 header.app.doors-hidden nav.tabs, header.app.doors-hidden .guides{max-height:none;opacity:1;pointer-events:auto}
+
+/* v13: seven doors upstairs: plaques stay readable on phones */
+@media (max-width: 520px){
+  nav.tabs{gap:4px}
+  .tab span{font-size:9.5px;padding:2px 2px}
+  .guides{gap:4px}
+  .guides a span{font-size:9px}
+}
