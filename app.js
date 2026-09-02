@@ -284,7 +284,9 @@ async function loadFeed() {
         <h3>${esc(s.title)}</h3>
         <p class="body-text">${esc(s.body)}</p>
       </div>
-      ${s.photo_url ? `<img class="photo" src="${esc(s.photo_url)}" alt="sighting photo" loading="lazy">` : ''}
+      ${s.photo_url ? (/\.(mp4|mov|webm)(\?|$)/i.test(s.photo_url)
+        ? `<video class="photo" src="${esc(s.photo_url)}" controls playsinline preload="metadata" style="width:100%"></video>`
+        : `<img class="photo" src="${esc(s.photo_url)}" alt="sighting photo" loading="lazy">`) : ''}
       <div class="card-actions">
         <button class="c-toggle">💬 Comments</button>
         <button class="c-report">Report</button>
