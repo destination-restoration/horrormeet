@@ -40,6 +40,8 @@
       <div class="row"><input id="evCity" placeholder="City"></div>
       <div class="row"><input id="evWhen" type="datetime-local"></div>
       <div class="row"><input id="evLink" placeholder="Details link (optional)"></div>
+      <div class="row"><select id="evKind"><option value="meetup">Meetup</option><option value="convention">Convention</option><option value="festival">Festival</option></select></div>
+      <div class="row"><input id="evCaptain" placeholder="Captain username (optional, without @)"></div>
       <div class="actions"><button class="btn" id="evBtn">Create event</button></div>
     </div>
 
@@ -155,6 +157,7 @@ $('evBtn').onclick = async () => {
   const { error } = await sb.from('events').insert({
     title: $('evTitle').value.trim(), venue: $('evVenue').value.trim() || null,
     city: $('evCity').value.trim() || null, starts_at, link: $('evLink').value.trim() || null,
+    kind: $('evKind').value, captain: $('evCaptain').value.trim().replace(/^@/, '') || null,
     created_by: session.user.id
   });
   if (error) return toast(error.message);

@@ -119,7 +119,7 @@ $('authChip')?.addEventListener('click', async () => {
 
 function openAccount() {
   document.querySelectorAll('.tab').forEach((x) => x.classList.remove('active'));
-  for (const name of ['feed', 'board', 'films', 'meetups', 'me']) {
+  for (const name of ['feed', 'board', 'films', 'news', 'map', 'meetups', 'me']) {
     $('tab-' + name).classList.toggle('hidden', name !== 'me');
   }
   loadMe();
@@ -344,7 +344,26 @@ async function loadEvents() {
   if (error || !data?.length) { box.innerHTML = `<div class="empty">No meetups listed yet. Soon.</div>`; return; }
   const months = ['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'];
   box.innerHTML = '';
-  for (const ev of data) {
+  const kinds = [
+    ['festival', 'Partner festivals'],
+    ['convention', 'Conventions · take the crew'],
+    ['meetup', 'Meetups'],
+  ];
+  for (const [kindKey, kindLabel] of kinds) {
+    const group = data.filter((e) => (e.kind || 'meetup') === kindKey);
+    if (!group.length) continue;
+    const head = document.createElement('div');
+    head.className = 'section-note';
+    head.textContent = kindLabel;
+    box.appendChild(head);
+    if (kindKey === 'convention') {
+      const hint = document.createElement('p');
+      hint.className = 'hint';
+      hint.style.margin = '0 0 8px';
+      hint.textContent = 'Every convention needs a HorrorMeet captain: the member who rallies the crew, picks the meeting spot, wears the metaphorical flag. Want a captaincy? Message the admins on the board and your name goes up.';
+      box.appendChild(hint);
+    }
+  for (const ev of group) {
     const d = new Date(ev.starts_at);
     const { data: count } = await sb.rpc('rsvp_count', { event: ev.id });
     const el = document.createElement('div');
@@ -355,6 +374,9 @@ async function loadEvents() {
         <h3>${esc(ev.title)}</h3>
         <div class="where">${esc([ev.venue, ev.city].filter(Boolean).join(' · '))} · ${d.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' })}</div>
         <div class="going">${count ?? 0} going${ev.link ? ` · <a href="${esc(ev.link)}" target="_blank" rel="noopener">details</a>` : ''}</div>
+        ${(ev.kind || 'meetup') !== 'meetup' ? (ev.captain
+          ? `<div class="hint" style="margin-top:4px">🧭 HorrorMeet captain: <b>@${esc(ev.captain)}</b>. Talk to them about going.</div>`
+          : `<div class="hint" style="margin-top:4px">🧭 No captain yet. Claim it on the board.</div>`) : ''}
       </div>
       <button class="btn ghost rsvp">RSVP</button>
     </div>`;
@@ -367,6 +389,7 @@ async function loadEvents() {
       loadEvents();
     });
     box.appendChild(el);
+  }
   }
 }
 
@@ -487,7 +510,13 @@ $('filmBtn')?.addEventListener('click', async () => {
   $('filmBtn').disabled = false;
 });
 
+let filmRatings = {};
 async function loadFilms() {
+  const { data: rats } = await sb.from('film_ratings').select('film_id,rating,user_id');
+  filmRatings = {};
+  (rats || []).forEach((r) => {
+    (filmRatings[r.film_id] = filmRatings[r.film_id] || []).push(r);
+  });
   const { data, error } = await sb
     .from('films')
     .select('id,title,year,roles,synopsis,watch_url,trailer_url,poster_url,runtime_min,subgenre,featured,created_at,profiles(username)')
@@ -506,6 +535,14 @@ async function loadFilms() {
         <h3>${esc(f.title)}${f.year ? ` <span style="color:var(--faint);font-weight:400">(${f.year})</span>` : ''}</h3>
         <div class="hint" style="margin-bottom:6px">${[f.subgenre, f.runtime_min ? f.runtime_min + ' min' : null].filter(Boolean).map(esc).join(' · ')}</div>
         ${f.synopsis ? `<p class="body-text">${esc(f.synopsis)}</p>` : ''}
+      <div class="hint film-rate" data-film="${f.id}" style="margin-top:6px">${(() => {
+        const rs = filmRatings[f.id] || [];
+        const avg = rs.length ? (rs.reduce((s, r) => s + r.rating, 0) / rs.length) : 0;
+        const mine = session ? rs.find((r) => r.user_id === session.user.id)?.rating : null;
+        let stones = '';
+        for (let i = 1; i <= 5; i++) stones += `<span class="stone" data-v="${i}" style="cursor:${session ? 'pointer' : 'default'};opacity:${i <= Math.round(avg) ? 1 : 0.3}">🪦</span>`;
+        return stones + ` <span>${rs.length ? avg.toFixed(1) + ' · ' + rs.length + ' rating' + (rs.length > 1 ? 's' : '') : 'unrated'}${mine ? ' · yours: ' + mine : ''}</span>`;
+      })()}</div>
         <div class="admin-row">
           <a class="btn" href="${esc(f.watch_url)}" target="_blank" rel="noopener">▶ Watch</a>
           ${f.trailer_url ? `<a class="btn ghost" href="${esc(f.trailer_url)}" target="_blank" rel="noopener">Trailer</a>` : ''}
@@ -635,3 +672,31 @@ if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catc
 await refreshSession();
 loadFeed();
 loadEvents();
+
+
+/* ---------- tombstone rating clicks (delegated) ---------- */
+document.addEventListener('click', async (e) => {
+  const stone = e.target.closest('.stone');
+  if (!stone || !session) return;
+  const wrap = stone.closest('.film-rate');
+  if (!wrap) return;
+  const film_id = Number(wrap.dataset.film);
+  const rating = Number(stone.dataset.v);
+  const { error } = await sb.from('film_ratings').upsert({ film_id, user_id: session.user.id, rating });
+  if (error) return toast(error.message);
+  toast(`Rated ${rating} tombstone${rating > 1 ? 's' : ''}.`);
+  loadFilms();
+});
+
+/* ---------- this day in horror ---------- */
+async function loadAlmanac() {
+  const el = $('almanac');
+  if (!el) return;
+  const now = new Date();
+  const { data } = await sb.from('almanac').select('year,entry').eq('month', now.getMonth() + 1).eq('day', now.getDate());
+  if (!data?.length) { el.classList.add('hidden'); return; }
+  el.classList.remove('hidden');
+  el.innerHTML = `<div class="pad"><div class="post-head">☠️ THIS DAY IN HORROR</div>` +
+    data.map((d) => `<p class="body-text" style="font-size:14.5px">${d.year ? `<b>${d.year}.</b> ` : ''}${esc(d.entry)}</p>`).join('') + `</div>`;
+}
+loadAlmanac();
