@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Basement · HorrorMeet</title>
+<meta name="theme-color" content="#0b0b0e">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Frijole&family=Rye&display=swap">
+<link rel="stylesheet" href="styles.css?v=6">
+<style>
+  .bx-title{font-family:'Frijole',Impact,fantasy;font-size:30px;color:var(--white);text-shadow:3px 3px 0 var(--red-deep);margin:24px 0 4px;line-height:1.2}
+  .bx-sub{font-family:'Rye',Georgia,serif;color:var(--red);font-size:13px;letter-spacing:.16em;text-transform:uppercase;margin:0 0 14px}
+  #chatBox{border:2px solid var(--line);background:var(--panel);height:52vh;min-height:320px;overflow-y:auto;padding:12px 14px;display:flex;flex-direction:column;gap:8px}
+  .msg{font-size:14.5px;line-height:1.4;word-wrap:break-word}
+  .msg .u{color:var(--red);font-weight:700}
+  .msg .t{color:var(--faint);font-size:11px;margin-left:6px}
+  .msg .zap{color:var(--faint);cursor:pointer;margin-left:8px;font-size:11px}
+  .msg .zap:hover{color:var(--red)}
+  #souls{color:var(--faint);font-size:12.5px;letter-spacing:.08em;text-transform:uppercase;margin:8px 0}
+  #souls b{color:var(--red)}
+  .chatrow{display:flex;gap:8px;margin-top:10px}
+  .chatrow input{flex:1}
+</style>
+</head>
+<body>
+<header class="app"><div class="tagline-bar"><div class="inner">mind the stairs. the light switch is at the bottom.</div></div><div class="app-bar"><a class="logo" href="index.html">HORRORMEET</a></div>
+  <nav class="tabs">
+    <a class="tab" href="index.html#feed"><span>Sightings</span></a>
+    <a class="tab" href="index.html#board"><span>Board</span></a>
+    <a class="tab" href="index.html#films"><span>Films</span></a>
+    <a class="tab" href="index.html#news"><span>News</span></a>
+    <a class="tab" href="index.html#map"><span>Map</span></a>
+    <a class="tab" href="index.html#meetups"><span>Meetups</span></a>
+  </nav>
+  <div class="guides">
+    <a href="festivals.html">🎟 The Circuit</a>
+    <a href="vault.html">🗝 The Vault</a>
+    <a href="awards.html">🏆 The Awards</a>
+    <a href="seance.html">🕯 The Séance</a>
+    <a href="market.html">🩸 Estate Sale</a>
+    <a href="basement.html" class="on">🔦 The Basement</a>
+  </div>
+</header>
+<main class="wrap">
+  <div class="bx-title">THE BASEMENT</div>
+  <div class="bx-sub">The live room · say it now or hold it forever</div>
+  <div id="souls">🔦 checking who's down here...</div>
+  <div id="chatBox"><div class="empty">Feeling for the light switch...</div></div>
+  <div class="chatrow" id="chatAuthed" style="display:none">
+    <input id="chatInput" maxlength="500" placeholder="Say something. Everyone down here hears it.">
+    <button class="btn" id="chatSend">Send</button>
+  </div>
+  <p class="hint" id="chatAnon" style="display:none">Sign in on the <a href="index.html">main board</a> to speak. Lurking is free and traditional.</p>
+  <p class="hint" style="margin-top:10px">Messages fade after seven days: the basement keeps no permanent records. House rules apply, mods can hear everything.</p>
+  <footer>THE BASEMENT · a HorrorMeet room · <a href="index.html">back upstairs</a></footer>
+</main>
+<div class="toast" id="toast"></div>
+<script type="module">
+import { sb, toast } from './app-core.js';
+const $ = (id) => document.getElementById(id);
+const esc = (s) => { const d = document.createElement('div'); d.textContent = s ?? ''; return d.innerHTML; };
+
+const { data: { session } } = await sb.auth.getSession();
+let isAdmin = false, myName = 'someone';
+if (session) {
+  const { data: p } = await sb.from('profiles').select('username,is_admin').eq('id', session.user.id).single();
+  isAdmin = !!p?.is_admin; myName = p?.username || 'someone';
+  $('chatAuthed').style.display = 'flex';
+} else {
+  $('chatAnon').style.display = 'block';
+}
+
+const names = {};
+async function nameOf(id) {
+  if (names[id]) return names[id];
+  const { data } = await sb.from('profiles').select('username').eq('id', id).single();
+  names[id] = data?.username || '???';
+  return names[id];
+}
+
+const box = $('chatBox');
+function render(m, name) {
+  const el = document.createElement('div');
+  el.className = 'msg'; el.dataset.id = m.id;
+  const when = new Date(m.created_at).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' });
+  el.innerHTML = `<span class="u">@${esc(name)}</span> ${esc(m.body)}<span class="t">${when}</span>` +
+    (isAdmin ? `<span class="zap" title="remove">✕</span>` : '');
+  el.querySelector('.zap')?.addEventListener('click', async () => {
+    await sb.from('chat_messages').delete().eq('id', m.id); el.remove();
+  });
+  box.appendChild(el);
+  box.scrollTop = box.scrollHeight;
+}
+
+const { data: history } = await sb.from('chat_messages').select('*').order('created_at', { ascending: false }).limit(50);
+box.innerHTML = '';
+for (const m of (history || []).reverse()) render(m, await nameOf(m.author));
+if (!history?.length) box.innerHTML = '<div class="empty">Dead quiet down here. Break the silence.</div>';
+
+const room = sb.channel('basement', { config: { presence: { key: session?.user?.id || ('ghost-' + Math.random().toString(36).slice(2, 8)) } } });
+room.on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'chat_messages' }, async (payload) => {
+  if (box.querySelector('.empty')) box.innerHTML = '';
+  render(payload.new, await nameOf(payload.new.author));
+});
+room.on('presence', { event: 'sync' }, () => {
+  const n = Object.keys(room.presenceState()).length;
+  $('souls').innerHTML = `🔦 <b>${n}</b> soul${n === 1 ? '' : 's'} in the basement right now`;
+});
+room.subscribe(async (status) => {
+  if (status === 'SUBSCRIBED') await room.track({ name: myName });
+});
+
+async function send() {
+  const body = $('chatInput').value.trim();
+  if (!body || !session) return;
+  $('chatSend').disabled = true;
+  const { error } = await sb.from('chat_messages').insert({ author: session.user.id, body });
+  if (error) toast(error.message);
+  $('chatInput').value = '';
+  setTimeout(() => { $('chatSend').disabled = false; }, 1200);
+}
+$('chatSend')?.addEventListener('click', send);
+$('chatInput')?.addEventListener('keydown', (e) => { if (e.key === 'Enter') send(); });
+</script>
+</body>
+</html>
