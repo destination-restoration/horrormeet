@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Rooms · HorrorMeet</title>
+<meta name="theme-color" content="#0b0b0e">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Frijole&family=Rye&display=swap">
+<link rel="stylesheet" href="styles.css?v=13">
+<style>
+  .rx-title{font-family:'Frijole',Impact,fantasy;font-size:30px;color:var(--white);text-shadow:3px 3px 0 var(--red-deep);margin:24px 0 4px;line-height:1.2}
+  .rx-sub{font-family:'Rye',Georgia,serif;color:var(--red);font-size:13px;letter-spacing:.16em;text-transform:uppercase;margin:0 0 16px}
+  .room{border:2px solid var(--line);background:var(--panel);padding:14px 16px;margin:10px 0}
+  .room h3{margin:0 0 4px;font-size:17px}
+  .room p{margin:0;font-size:14px;color:var(--dim)}
+  .room a.enter{display:inline-block;margin-top:8px;background:var(--red);color:#0a0607;font-family:'Rye',Georgia,serif;padding:6px 14px;font-size:12px;letter-spacing:.08em;text-decoration:none}
+</style>
+</head>
+<body>
+<header class="app"><div class="tagline-bar"><div class="inner">every orphaned community deserves a room.</div></div><div class="app-bar"><a class="logo" href="index.html">HORRORMEET</a></div>
+  <nav class="tabs">
+    <a class="tab" href="index.html#home"><span>Home</span></a>
+    <a class="tab" href="index.html#feed"><span>Sightings</span></a>
+    <a class="tab" href="index.html#board"><span>Board</span></a>
+    <a class="tab" href="index.html#films"><span>Films</span></a>
+    <a class="tab" href="index.html#news"><span>News</span></a>
+    <a class="tab" href="index.html#map"><span>Map</span></a>
+    <a class="tab" href="index.html#meetups"><span>Meetups</span></a>
+  </nav>
+  <div class="guides">
+    <a href="festivals.html"><span>🎟 CIRCUIT</span></a>
+    <a href="vault.html"><span>🗝 VAULT</span></a>
+    <a href="awards.html"><span>🏆 AWARDS</span></a>
+    <a href="seance.html"><span>🕯 SÉANCE</span></a>
+    <a href="market.html"><span>🩸 ESTATE SALE</span></a>
+    <a href="basement.html"><span>🔦 BASEMENT</span></a>
+    <a href="rooms.html" class="on"><span>🚪 ROOMS</span></a>
+    <a href="morgue.html"><span>⚰ MORGUE</span></a>
+    <a href="crew.html"><span>🎬 CREW</span></a>
+  </div>
+</header>
+<main class="wrap">
+  <div class="rx-title">THE ROOMS</div>
+  <div class="rx-sub">Homes for communities the internet forgot</div>
+  <p style="color:var(--dim);font-size:15px;max-width:60ch">When Horror Amino shut down in December, whole communities lost their home overnight, with no warning and no export. So we built rooms. Each one is a corner of the house for a specific crowd: pick yours, or ask us to open a room for a community that lost its own.</p>
+  <div id="rooms"><div class="empty">Opening doors...</div></div>
+  <p class="hint" style="margin-top:16px">Run an orphaned community? Message @LandonXXL on the board and we'll open a room for it, your name on the door.</p>
+  <footer>THE ROOMS · a HorrorMeet gathering · <a href="index.html">back to the board</a></footer>
+</main>
+<div class="toast" id="toast"></div>
+<script type="module">
+import { sb } from './app-core.js';
+const esc = (s) => { const d = document.createElement('div'); d.textContent = s ?? ''; return d.innerHTML; };
+const { data } = await sb.from('rooms').select('id,name,description').eq('status','active').order('created_at');
+const counts = {};
+const { data: th } = await sb.from('threads').select('room_id').eq('status','approved');
+(th||[]).forEach(t => { if (t.room_id) counts[t.room_id] = (counts[t.room_id]||0)+1; });
+document.getElementById('rooms').innerHTML = (data||[]).length ? data.map(r => `
+  <div class="room"><h3>${esc(r.name)}</h3><p>${esc(r.description||'')}</p>
+  <a class="enter" href="index.html#board?room=${r.id}">Enter · ${counts[r.id]||0} thread${(counts[r.id]||0)===1?'':'s'}</a></div>`).join('')
+  : `<div class="empty">No rooms open yet.</div>`;
+</script>
+<script defer src="nav.js?v=4"></script>
+</body>
+</html>

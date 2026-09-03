@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Morgue · HorrorMeet</title>
+<meta name="theme-color" content="#0b0b0e">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Frijole&family=Rye&display=swap">
+<link rel="stylesheet" href="styles.css?v=13">
+<style>
+  .mg-title{font-family:'Frijole',Impact,fantasy;font-size:30px;color:var(--white);text-shadow:3px 3px 0 var(--red-deep);margin:24px 0 4px;line-height:1.2}
+  .mg-sub{font-family:'Rye',Georgia,serif;color:var(--red);font-size:13px;letter-spacing:.16em;text-transform:uppercase;margin:0 0 16px}
+  .art .cat{color:var(--red);font-size:11px;letter-spacing:.1em;text-transform:uppercase}
+  .art h3{margin:2px 0 6px;font-size:18px}
+  .art .body-text{font-size:14.5px}
+  .art .by{color:var(--faint);font-size:12px;margin-top:8px}
+</style>
+</head>
+<body>
+<header class="app"><div class="tagline-bar"><div class="inner">the drawers are cold. the files are colder.</div></div><div class="app-bar"><a class="logo" href="index.html">HORRORMEET</a></div>
+  <nav class="tabs">
+    <a class="tab" href="index.html#home"><span>Home</span></a>
+    <a class="tab" href="index.html#feed"><span>Sightings</span></a>
+    <a class="tab" href="index.html#board"><span>Board</span></a>
+    <a class="tab" href="index.html#films"><span>Films</span></a>
+    <a class="tab" href="index.html#news"><span>News</span></a>
+    <a class="tab" href="index.html#map"><span>Map</span></a>
+    <a class="tab" href="index.html#meetups"><span>Meetups</span></a>
+  </nav>
+  <div class="guides">
+    <a href="festivals.html"><span>🎟 CIRCUIT</span></a>
+    <a href="vault.html"><span>🗝 VAULT</span></a>
+    <a href="awards.html"><span>🏆 AWARDS</span></a>
+    <a href="seance.html"><span>🕯 SÉANCE</span></a>
+    <a href="market.html"><span>🩸 ESTATE SALE</span></a>
+    <a href="basement.html"><span>🔦 BASEMENT</span></a>
+    <a href="rooms.html"><span>🚪 ROOMS</span></a>
+    <a href="morgue.html" class="on"><span>⚰ MORGUE</span></a>
+    <a href="crew.html"><span>🎬 CREW</span></a>
+  </div>
+</header>
+<main class="wrap">
+  <div class="mg-title">THE MORGUE</div>
+  <div class="mg-sub">The community lore wiki · cases, hauntings, lost media, legends</div>
+  <p style="color:var(--dim);font-size:15px;max-width:60ch">The Morgue is where the community writes down what it knows: the real cases, the famous hauntings, the lost films, the legends worth preserving. Members write, humans review, and it becomes a reference that outlives any one thread. Add a file to the drawer.</p>
+
+  <div class="composer">
+    <h3>Write a file</h3>
+    <div id="wAuthed" class="hidden">
+      <div class="row"><input id="aTitle" maxlength="160" placeholder="Title of the case, haunting, or legend"></div>
+      <div class="row"><select id="aCat"><option value="case">True case</option><option value="haunting">Haunting</option><option value="lost-media">Lost media</option><option value="legend">Legend / folklore</option><option value="creature">Creature / cryptid</option><option value="other">Other</option></select></div>
+      <div class="row"><textarea id="aBody" rows="7" maxlength="20000" placeholder="Write the file. Facts where you have them, sources where you can, and tell it like it matters. 100 characters minimum."></textarea></div>
+      <div class="actions"><button class="btn" id="aBtn">Submit for review</button><span class="hint">Reviewed before it enters the record. No plagiarism, cite where you can. <a href="rules.html">Rules</a>.</span></div>
+    </div>
+    <div id="wAnon"><p class="hint" style="margin:0">Sign in on the <a href="index.html">main board</a> to write a file.</p></div>
+  </div>
+
+  <div class="section-note">The drawers</div>
+  <div id="articles"><div class="empty">Pulling the files...</div></div>
+  <footer>THE MORGUE · a HorrorMeet archive · <a href="index.html">back to the board</a></footer>
+</main>
+<div class="toast" id="toast"></div>
+<script type="module">
+import { sb, toast } from './app-core.js';
+const $ = (id) => document.getElementById(id);
+const esc = (s) => { const d = document.createElement('div'); d.textContent = s ?? ''; return d.innerHTML; };
+const { data: { session } } = await sb.auth.getSession();
+$(session ? 'wAnon' : 'wAuthed').classList.add('hidden');
+$(session ? 'wAuthed' : 'wAnon').classList.remove('hidden');
+
+$('aBtn')?.addEventListener('click', async () => {
+  if (!session) return;
+  const title = $('aTitle').value.trim(), body = $('aBody').value.trim();
+  if (!title || body.length < 100) return toast('Title, and at least 100 characters of file.');
+  const { error } = await sb.from('morgue_articles').insert({ author: session.user.id, title, category: $('aCat').value, body, status: 'pending' });
+  if (error) return toast(error.message);
+  toast('Filed. A mod reviews before it enters the record.');
+  $('aTitle').value = ''; $('aBody').value = ''; load();
+});
+
+async function load() {
+  const { data } = await sb.from('morgue_articles').select('title,category,body,created_at,profiles!author(username)').eq('status','active').order('created_at',{ascending:false}).limit(50);
+  $('articles').innerHTML = (data||[]).length ? data.map(a => `
+    <div class="card art"><div class="pad">
+      <div class="cat">${esc(a.category)}</div><h3>${esc(a.title)}</h3>
+      <p class="body-text" style="white-space:pre-wrap">${esc(a.body)}</p>
+      <div class="by">filed by @${esc(a.profiles?.username || '?')}</div>
+    </div></div>`).join('') : `<div class="empty">The drawers are empty. Be the first coroner.</div>`;
+}
+load();
+</script>
+<script defer src="nav.js?v=4"></script>
+</body>
+</html>

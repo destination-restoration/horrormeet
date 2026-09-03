@@ -26,6 +26,12 @@
     <div class="section-note">Pending market listings</div>
     <div id="pendingListings"><div class="empty">Loading...</div></div>
 
+    <div class="section-note">Pending Morgue files</div>
+    <div id="pendingMorgue"><div class="empty">Loading...</div></div>
+
+    <div class="section-note">Pending casting calls</div>
+    <div id="pendingCalls"><div class="empty">Loading...</div></div>
+
     <div class="section-note">Broken links (weekly patrol)</div>
     <div id="brokenLinks"><div class="empty">Loading...</div></div>
 
@@ -76,7 +82,7 @@ if (!isAdmin) {
 } else {
   $('gate').classList.add('hidden');
   $('panel').classList.remove('hidden');
-  loadPending(); loadPendingFilms(); loadPendingSpots(); loadReports(); loadModThreads(); loadNewMembers(); loadPendingListings(); loadBrokenLinks();
+  loadPending(); loadPendingFilms(); loadPendingSpots(); loadReports(); loadModThreads(); loadNewMembers(); loadPendingListings(); loadPendingMorgue(); loadPendingCalls(); loadBrokenLinks();
 }
 
 async function loadPendingListings() {
@@ -92,6 +98,35 @@ async function loadPendingListings() {
   document.getElementById('pendingListings').querySelectorAll('.card').forEach((c) => {
     c.querySelector('.li-approve').onclick = async () => { await sb.from('listings').update({ status: 'active' }).eq('id', c.dataset.id); toast('On the block.'); loadPendingListings(); };
     c.querySelector('.li-remove').onclick = async () => { await sb.from('listings').update({ status: 'removed' }).eq('id', c.dataset.id); toast('Removed.'); loadPendingListings(); };
+  });
+}
+
+async function loadPendingMorgue() {
+  const { data } = await sb.from('morgue_articles').select('id,title,category,body,profiles!author(username)').eq('status','pending').order('created_at');
+  document.getElementById('pendingMorgue').innerHTML = (data||[]).length ? data.map(a => `
+    <div class="card" data-id="${a.id}"><div class="pad">
+      <div class="post-head"><span class="u">@${esc(a.profiles?.username||'?')}</span> · ${esc(a.category)}</div>
+      <h3>${esc(a.title)}</h3><p class="body-text" style="white-space:pre-wrap">${esc(a.body)}</p>
+      <div class="admin-row"><button class="btn good m-approve">Approve</button><button class="btn danger m-remove">Remove</button></div>
+    </div></div>`).join('') : `<div class="empty">No files waiting.</div>`;
+  document.getElementById('pendingMorgue').querySelectorAll('.card').forEach(c => {
+    c.querySelector('.m-approve').onclick = async () => { await sb.from('morgue_articles').update({status:'active'}).eq('id',c.dataset.id); toast('Filed.'); loadPendingMorgue(); };
+    c.querySelector('.m-remove').onclick = async () => { await sb.from('morgue_articles').update({status:'removed'}).eq('id',c.dataset.id); toast('Removed.'); loadPendingMorgue(); };
+  });
+}
+
+async function loadPendingCalls() {
+  const { data } = await sb.from('casting_calls').select('id,production,roles_sought,compensation,location,dates,details,profiles!poster(username)').eq('status','pending').order('created_at');
+  document.getElementById('pendingCalls').innerHTML = (data||[]).length ? data.map(c => `
+    <div class="card" data-id="${c.id}"><div class="pad">
+      <div class="post-head"><span class="u">@${esc(c.profiles?.username||'?')}</span></div>
+      <h3>${esc(c.production)}</h3><p class="body-text"><b>Seeking:</b> ${esc(c.roles_sought)}<br>${[c.compensation,c.location,c.dates].filter(Boolean).map(esc).join(' · ')}</p>
+      ${c.details?`<p class="body-text">${esc(c.details)}</p>`:''}
+      <div class="admin-row"><button class="btn good cc-approve">Approve</button><button class="btn danger cc-remove">Remove</button></div>
+    </div></div>`).join('') : `<div class="empty">No calls waiting.</div>`;
+  document.getElementById('pendingCalls').querySelectorAll('.card').forEach(c => {
+    c.querySelector('.cc-approve').onclick = async () => { await sb.from('casting_calls').update({status:'active'}).eq('id',c.dataset.id); toast('Posted.'); loadPendingCalls(); };
+    c.querySelector('.cc-remove').onclick = async () => { await sb.from('casting_calls').update({status:'removed'}).eq('id',c.dataset.id); toast('Removed.'); loadPendingCalls(); };
   });
 }
 

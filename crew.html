@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Crew · HorrorMeet</title>
+<meta name="theme-color" content="#0b0b0e">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Frijole&family=Rye&display=swap">
+<link rel="stylesheet" href="styles.css?v=13">
+<style>
+  .cw-title{font-family:'Frijole',Impact,fantasy;font-size:30px;color:var(--white);text-shadow:3px 3px 0 var(--red-deep);margin:24px 0 4px;line-height:1.2}
+  .cw-sub{font-family:'Rye',Georgia,serif;color:var(--red);font-size:13px;letter-spacing:.16em;text-transform:uppercase;margin:0 0 16px}
+  .who h3{margin:0 0 3px;font-size:16.5px}
+  .who .craft{color:var(--red);font-size:12px;letter-spacing:.08em;text-transform:uppercase}
+  .call .prod{font-family:'Rye',Georgia,serif;color:var(--white);font-size:16px}
+  .call .meta{color:var(--dim);font-size:13px;margin-top:4px}
+</style>
+</head>
+<body>
+<header class="app"><div class="tagline-bar"><div class="inner">every production is a summoning. bring the right people.</div></div><div class="app-bar"><a class="logo" href="index.html">HORRORMEET</a></div>
+  <nav class="tabs">
+    <a class="tab" href="index.html#home"><span>Home</span></a>
+    <a class="tab" href="index.html#feed"><span>Sightings</span></a>
+    <a class="tab" href="index.html#board"><span>Board</span></a>
+    <a class="tab" href="index.html#films"><span>Films</span></a>
+    <a class="tab" href="index.html#news"><span>News</span></a>
+    <a class="tab" href="index.html#map"><span>Map</span></a>
+    <a class="tab" href="index.html#meetups"><span>Meetups</span></a>
+  </nav>
+  <div class="guides">
+    <a href="festivals.html"><span>🎟 CIRCUIT</span></a>
+    <a href="vault.html"><span>🗝 VAULT</span></a>
+    <a href="awards.html"><span>🏆 AWARDS</span></a>
+    <a href="seance.html"><span>🕯 SÉANCE</span></a>
+    <a href="market.html"><span>🩸 ESTATE SALE</span></a>
+    <a href="basement.html"><span>🔦 BASEMENT</span></a>
+    <a href="rooms.html"><span>🚪 ROOMS</span></a>
+    <a href="morgue.html"><span>⚰ MORGUE</span></a>
+    <a href="crew.html" class="on"><span>🎬 CREW</span></a>
+  </div>
+</header>
+<main class="wrap">
+  <div class="cw-title">THE CREW</div>
+  <div class="cw-sub">The for-hire directory &amp; the casting board</div>
+
+  <div id="hireBox" class="composer hidden">
+    <h3>List yourself for hire</h3>
+    <div class="row" style="display:flex;gap:8px;align-items:center">
+      <label class="hint" style="white-space:nowrap">Available for work</label>
+      <input type="checkbox" id="hForHire" style="width:auto">
+    </div>
+    <div class="row"><input id="hCraft" maxlength="80" placeholder="Your craft(s): director, DP, FX, actor, composer, editor..."></div>
+    <div class="row"><input id="hReel" maxlength="300" placeholder="Reel / portfolio link (optional)"></div>
+    <div class="actions"><button class="btn" id="hBtn">Save</button><span class="hint">Shows on your profile card here. Productions reach you on the board.</span></div>
+  </div>
+
+  <div class="section-note">Available for hire</div>
+  <div id="crewList"><div class="empty">Checking the call sheet...</div></div>
+
+  <div class="composer" style="margin-top:18px">
+    <h3>Post a casting call</h3>
+    <div id="callAuthed" class="hidden">
+      <div class="row"><input id="cProd" maxlength="120" placeholder="Production title"></div>
+      <div class="row"><input id="cRoles" maxlength="200" placeholder="Roles / crew sought"></div>
+      <div class="row" style="display:flex;gap:8px"><input id="cComp" maxlength="80" placeholder="Pay (or 'deferred')" style="flex:1"><input id="cLoc" maxlength="80" placeholder="Location" style="flex:1"></div>
+      <div class="row"><input id="cDates" maxlength="80" placeholder="Shoot dates"></div>
+      <div class="row"><textarea id="cDetails" rows="3" maxlength="2000" placeholder="Details, how to apply, contact via the board"></textarea></div>
+      <div class="actions"><button class="btn" id="cBtn">Submit for review</button><span class="hint">Reviewed before posting. Real productions only. <a href="rules.html">Rules</a>.</span></div>
+    </div>
+    <div id="callAnon"><p class="hint" style="margin:0">Sign in on the <a href="index.html">main board</a> to post a casting call.</p></div>
+  </div>
+
+  <div class="section-note">Open casting calls</div>
+  <div id="calls"><div class="empty">Loading...</div></div>
+  <footer>THE CREW · a HorrorMeet directory · <a href="index.html">back to the board</a></footer>
+</main>
+<div class="toast" id="toast"></div>
+<script type="module">
+import { sb, toast } from './app-core.js';
+const $ = (id) => document.getElementById(id);
+const esc = (s) => { const d = document.createElement('div'); d.textContent = s ?? ''; return d.innerHTML; };
+const { data: { session } } = await sb.auth.getSession();
+
+if (session) {
+  $('hireBox').classList.remove('hidden');
+  $('callAuthed').classList.remove('hidden'); $('callAnon').classList.add('hidden');
+  const { data: p } = await sb.from('profiles').select('for_hire,craft,reel_url').eq('id', session.user.id).single();
+  if (p) { $('hForHire').checked = !!p.for_hire; $('hCraft').value = p.craft || ''; $('hReel').value = p.reel_url || ''; }
+} else {
+  $('callAnon').classList.remove('hidden');
+}
+
+$('hBtn')?.addEventListener('click', async () => {
+  const { error } = await sb.from('profiles').update({
+    for_hire: $('hForHire').checked, craft: $('hCraft').value.trim() || null, reel_url: $('hReel').value.trim() || null
+  }).eq('id', session.user.id);
+  if (error) return toast(error.message);
+  toast('Saved. You are on the call sheet.'); loadCrew();
+});
+
+async function loadCrew() {
+  const { data } = await sb.from('profiles').select('username,craft,reel_url').eq('for_hire', true).limit(100);
+  $('crewList').innerHTML = (data||[]).length ? data.map(c => `
+    <div class="card who"><div class="pad">
+      <h3>@${esc(c.username || '?')}</h3><div class="craft">${esc(c.craft || 'available')}</div>
+      ${c.reel_url ? `<div class="hint" style="margin-top:6px"><a href="${esc(c.reel_url)}" target="_blank" rel="noopener">reel / portfolio</a></div>` : ''}
+    </div></div>`).join('') : `<div class="empty">Nobody on the call sheet yet. List yourself above.</div>`;
+}
+
+$('cBtn')?.addEventListener('click', async () => {
+  const production = $('cProd').value.trim(), roles = $('cRoles').value.trim();
+  if (!production || !roles) return toast('Production and roles required.');
+  const { error } = await sb.from('casting_calls').insert({
+    poster: session.user.id, production, roles_sought: roles,
+    compensation: $('cComp').value.trim() || null, location: $('cLoc').value.trim() || null,
+    dates: $('cDates').value.trim() || null, details: $('cDetails').value.trim() || null, status: 'pending'
+  });
+  if (error) return toast(error.message);
+  toast('Submitted. A mod reviews before it posts.');
+  ['cProd','cRoles','cComp','cLoc','cDates','cDetails'].forEach(id => $(id).value = ''); loadCalls();
+});
+
+async function loadCalls() {
+  const { data } = await sb.from('casting_calls').select('production,roles_sought,compensation,location,dates,details,status,profiles!poster(username)').in('status',['active','filled']).order('created_at',{ascending:false}).limit(40);
+  $('calls').innerHTML = (data||[]).length ? data.map(c => `
+    <div class="card call"><div class="pad">
+      <div class="prod">${esc(c.production)} ${c.status==='filled'?'<span class="craft">· FILLED</span>':''}</div>
+      <div class="meta"><b>Seeking:</b> ${esc(c.roles_sought)}</div>
+      <div class="meta">${[c.compensation, c.location, c.dates].filter(Boolean).map(esc).join(' · ')}</div>
+      ${c.details ? `<p class="body-text" style="font-size:14px;margin-top:6px">${esc(c.details)}</p>` : ''}
+      <div class="hint" style="margin-top:6px">Posted by @${esc(c.profiles?.username||'?')} · apply via the <a href="index.html">board</a></div>
+    </div></div>`).join('') : `<div class="empty">No open calls. Post the first.</div>`;
+}
+loadCrew(); loadCalls();
+</script>
+<script defer src="nav.js?v=4"></script>
+</body>
+</html>
