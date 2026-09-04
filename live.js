@@ -38,3 +38,17 @@ sb.channel('front-porch')
     if (p.new?.username) announce(p.new.username);
   })
   .subscribe();
+
+/* admin key: visible only to signed-in admins */
+(async () => {
+  const { data: { session } } = await sb.auth.getSession();
+  if (!session || !bar || document.getElementById('adminBtn')) return;
+  const { data: p } = await sb.from('profiles').select('is_admin').eq('id', session.user.id).single();
+  if (!p?.is_admin) return;
+  const a = document.createElement('a');
+  a.id = 'adminBtn';
+  a.href = 'admin.html';
+  a.textContent = '\u{1F5DD} ADMIN';
+  a.style.cssText = 'color:var(--red);font-size:11.5px;letter-spacing:.06em;border:1px solid var(--red);padding:4px 9px;margin-right:8px;text-decoration:none;white-space:nowrap';
+  bar.insertBefore(a, chip);
+})();
