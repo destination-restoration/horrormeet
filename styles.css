@@ -345,3 +345,24 @@ header.app.doors-hidden nav.tabs, header.app.doors-hidden .guides{max-height:non
   .guides{gap:4px}
   .guides a span{font-size:9px}
 }
+
+
+/* ---------- LIVE v1: member counter + signup drops ---------- */
+#memberCount{color:var(--dim);font-size:11.5px;letter-spacing:.06em;text-transform:uppercase;
+  border:1px solid var(--line);padding:4px 9px;margin-right:8px;white-space:nowrap}
+#memberCount b{color:var(--red)}
+#liveDrop{position:fixed;top:-46px;left:50%;transform:translateX(-50%);z-index:95;
+  background:#140b0c;color:var(--white);border:1.5px solid var(--red);border-top:none;
+  font-family:'Rye',Georgia,serif;font-size:12px;letter-spacing:.08em;
+  padding:8px 18px 7px;border-radius:0 0 8px 8px;transition:top .45s cubic-bezier(.2,.9,.3,1.1);
+  box-shadow:0 4px 18px rgba(179,18,27,.35);pointer-events:none;max-width:88vw;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#liveDrop.show{top:0}
+@media (prefers-reduced-motion: reduce){#liveDrop{transition:none}}
+
+/* dead letters (Estate Sale DMs) */
+.dm-compose{border:2px dashed var(--line);padding:10px 12px;margin-top:8px}
+.dm-compose textarea{width:100%;min-height:64px}
+.letter{border:1.5px solid var(--line);background:var(--panel);padding:10px 14px;margin:8px 0}
+.letter .lhead{font-size:12px;color:var(--faint);margin-bottom:4px}
+.letter .lhead b{color:var(--red)}
+.letter .lbody{font-size:14px;white-space:pre-wrap}

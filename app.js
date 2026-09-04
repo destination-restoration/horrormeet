@@ -38,9 +38,10 @@ async function refreshSession() {
     const pending = JSON.parse(localStorage.getItem('hm_join') || 'null');
     if (pending?.u && p && !p.username) {
       const { error: applyErr } = await sb.from('profiles').update({
-        username: pending.u, phone: pending.phone || null,
+        username: pending.u,
         fav_movie: pending.fav_movie || null, fav_haunt: pending.fav_haunt || null
       }).eq('id', session.user.id);
+      if (pending.phone) await sb.from('profiles_private').upsert({ id: session.user.id, phone: pending.phone });
       if (!applyErr) { localStorage.removeItem('hm_join'); toast('Welcome to the board, @' + pending.u); }
       const { data: p2 } = await sb.from('profiles').select('*').eq('id', session.user.id).single();
       p = p2;
@@ -571,7 +572,8 @@ function fillEditor() {
   if (!myProfile) return;
   const d = myProfile.details || {};
   if (myProfile.avatar_url) $('eAvatarPreview').src = myProfile.avatar_url;
-  $('ePhone').value = myProfile.phone || '';
+  sb.from('profiles_private').select('phone').eq('id', session.user.id).single()
+    .then(({ data }) => { if (data?.phone) $('ePhone').value = data.phone; });
   $('eWebsite').value = myProfile.website_url || '';
   $('eShortFilm').value = myProfile.short_film_url || '';
   $('eFavMovie').value = myProfile.fav_movie || '';
@@ -603,9 +605,9 @@ $('saveProfileBtn')?.addEventListener('click', async () => {
       if (upErr) throw upErr;
       avatar_url = sb.storage.from('avatars').getPublicUrl(path).data.publicUrl + '?t=' + Date.now();
     }
+    await sb.from('profiles_private').upsert({ id: session.user.id, phone: $('ePhone').value.trim() || null });
     const { error } = await sb.from('profiles').update({
       avatar_url,
-      phone: $('ePhone').value.trim() || null,
       website_url: $('eWebsite').value.trim() || null,
       short_film_url: $('eShortFilm').value.trim() || null,
       fav_movie: $('eFavMovie').value.trim() || null,
