@@ -57,7 +57,7 @@ const { data: th } = await sb.from('threads').select('room_id').eq('status','app
 (th||[]).forEach(t => { if (t.room_id) counts[t.room_id] = (counts[t.room_id]||0)+1; });
 document.getElementById('rooms').innerHTML = (data||[]).length ? data.map(r => `
   <div class="room"><h3>${esc(r.name)}</h3><p>${esc(r.description||'')}</p>
-  <a class="enter" href="index.html#board?room=${r.id}">Enter · ${counts[r.id]||0} thread${(counts[r.id]||0)===1?'':'s'}</a></div>`).join('')
+  <a class="enter" href="index.html#board">Enter the Board</a></div>`).join('')
   : `<div class="empty">No rooms open yet.</div>`;
 </script>
 <script defer src="nav.js?v=4"></script>
