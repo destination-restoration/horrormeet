@@ -2,7 +2,11 @@ import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js
 
 export const SUPABASE_URL = 'https://lwwtlsxvbzmddwdcbsnj.supabase.co';
 export const SUPABASE_KEY = 'sb_publishable_HexDGBDO-zSLkasLjsR6rw__Vi8JMZD';
-export const sb = createClient(SUPABASE_URL, SUPABASE_KEY);
+export const sb = createClient(SUPABASE_URL, SUPABASE_KEY, { auth: { storage: {
+  getItem: (k) => (sessionStorage.getItem('hm_nokeep') ? sessionStorage : localStorage).getItem(k),
+  setItem: (k, v) => (sessionStorage.getItem('hm_nokeep') ? sessionStorage : localStorage).setItem(k, v),
+  removeItem: (k) => { localStorage.removeItem(k); sessionStorage.removeItem(k); },
+} } });
 
 const $ = (id) => document.getElementById(id);
 const toastEl = $('toast');
