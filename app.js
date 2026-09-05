@@ -603,8 +603,9 @@ async function loadFilms() {
         return stones + ` <span>${rs.length ? avg.toFixed(1) + ' · ' + rs.length + ' rating' + (rs.length > 1 ? 's' : '') : 'unrated'}${mine ? ' · yours: ' + mine : ''}</span>`;
       })()}</div>
         <div class="admin-row">
-          <a class="btn" href="${esc(f.watch_url)}" target="_blank" rel="noopener">▶ Watch</a>
+          <a class="btn watchBtn" data-film="${f.id}" href="${esc(f.watch_url)}" target="_blank" rel="noopener">▶ Watch</a>
           ${f.trailer_url ? `<a class="btn ghost" href="${esc(f.trailer_url)}" target="_blank" rel="noopener">Trailer</a>` : ''}
+          <span class="hint" style="align-self:center">👁 sent ${f.watch_clicks || 0} viewer${(f.watch_clicks || 0) === 1 ? '' : 's'}</span>
         </div>
       </div>
     </article>`).join('');
@@ -711,7 +712,7 @@ async function loadMe() {
   $('meEditorWrap')?.classList.remove('hidden');
   fillEditor();
 
-  const { data: myF } = await sb.from('films').select('id,title,status,created_at').eq('submitter', session.user.id).order('created_at', { ascending: false });
+  const { data: myF } = await sb.from('films').select('id,title,status,created_at,watch_clicks').eq('submitter', session.user.id).order('created_at', { ascending: false });
   $('myFilms').innerHTML = (myF || []).length
     ? myF.map((f) => `<div class="card"><div class="pad"><div class="post-head">${timeAgo(f.created_at)} · <span class="pill ${f.status === 'pending' ? 'pending' : ''}">${f.status.toUpperCase()}</span></div><h3>${esc(f.title)}</h3></div></div>`).join('')
     : `<div class="empty">No films submitted yet.</div>`;
@@ -786,3 +787,16 @@ document.querySelectorAll('[data-open]').forEach((el) =>
   const pl = (n, w) => `${n ?? 0} ${w}${(n ?? 0) === 1 ? '' : 's'}`;
   el.textContent = `${pl(m.count, 'member')} inside · ${pl(s.count, 'sighting')} on record · ${pl(f.count, 'film')} on the shelf · founded 2026, Laurel Canyon`;
 })();
+
+
+/* watch-click counter: every WATCH press is counted and shown on the card */
+document.addEventListener('click', (e) => {
+  const b = e.target.closest('.watchBtn');
+  if (!b) return;
+  sb.rpc('count_watch_click', { film_id: Number(b.dataset.film) });
+  const tag = b.parentElement.querySelector('span.hint');
+  if (tag) {
+    const n = (parseInt(tag.textContent.replace(/\D/g, ''), 10) || 0) + 1;
+    tag.textContent = `\u{1F441} sent ${n} viewer${n === 1 ? '' : 's'}`;
+  }
+});
