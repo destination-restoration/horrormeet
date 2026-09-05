@@ -51,7 +51,7 @@
   <div class="app-bar">
     <div class="logo">HORRORMEET <span class="beta">Beta</span></div>
     <div class="spacer"></div>
-    <button id="authChip" class="chip">Join / Sign in</button>
+    <a id="signupChip" class="chip" href="join.html">Sign up</a><button id="authChip" class="chip">Sign in</button>
   </div>
   <nav class="tabs">
     <button class="tab active" data-tab="home"><span>Home</span></button>
@@ -128,10 +128,11 @@
       </div>
       <div id="composerAnon">
         <h3 style="margin:0 0 4px;font-family:Georgia,serif;text-transform:none;letter-spacing:0;color:var(--text);font-size:17px">Sign in</h3>
-          <p class="hint" style="margin:0 0 10px">Members: enter your email and we send a sign-in link. No passwords, ever.</p>
+          <p class="hint" style="margin:0 0 10px">Members: email and password.</p>
         <div class="auth-panel" style="padding:0">
-          <div class="row"><input id="emailInput" type="email" placeholder="you@email.com" autocomplete="email"><button class="btn" id="sendCodeBtn">Send link</button></div>
-          <p class="hint" style="margin:10px 0 0">New here? <a href="join.html"><b>Register now</b></a>: claim your handle in 30 seconds.</p>
+          <div class="row"><input id="emailInput" type="email" placeholder="you@email.com" autocomplete="email"></div>
+          <div class="row"><input id="pwInput" type="password" placeholder="password" autocomplete="current-password"><button class="btn" id="sendCodeBtn">Sign in</button></div>
+          <p class="hint" style="margin:10px 0 0"><span id="forgotBtn" style="color:var(--red);cursor:pointer">Forgot password?</span> We'll email you a reset. New here? <a href="join.html"><b>Sign up</b></a>: claim your handle in 30 seconds.</p>
         </div>
       </div>
     </div>

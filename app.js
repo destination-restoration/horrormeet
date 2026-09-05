@@ -55,6 +55,8 @@ async function refreshSession() {
 
 function renderAuthState() {
   const chip = $('authChip');
+  const signup = $('signupChip');
+  if (signup) signup.style.display = session ? 'none' : '';
   if (session) {
     chip.textContent = myProfile?.username ? '@' + myProfile.username : 'Set username';
     chip.classList.add('red');
@@ -95,12 +97,40 @@ async function promptUsername() {
 
 $('sendCodeBtn')?.addEventListener('click', async () => {
   const email = $('emailInput').value.trim();
-  if (!email) return toast('Enter your email first.');
+  const password = $('pwInput').value;
+  if (!email || !password) return toast('Email and password, both.');
   $('sendCodeBtn').disabled = true;
-  const { error } = await sb.auth.signInWithOtp({ email, options: { shouldCreateUser: false } });
+  const { error } = await sb.auth.signInWithPassword({ email, password });
   $('sendCodeBtn').disabled = false;
-  if (error) return toast(error.message.includes('not allowed') || error.message.includes('Signups') ? 'No account with that email yet. Hit Register below.' : error.message);
-  toast('Check your email and click the sign-in link.');
+  if (error) {
+    if (error.message.includes('Invalid login')) return toast('Wrong email or password. Early member without a password yet? Tap Forgot password to set one.');
+    if (error.message.includes('not confirmed')) return toast('Confirm your email first: check your inbox for the confirmation link.');
+    return toast(error.message);
+  }
+  await refreshSession();
+  toast('Welcome back.');
+  loadFeed(); loadEvents();
+});
+
+$('forgotBtn')?.addEventListener('click', async () => {
+  const email = $('emailInput').value.trim();
+  if (!email) return toast('Type your email above first, then tap Forgot password.');
+  const { error } = await sb.auth.resetPasswordForEmail(email, { redirectTo: 'https://horrormeet.com' });
+  if (error) return toast(error.message);
+  toast('Reset link sent. Open it, then you will be asked for a new password.');
+});
+
+sb.auth.onAuthStateChange(async (event) => {
+  if (event === 'PASSWORD_RECOVERY') {
+    let pw = null;
+    while (!pw || pw.length < 8) {
+      pw = prompt('Set your new password (at least 8 characters):');
+      if (pw === null) return;
+    }
+    const { error } = await sb.auth.updateUser({ password: pw });
+    toast(error ? error.message : 'Password set. That is your key from now on.');
+    if (!error) await refreshSession();
+  }
 });
 
 $('verifyBtn')?.addEventListener('click', async () => {

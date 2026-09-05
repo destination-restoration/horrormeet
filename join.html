@@ -72,7 +72,7 @@
 
   <div class="pad hidden" id="step2">
     <h3 style="margin:0 0 6px">Check your email</h3>
-    <p class="hint" style="margin:0 0 10px">We sent a sign-in link to <span id="jEmailEcho" style="color:var(--white)"></span>. Click it and your account (with your reserved handle) is created automatically. Check spam if it's shy.</p>
+    <p class="hint" style="margin:0 0 10px">One confirmation email is on its way to <span id="jEmailEcho" style="color:var(--white)"></span>. Click the link inside once, and from then on you sign in with your email and password. Check spam if it's shy.</p>
     <div class="actions"><button class="btn ghost" id="jBack">Use a different email</button></div>
   </div></div>
 
@@ -102,14 +102,16 @@ $('jUsername').addEventListener('input', () => {
 $('jSend').addEventListener('click', async () => {
   const u = $('jUsername').value.trim();
   const email = $('jEmail').value.trim();
+  const password = $('jPassword').value;
   if (!USER_RE.test(u)) return toast('Pick a valid username first.');
   if (!email.includes('@')) return toast('Enter your email.');
+  if (password.length < 8) return toast('Password needs at least 8 characters.');
   const { data: taken } = await sb.from('profiles').select('id').ilike('username', u).limit(1);
   if (taken && taken.length) return toast('That username is taken.');
   $('jSend').disabled = true;
-  const { error } = await sb.auth.signInWithOtp({ email, options: { shouldCreateUser: true } });
+  const { error } = await sb.auth.signUp({ email, password, options: { emailRedirectTo: 'https://horrormeet.com' } });
   $('jSend').disabled = false;
-  if (error) return toast(error.message);
+  if (error) return toast(error.message.includes('already registered') ? 'That email already has an account. Sign in on the main page.' : error.message);
   localStorage.setItem('hm_join', JSON.stringify({
     u, phone: $('jPhone').value.trim() || null,
     fav_movie: $('jMovie').value.trim() || null,
@@ -118,7 +120,7 @@ $('jSend').addEventListener('click', async () => {
   $('jEmailEcho').textContent = email;
   $('step1').classList.add('hidden');
   $('step2').classList.remove('hidden');
-  toast('Link sent. Check your email (and spam).');
+  toast('Account created. Confirm your email once and you are in.');
 });
 
 $('jBack').addEventListener('click', () => { $('step2').classList.add('hidden'); $('step1').classList.remove('hidden'); });
