@@ -14,8 +14,11 @@ async function refreshCount() {
   if (typeof c === 'number') { count = c; paint(); }
 }
 function paint() {
-  if (chip) chip.innerHTML = `\u{1F9DF} <b>${count}</b> member${count === 1 ? '' : 's'}`;
+  if (!chip) return;
+  const compact = window.innerWidth < 560;
+  chip.innerHTML = compact ? `\u{1F9DF} <b>${count}</b>` : `\u{1F9DF} <b>${count}</b> member${count === 1 ? '' : 's'}`;
 }
+window.addEventListener('resize', paint);
 refreshCount();
 
 /* live drop: a small banner slides from the top when someone claims a handle */

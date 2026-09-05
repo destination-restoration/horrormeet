@@ -366,3 +366,14 @@ header.app.doors-hidden nav.tabs, header.app.doors-hidden .guides{max-height:non
 .letter .lhead{font-size:12px;color:var(--faint);margin-bottom:4px}
 .letter .lhead b{color:var(--red)}
 .letter .lbody{font-size:14px;white-space:pre-wrap}
+
+
+/* ---------- MOBILE HEADER FIX v1: sign-in stays on screen ---------- */
+@media (max-width: 560px){
+  .app-bar{gap:8px}
+  .app-bar .logo{font-size:21px;letter-spacing:1px}
+  #memberCount{font-size:10px;padding:3px 6px;margin-right:0;letter-spacing:.03em}
+  #adminBtn{font-size:10px !important;padding:3px 6px !important;margin-right:0 !important}
+  .tab span{font-size:8.5px;padding:2px 1px;letter-spacing:0}
+  .guides a span{font-size:8px;letter-spacing:0}
+}
