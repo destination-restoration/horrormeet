@@ -103,6 +103,8 @@ $('sendCodeBtn')?.addEventListener('click', async () => {
   const email = $('emailInput').value.trim();
   const password = $('pwInput').value;
   if (!email || !password) return toast('Email and password, both.');
+  if ($('keepIn')?.checked) sessionStorage.removeItem('hm_nokeep');
+  else sessionStorage.setItem('hm_nokeep', '1');
   $('sendCodeBtn').disabled = true;
   const { error } = await sb.auth.signInWithPassword({ email, password });
   $('sendCodeBtn').disabled = false;
