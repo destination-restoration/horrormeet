@@ -78,12 +78,19 @@ function renderAuthState() {
 }
 
 async function promptUsername() {
-  const u = prompt('Pick a username (3-24 letters, numbers, underscores). This is your handle on the board.');
-  if (!u) return;
-  const { error } = await sb.from('profiles').update({ username: u.trim() }).eq('id', session.user.id);
-  if (error) { toast(error.message.includes('duplicate') ? 'Username taken. Try another.' : 'Invalid username.'); return promptUsername(); }
-  await refreshSession();
-  toast('Welcome to the board, @' + u.trim());
+  while (true) {
+    const u = prompt('Pick a username (3-24 letters, numbers, underscores). You need one to enter the house.');
+    if (u === null || !u.trim()) {
+      await sb.auth.signOut();
+      session = null; myProfile = null;
+      renderAuthState();
+      toast('A username is required to join. Sign in again anytime to pick one.');
+      return;
+    }
+    const { error } = await sb.from('profiles').update({ username: u.trim() }).eq('id', session.user.id);
+    if (!error) { await refreshSession(); toast('Welcome to the board, @' + u.trim()); return; }
+    toast(error.message.includes('duplicate') ? 'Username taken. Try another.' : 'Invalid username. Letters, numbers, underscores, 3-24 characters.');
+  }
 }
 
 $('sendCodeBtn')?.addEventListener('click', async () => {
