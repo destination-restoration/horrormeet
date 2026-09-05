@@ -377,3 +377,11 @@ header.app.doors-hidden nav.tabs, header.app.doors-hidden .guides{max-height:non
   .tab span{font-size:8.5px;padding:2px 1px;letter-spacing:0}
   .guides a span{font-size:8px;letter-spacing:0}
 }
+
+/* mobile header fix v2: logo yields, sign-in always on screen */
+@media (max-width: 560px){
+  .app-bar{padding:10px 10px 6px;gap:6px}
+  .app-bar .logo{font-size:16px;letter-spacing:0;flex-shrink:1;min-width:0}
+  .logo .beta{display:none}
+  #authChip{flex-shrink:0}
+}
