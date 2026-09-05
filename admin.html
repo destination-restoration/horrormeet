@@ -40,7 +40,7 @@
 
     <div class="section-note">Grant a badge</div>
     <div class="composer">
-      <div class="row"><input id="bUser" placeholder="username (without @)"></div>
+      <div class="row"><input id="bUser" list="memberList" placeholder="type to search members..."></div>
       <div class="row"><input id="bBadge" maxlength="40" placeholder="badge name, e.g. Horror OG"></div>
       <div class="actions"><button class="btn" id="bBtn">Grant badge</button></div>
     </div>
@@ -56,7 +56,7 @@
       <div class="row"><input id="evWhen" type="datetime-local"></div>
       <div class="row"><input id="evLink" placeholder="Details link (optional)"></div>
       <div class="row"><select id="evKind"><option value="meetup">Meetup</option><option value="convention">Convention</option><option value="festival">Festival</option></select></div>
-      <div class="row"><input id="evCaptain" placeholder="Captain username (optional, without @)"></div>
+      <div class="row"><input id="evCaptain" list="memberList" placeholder="Captain: type to search members (optional)"></div>
       <div class="actions"><button class="btn" id="evBtn">Create event</button></div>
     </div>
 
@@ -64,6 +64,7 @@
     <div id="modThreads"><div class="empty">Loading...</div></div>
   </div>
 </main>
+<datalist id="memberList"></datalist>
 <div class="toast" id="toast"></div>
 <script type="module">
 import { sb, toast } from './app-core.js';
@@ -83,6 +84,10 @@ if (!isAdmin) {
   $('gate').classList.add('hidden');
   $('panel').classList.remove('hidden');
   loadPending(); loadPendingFilms(); loadPendingSpots(); loadReports(); loadModThreads(); loadNewMembers(); loadPendingListings(); loadPendingMorgue(); loadPendingCalls(); loadBrokenLinks();
+(async () => {
+  const { data } = await sb.from('profiles').select('username').not('username', 'is', null).order('username');
+  document.getElementById('memberList').innerHTML = (data || []).map(p => `<option value="${esc(p.username)}">`).join('');
+})();
 }
 
 async function loadPendingListings() {
