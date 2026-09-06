@@ -1,13 +1,13 @@
 (function () {
   var PAGE = location.pathname.split('/').pop() || 'index.html';
   var CATS = [
-    { key: 'community', label: 'Community', rooms: [
+    { key: 'community', label: 'Community', home: 'index.html#feed', rooms: [
       ['Sightings', 'index.html#feed'], ['The Board', 'index.html#board'],
       ['The Rooms', 'rooms.html'], ['The Basement', 'basement.html'], ['The Séance', 'seance.html']] },
-    { key: 'films', label: 'Films', rooms: [
+    { key: 'films', label: 'Films', home: 'index.html#films', rooms: [
       ['The Shelf', 'index.html#films'], ['The Vault', 'vault.html'], ['The Circuit', 'festivals.html'],
       ['The Awards', 'awards.html'], ['The Crew', 'crew.html']] },
-    { key: 'world', label: 'The World', rooms: [
+    { key: 'world', label: 'The World', home: 'index.html#news', rooms: [
       ['News Wire', 'index.html#news'], ['The Atlas', 'index.html#map'],
       ['Meetups', 'index.html#meetups'], ['The Morgue', 'morgue.html']] },
     { key: 'market', label: 'Estate Sale', href: 'market.html' }
@@ -73,15 +73,26 @@
     if (cat && cat.rooms) renderChips(cat.key);
   });
   tabsEl.addEventListener('mouseleave', function () { renderChips(locked); });
+
+  function navTo(href) {
+    if (href.indexOf('index.html#') === 0 && PAGE === 'index.html') {
+      location.hash = href.slice(href.indexOf('#'));
+      return;
+    }
+    var fx2 = document.getElementById('doorFx');
+    if (!fx2 || window.matchMedia('(prefers-reduced-motion: reduce)').matches) { window.location.href = href; return; }
+    fx2.classList.remove('go'); void fx2.offsetWidth; fx2.classList.add('go');
+    setTimeout(function () { window.location.href = href; }, 340);
+  }
+
+  /* a category door goes straight to its front room; the chips below jump between rooms */
   tabsEl.addEventListener('click', function (e) {
     var a = e.target.closest('a.tab');
     if (!a) return;
     var cat = findCat(a.dataset.cat);
-    if (cat && cat.rooms) {
+    if (cat && cat.home) {
       e.preventDefault();
-      locked = cat.key;
-      renderDoors();
-      renderChips(locked);
+      navTo(cat.home);
     }
   });
 
