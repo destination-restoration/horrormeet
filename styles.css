@@ -403,3 +403,6 @@ header.app.doors-hidden nav.tabs, header.app.doors-hidden .guides{max-height:non
 .guides a.on{border-color:var(--red) !important;background:rgba(179,18,27,.12) !important}
 .guides a.on span{color:var(--white)}
 @media (max-width:560px){.guides{gap:5px}.guides a{padding:5px 8px !important}.guides a span{font-size:10px !important}}
+
+/* chips row: centered under the doors */
+.guides{justify-content:center}
