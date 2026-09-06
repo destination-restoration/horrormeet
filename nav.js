@@ -33,14 +33,20 @@
   if (!tabsEl || !guidesEl) return;
   var active = catOfCurrent();
 
-  function render() {
+  var locked = active;
+  function findCat(key) {
+    for (var i = 0; i < CATS.length; i++) if (CATS[i].key === key) return CATS[i];
+    return null;
+  }
+  function renderDoors() {
     tabsEl.innerHTML = CATS.map(function (c) {
-      var cls = 'tab' + (active && c.key === active ? ' active' : '');
+      var cls = 'tab' + (locked && c.key === locked ? ' active' : '');
       var href = c.href || '#';
       return '<a class="' + cls + '" href="' + href + '" data-cat="' + c.key + '"><span>' + c.label + '</span></a>';
     }).join('');
-    var cat = null;
-    for (var i = 0; i < CATS.length; i++) if (CATS[i].key === active) cat = CATS[i];
+  }
+  function renderChips(key) {
+    var cat = findCat(key);
     if (cat && cat.rooms) {
       guidesEl.style.display = '';
       guidesEl.innerHTML = cat.rooms.map(function (r) {
@@ -51,15 +57,32 @@
       guidesEl.style.display = 'none';
     }
   }
-  render();
-  window.addEventListener('hashchange', function () { active = catOfCurrent(); render(); });
+  renderDoors();
+  renderChips(locked);
+  window.addEventListener('hashchange', function () {
+    locked = catOfCurrent();
+    renderDoors();
+    renderChips(locked);
+  });
 
+  /* hover a door: peek at its rooms. click: lock it in. leave the nav: back to the locked one */
+  tabsEl.addEventListener('mouseover', function (e) {
+    var a = e.target.closest('a.tab');
+    if (!a) return;
+    var cat = findCat(a.dataset.cat);
+    if (cat && cat.rooms) renderChips(cat.key);
+  });
+  tabsEl.addEventListener('mouseleave', function () { renderChips(locked); });
   tabsEl.addEventListener('click', function (e) {
     var a = e.target.closest('a.tab');
     if (!a) return;
-    var cat = null;
-    for (var i = 0; i < CATS.length; i++) if (CATS[i].key === a.dataset.cat) cat = CATS[i];
-    if (cat && cat.rooms) { e.preventDefault(); active = cat.key; render(); }
+    var cat = findCat(a.dataset.cat);
+    if (cat && cat.rooms) {
+      e.preventDefault();
+      locked = cat.key;
+      renderDoors();
+      renderChips(locked);
+    }
   });
 
   if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
