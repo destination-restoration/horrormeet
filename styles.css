@@ -385,3 +385,21 @@ header.app.doors-hidden nav.tabs, header.app.doors-hidden .guides{max-height:non
   .logo .beta{display:none}
   #authChip{flex-shrink:0}
 }
+
+
+/* ---------- GUIDES CLEAN PASS: doors stay upstairs, the rooms become coffin plates ---------- */
+.guides{flex-wrap:wrap;gap:6px;align-items:stretch}
+.guides a, .guides a:nth-child(1), .guides a:nth-child(2), .guides a:nth-child(3),
+.guides a:nth-child(4), .guides a:nth-child(5), .guides a:nth-child(6),
+.guides a:nth-child(7), .guides a:nth-child(8), .guides a:nth-child(9){
+  height:auto !important;min-width:0;flex:0 1 auto;display:inline-flex;align-items:center;justify-content:center;
+  padding:6px 11px !important;border:1.5px solid var(--line) !important;border-top-width:1.5px !important;
+  border-radius:3px;background:var(--panel) !important;box-shadow:none !important;overflow:visible}
+.guides a::after{display:none !important}
+.guides a span{position:static !important;background:none !important;border:none !important;padding:0 !important;
+  font-size:11px !important;letter-spacing:.08em;white-space:nowrap;word-break:normal;overflow-wrap:normal;
+  max-width:none !important;margin:0 !important;font-weight:600;line-height:1.3}
+.guides a:hover{border-color:var(--red) !important;color:var(--white)}
+.guides a.on{border-color:var(--red) !important;background:rgba(179,18,27,.12) !important}
+.guides a.on span{color:var(--white)}
+@media (max-width:560px){.guides{gap:5px}.guides a{padding:5px 8px !important}.guides a span{font-size:10px !important}}
