@@ -765,12 +765,6 @@ loadAlmanac();
 
 
 /* deep-link tabs: index.html#films etc */
-const wantedTab = location.hash.slice(1);
-if (wantedTab) {
-  const btn = document.querySelector(`.tab[data-tab="${wantedTab}"]`);
-  if (btn && !btn.classList.contains('active')) btn.click();
-  window.scrollTo(0, 0);
-}
 
 
 /* home screen: open-a-door links + live stats */
@@ -817,3 +811,4 @@ function openTabByHash() {
   window.scrollTo(0, 0);
 }
 window.addEventListener('hashchange', openTabByHash);
+openTabByHash();
