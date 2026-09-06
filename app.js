@@ -460,7 +460,7 @@ $('threadBtn')?.addEventListener('click', async () => {
   const body = $('threadBody').value.trim();
   if (title.length < 3 || !body) return toast('Give it a topic and a first post.');
   $('threadBtn').disabled = true;
-  const { error } = await sb.from('threads').insert({ author: session.user.id, title, body });
+  const { error } = await sb.from('threads').insert({ author: session.user.id, title, body, room_id: currentRoom });
   $('threadBtn').disabled = false;
   if (error) return toast(error.message);
   $('threadTitle').value = ''; $('threadBody').value = '';
@@ -468,17 +468,39 @@ $('threadBtn')?.addEventListener('click', async () => {
   loadThreads();
 });
 
+let currentRoom = null;
+let roomsCache = null;
+async function renderRoomBar() {
+  const bar = $('roomBar');
+  if (!bar) return;
+  if (!roomsCache) {
+    const { data } = await sb.from('rooms').select('id,name').eq('status', 'active').order('created_at');
+    roomsCache = data || [];
+  }
+  const chip = (id, name) => `<button class="roomChip${(currentRoom === id) ? ' on' : ''}" data-room="${id ?? ''}">${name}</button>`;
+  bar.innerHTML = chip(null, 'General') + roomsCache.map((r) => chip(r.id, esc(r.name))).join('');
+}
+$('roomBar')?.addEventListener('click', (e) => {
+  const b = e.target.closest('.roomChip');
+  if (!b) return;
+  currentRoom = b.dataset.room ? Number(b.dataset.room) : null;
+  renderRoomBar();
+  loadThreads();
+});
 async function loadThreads() {
-  const { data, error } = await sb
+  renderRoomBar();
+  let q = sb
     .from('threads')
-    .select('id,title,body,created_at,pinned,profiles(username)')
-    .eq('status', 'approved')
+    .select('id,title,body,created_at,pinned,room_id,profiles(username)')
+    .eq('status', 'approved');
+  q = currentRoom === null ? q.is('room_id', null) : q.eq('room_id', currentRoom);
+  const { data, error } = await q
     .order('pinned', { ascending: false })
     .order('created_at', { ascending: false })
     .limit(50);
   const box = $('threads');
   if (error) { box.innerHTML = `<div class="empty">Signal lost. Refresh.</div>`; return; }
-  if (!data.length) { box.innerHTML = `<div class="empty">No threads yet. Start the first conversation.</div>`; return; }
+  if (!data.length) { box.innerHTML = `<div class="empty">${currentRoom === null ? 'No threads yet. Start the first conversation.' : 'This room is empty and waiting. First one to post owns the couch.'}</div>`; return; }
   box.innerHTML = data.map((t) => `
     <article class="card" data-tid="${t.id}">
       <div class="pad">

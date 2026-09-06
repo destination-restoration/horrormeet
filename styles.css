@@ -406,3 +406,10 @@ header.app.doors-hidden nav.tabs, header.app.doors-hidden .guides{max-height:non
 
 /* chips row: centered under the doors */
 .guides{justify-content:center}
+
+/* room chips inside the board */
+.roomChip{background:var(--panel);border:1.5px solid var(--line);color:var(--dim);
+  font-family:'Rye',Georgia,serif;font-size:11px;letter-spacing:.08em;text-transform:uppercase;
+  padding:6px 11px;border-radius:3px;cursor:pointer}
+.roomChip:hover{border-color:var(--red);color:var(--white)}
+.roomChip.on{border-color:var(--red);background:rgba(179,18,27,.12);color:var(--white)}

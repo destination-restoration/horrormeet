@@ -3,7 +3,7 @@
   var CATS = [
     { key: 'community', label: 'Community', home: 'index.html#feed', rooms: [
       ['Sightings', 'index.html#feed'], ['The Board', 'index.html#board'],
-      ['The Rooms', 'rooms.html'], ['The Basement', 'basement.html'], ['The Séance', 'seance.html']] },
+      ['The Basement', 'basement.html'], ['The Séance', 'seance.html']] },
     { key: 'films', label: 'Films', home: 'index.html#films', rooms: [
       ['The Shelf', 'index.html#films'], ['The Vault', 'vault.html'], ['The Circuit', 'festivals.html'],
       ['The Awards', 'awards.html'], ['The Crew', 'crew.html']] },
