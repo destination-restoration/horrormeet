@@ -65,14 +65,16 @@
     renderChips(locked);
   });
 
-  /* hover a door: peek at its rooms. click: lock it in. leave the nav: back to the locked one */
-  tabsEl.addEventListener('mouseover', function (e) {
-    var a = e.target.closest('a.tab');
-    if (!a) return;
-    var cat = findCat(a.dataset.cat);
-    if (cat && cat.rooms) renderChips(cat.key);
-  });
-  tabsEl.addEventListener('mouseleave', function () { renderChips(locked); });
+  /* hover peek is desktop-only: on touch it makes iOS demand a second tap */
+  if (window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
+    tabsEl.addEventListener('mouseover', function (e) {
+      var a = e.target.closest('a.tab');
+      if (!a) return;
+      var cat = findCat(a.dataset.cat);
+      if (cat && cat.rooms) renderChips(cat.key);
+    });
+    tabsEl.addEventListener('mouseleave', function () { renderChips(locked); });
+  }
 
   function navTo(href) {
     if (href.indexOf('index.html#') === 0 && PAGE === 'index.html') {
