@@ -182,6 +182,7 @@ function throughTheDoor(fn) {
 }
 document.querySelectorAll('.tab').forEach((t) =>
   t.addEventListener('click', () => {
+    if (!t.dataset.tab) return;
     if (t.classList.contains('active')) return;
     document.querySelectorAll('.tab').forEach((x) => x.classList.remove('active'));
     t.classList.add('active');
@@ -800,3 +801,19 @@ document.addEventListener('click', (e) => {
     tag.textContent = `\u{1F441} sent ${n} viewer${n === 1 ? '' : 's'}`;
   }
 });
+
+
+/* tree nav: rooms are hash links, hashchange opens the tab */
+function openTabByHash() {
+  const name = (location.hash || '#home').slice(1);
+  const valid = ['home', 'feed', 'board', 'films', 'news', 'map', 'meetups', 'me'];
+  if (!valid.includes(name)) return;
+  for (const n of valid) $('tab-' + n)?.classList.toggle('hidden', n !== name);
+  if (name === 'board') loadThreads();
+  if (name === 'films') loadFilms();
+  if (name === 'news') loadNews();
+  if (name === 'map') loadMap();
+  if (name === 'me') loadMe();
+  window.scrollTo(0, 0);
+}
+window.addEventListener('hashchange', openTabByHash);
