@@ -222,7 +222,7 @@ async function loadMap() {
     });
   }
   setTimeout(() => map.invalidateSize(), 100);
-  let q = sb.from('map_spots').select('id,title,category,description,lat,lng,profiles(username)').eq('status', 'approved');
+  let q = sb.from('map_spots').select('id,title,category,description,address,lat,lng,profiles(username)').eq('status', 'approved');
   if (mapCat !== 'all') q = q.eq('category', mapCat);
   const { data } = await q;
   mapLayer.clearLayers();
@@ -236,9 +236,21 @@ async function loadMap() {
     }).bindPopup(
       `<div class="cat">${isFilm ? '🎬 Filming location' : '👻 Real horror'}</div>` +
       `<b>${esc(s.title)}</b><br>${esc(s.description || '')}` +
-      (s.profiles?.username ? `<br><span style="color:#8b7f84;font-size:12px">added by @${esc(s.profiles.username)}</span>` : '')
+      `<div class="addr">📍 ${s.address ? esc(s.address) : `${s.lat.toFixed(4)}, ${s.lng.toFixed(4)}`}</div>` +
+      `<div class="maplinks">` +
+        `<a href="${mapsUrl('apple', s)}" target="_blank" rel="noopener"> Apple Maps</a>` +
+        `<a href="${mapsUrl('google', s)}" target="_blank" rel="noopener">G Google Maps</a>` +
+      `</div>` +
+      (s.profiles?.username ? `<span style="color:#8b7f84;font-size:12px">added by @${esc(s.profiles.username)}</span>` : '')
     ).addTo(mapLayer);
   });
+}
+function mapsUrl(kind, s) {
+  const q = encodeURIComponent(s.address ? `${s.title}, ${s.address}` : s.title);
+  const ll = `${s.lat},${s.lng}`;
+  return kind === 'apple'
+    ? `https://maps.apple.com/?ll=${ll}&q=${q}`
+    : `https://www.google.com/maps/search/?api=1&query=${ll}`;
 }
 for (const [id, cat] of [['mapAll', 'all'], ['mapFilm', 'film'], ['mapReal', 'real']]) {
   $(id)?.addEventListener('click', () => { mapCat = cat; loadMap(); });
@@ -262,11 +274,12 @@ $('spotSubmit')?.addEventListener('click', async () => {
   const ll = pendingPin.getLatLng();
   const { error } = await sb.from('map_spots').insert({
     title, category: $('spotCat').value, description: $('spotDesc').value.trim() || null,
+    address: $('spotAddr').value.trim() || null,
     lat: ll.lat, lng: ll.lng, submitter: session.user.id, status: 'pending'
   });
   if (error) return toast(error.message);
   toast('Submitted. A mod will walk the grounds before it posts.');
-  $('spotTitle').value = ''; $('spotDesc').value = '';
+  $('spotTitle').value = ''; $('spotDesc').value = ''; $('spotAddr').value = '';
   $('spotCancel').click();
 });
 

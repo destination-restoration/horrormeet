@@ -153,12 +153,13 @@ async function loadNewMembers() {
 }
 
 async function loadPendingSpots() {
-  const { data } = await sb.from('map_spots').select('id,title,category,description,lat,lng,profiles(username)').eq('status', 'pending').order('created_at');
+  const { data } = await sb.from('map_spots').select('id,title,category,description,address,lat,lng,profiles(username)').eq('status', 'pending').order('created_at');
   $('pendingSpots').innerHTML = (data || []).length ? data.map((s) => `
     <div class="card" data-id="${s.id}"><div class="pad">
       <div class="post-head"><span class="u">@${esc(s.profiles?.username || '?')}</span> · ${s.category === 'film' ? '🎬 filming location' : '👻 real horror'}</div>
       <h3>${esc(s.title)}</h3>
       ${s.description ? `<p class="body-text">${esc(s.description)}</p>` : ''}
+      ${s.address ? `<div class="hint" style="margin:4px 0">📍 ${esc(s.address)} (check it matches the pin)</div>` : ''}
       <div class="hint" style="margin:6px 0"><a href="https://www.openstreetmap.org/?mlat=${s.lat}&mlon=${s.lng}#map=15/${s.lat}/${s.lng}" target="_blank" rel="noopener">Open the pin on a map and VERIFY before approving</a> (${s.lat.toFixed(4)}, ${s.lng.toFixed(4)})</div>
       <div class="admin-row"><button class="btn good s-approve">Approve</button><button class="btn danger s-remove">Remove</button></div>
     </div></div>`).join('') : `<div class="empty">No locations waiting.</div>`;

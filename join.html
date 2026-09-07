@@ -43,7 +43,7 @@
 </header>
 <main class="wrap">
   <div class="join-title">REGISTER</div>
-  <p class="join-sub">Claim your handle. No passwords, ever: we email you a sign-in link. Already a member? <a href="index.html">Sign in here</a>.</p>
+  <p class="join-sub">Claim your handle, pick a password, confirm one email and you're in. Already a member? <a href="index.html">Sign in here</a>.</p>
 
   <div class="card"><div class="pad" id="step1">
     <label>Username</label>
@@ -52,6 +52,10 @@
 
     <label>Email</label>
     <input id="jEmail" type="email" placeholder="you@email.com" autocomplete="email">
+
+    <label>Password</label>
+    <input id="jPassword" type="password" minlength="8" placeholder="8+ characters" autocomplete="new-password">
+    <div class="avail" id="jPwHint" style="color:var(--faint)">At least 8 characters. <span id="jPwToggle" style="color:var(--red);cursor:pointer">Show</span></div>
 
     <label>Phone <span class="opt">(optional: never shown publicly)</span></label>
     <input id="jPhone" type="tel" maxlength="20" placeholder="(555) 555-5555" autocomplete="tel">
@@ -66,7 +70,7 @@
 
     <div class="actions" style="margin-top:18px">
       <button class="btn" id="jSend">Create my account</button>
-      <span class="hint">We email you a sign-in link to verify it's you.</span>
+      <span class="hint">One confirmation email to verify it's you.</span>
     </div>
   </div>
 
@@ -99,7 +103,14 @@ $('jUsername').addEventListener('input', () => {
   }, 400);
 });
 
+$('jPwToggle').addEventListener('click', () => {
+  const pw = $('jPassword'); const show = pw.type === 'password';
+  pw.type = show ? 'text' : 'password'; $('jPwToggle').textContent = show ? 'Hide' : 'Show';
+});
+$('jPassword').addEventListener('keydown', (e) => { if (e.key === 'Enter') $('jSend').click(); });
+
 $('jSend').addEventListener('click', async () => {
+  try {
   const u = $('jUsername').value.trim();
   const email = $('jEmail').value.trim();
   const password = $('jPassword').value;
@@ -121,6 +132,7 @@ $('jSend').addEventListener('click', async () => {
   $('step1').classList.add('hidden');
   $('step2').classList.remove('hidden');
   toast('Account created. Confirm your email once and you are in.');
+  } catch (err) { $('jSend').disabled = false; toast('Something broke: ' + (err?.message || err)); console.error(err); }
 });
 
 $('jBack').addEventListener('click', () => { $('step2').classList.add('hidden'); $('step1').classList.remove('hidden'); });
