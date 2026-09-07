@@ -847,3 +847,22 @@ function openTabByHash() {
 }
 window.addEventListener('hashchange', openTabByHash);
 openTabByHash();
+
+
+/* the six notes: E-flat, G, B-flat, A (the tritone itch), C, D. Rising. Never the seventh. */
+$('playSix')?.addEventListener('click', () => {
+  const ctx = new (window.AudioContext || window.webkitAudioContext)();
+  const notes = [311.13, 392.00, 466.16, 440.00, 523.25, 587.33];
+  const t0 = ctx.currentTime + 0.05;
+  notes.forEach((f, i) => {
+    const o = ctx.createOscillator(); const g = ctx.createGain();
+    o.type = 'sine'; o.frequency.value = f;
+    const start = t0 + i * 0.55, hold = i === notes.length - 1 ? 1.6 : 0.5;
+    g.gain.setValueAtTime(0.0001, start);
+    g.gain.exponentialRampToValueAtTime(0.28, start + 0.04);
+    g.gain.exponentialRampToValueAtTime(0.0001, start + hold);
+    o.connect(g).connect(ctx.destination); o.start(start); o.stop(start + hold + 0.05);
+  });
+  const hint = $('sixHint');
+  if (hint) { hint.textContent = 'Six. Only six. Notice what your head wants to do next.'; setTimeout(() => { hint.textContent = "That pull you feel is the seventh. Don't."; }, 4200); }
+});
