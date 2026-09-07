@@ -238,8 +238,8 @@ async function loadMap() {
       `<b>${esc(s.title)}</b><br>${esc(s.description || '')}` +
       `<div class="addr">📍 ${s.address ? esc(s.address) : `${s.lat.toFixed(4)}, ${s.lng.toFixed(4)}`}</div>` +
       `<div class="maplinks">` +
-        `<a href="${mapsUrl('apple', s)}" target="_blank" rel="noopener"> Apple Maps</a>` +
-        `<a href="${mapsUrl('google', s)}" target="_blank" rel="noopener">G Google Maps</a>` +
+        `<a href="${mapsUrl('apple', s)}" target="_blank" rel="noopener">Apple Maps</a>` +
+        `<a href="${mapsUrl('google', s)}" target="_blank" rel="noopener">Google Maps</a>` +
       `</div>` +
       (s.profiles?.username ? `<span style="color:#8b7f84;font-size:12px">added by @${esc(s.profiles.username)}</span>` : '')
     ).addTo(mapLayer);
