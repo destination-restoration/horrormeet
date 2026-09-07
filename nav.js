@@ -117,7 +117,13 @@
     if (!href || href === '#' || d.classList.contains('on')) return;
     if (href.indexOf('index.html#') === 0 && PAGE === 'index.html') {
       e.preventDefault();
-      location.hash = href.slice(href.indexOf('#'));
+      var h = href.slice(href.indexOf('#'));
+      if (location.hash === h || (h === '#home' && !location.hash)) {
+        window.dispatchEvent(new HashChangeEvent('hashchange'));
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      } else {
+        location.hash = h;
+      }
       return;
     }
     if (reduced || !fx) return;

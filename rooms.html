@@ -17,7 +17,7 @@
 </style>
 </head>
 <body>
-<header class="app"><div class="tagline-bar"><div class="inner">every orphaned community deserves a room.</div></div><div class="app-bar"><a class="logo" href="index.html">HORRORMEET</a></div>
+<header class="app"><div class="tagline-bar"><div class="inner">every orphaned community deserves a room.</div></div><div class="app-bar"><a class="logo" href="index.html#home">HORRORMEET</a></div>
   <nav class="tabs">
     <a class="tab" href="index.html#home"><span>Home</span></a>
     <a class="tab" href="index.html#feed"><span>Sightings</span></a>
@@ -60,7 +60,7 @@ document.getElementById('rooms').innerHTML = (data||[]).length ? data.map(r => `
   <a class="enter" href="index.html#board">Enter the Board and pick your room</a></div>`).join('')
   : `<div class="empty">No rooms open yet.</div>`;
 </script>
-<script defer src="nav.js?v=9"></script>
+<script defer src="nav.js?v=10"></script>
 <script type="module" src="live.js?v=3"></script>
 </body>
 </html>
