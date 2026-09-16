@@ -222,20 +222,29 @@ async function loadMap() {
     });
   }
   setTimeout(() => map.invalidateSize(), 100);
-  let q = sb.from('map_spots').select('id,title,category,description,address,lat,lng,profiles(username)').eq('status', 'approved');
-  if (mapCat !== 'all') q = q.eq('category', mapCat);
+  let q = sb.from('map_spots').select('id,title,category,description,address,lat,lng,est_value,value_note,sale_history,for_sale,list_price,listing_url,profiles(username)').eq('status', 'approved');
+  if (mapCat === 'sale') q = q.eq('for_sale', true);
+  else if (mapCat !== 'all') q = q.eq('category', mapCat);
   const { data } = await q;
   mapLayer.clearLayers();
   (data || []).forEach((s) => {
     const isFilm = s.category === 'film';
+    const sale = !!s.for_sale;
+    const money = (n) => '$' + Math.round(n).toLocaleString('en-US');
+    const valueLine = sale
+      ? `<div class="forsale">🏷 FOR SALE${s.list_price ? ' · ' + money(s.list_price) : ''}${s.listing_url ? ` · <a href="${esc(s.listing_url)}" target="_blank" rel="noopener">see the listing</a>` : ''}</div>`
+      : (s.est_value ? `<div class="val">💰 Est. value ${money(s.est_value)}${s.value_note ? ` <span class="valnote">(${esc(s.value_note)})</span>` : ''}</div>` : '');
+    const histLine = s.sale_history ? `<div class="valnote">🧾 ${esc(s.sale_history)}</div>` : '';
     L.circleMarker([s.lat, s.lng], {
-      radius: 8, weight: 2,
-      color: isFilm ? '#b3121b' : '#e8d9a0',
-      fillColor: isFilm ? '#b3121b' : '#e8d9a0',
-      fillOpacity: 0.75
+      radius: sale ? 10 : 8, weight: sale ? 3 : 2,
+      color: sale ? '#2ecc71' : (isFilm ? '#b3121b' : '#e8d9a0'),
+      fillColor: sale ? '#2ecc71' : (isFilm ? '#b3121b' : '#e8d9a0'),
+      fillOpacity: sale ? 0.95 : 0.75,
+      className: sale ? 'pin-sale' : ''
     }).bindPopup(
-      `<div class="cat">${isFilm ? '🎬 Filming location' : '👻 Real horror'}</div>` +
+      `<div class="cat">${isFilm ? '🎬 Filming location' : '👻 Real horror'}${sale ? ' · <span class="saletag">ON THE MARKET</span>' : ''}</div>` +
       `<b>${esc(s.title)}</b><br>${esc(s.description || '')}` +
+      valueLine + histLine +
       `<div class="addr">📍 ${s.address ? esc(s.address) : `${s.lat.toFixed(4)}, ${s.lng.toFixed(4)}`}</div>` +
       `<div class="maplinks">` +
         `<a href="${mapsUrl('apple', s)}" target="_blank" rel="noopener">Apple Maps</a>` +
@@ -252,7 +261,7 @@ function mapsUrl(kind, s) {
     ? `https://maps.apple.com/?ll=${ll}&q=${q}`
     : `https://www.google.com/maps/search/?api=1&query=${ll}`;
 }
-for (const [id, cat] of [['mapAll', 'all'], ['mapFilm', 'film'], ['mapReal', 'real']]) {
+for (const [id, cat] of [['mapAll', 'all'], ['mapFilm', 'film'], ['mapReal', 'real'], ['mapSale', 'sale']]) {
   $(id)?.addEventListener('click', () => { mapCat = cat; loadMap(); });
 }
 $('mapAddBtn')?.addEventListener('click', () => {
