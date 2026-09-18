@@ -32,7 +32,7 @@
     <div class="section-note">Pending casting calls</div>
     <div id="pendingCalls"><div class="empty">Loading...</div></div>
 
-    <div class="section-note">Broken links (weekly patrol)</div>
+    <div class="section-note">Broken links (weekly patrol: dead news headlines are removed automatically; everything else is yours to decide)</div>
     <div id="brokenLinks"><div class="empty">Loading...</div></div>
 
     <div class="section-note">Pending map locations</div>
@@ -137,9 +137,20 @@ async function loadPendingCalls() {
 
 async function loadBrokenLinks() {
   const { data } = await sb.from('broken_links').select('url,source,status_code,checked_at').order('checked_at', { ascending: false }).limit(30);
-  document.getElementById('brokenLinks').innerHTML = (data || []).length ? data.map((b) => `
-    <div class="card"><div class="pad" style="padding:10px 14px"><span class="hint">${b.status_code} · ${esc(b.source)} · </span><a href="${esc(b.url)}" target="_blank" rel="noopener">${esc(b.url.slice(0, 60))}</a></div></div>`).join('')
+  const box = document.getElementById('brokenLinks');
+  box.innerHTML = (data || []).length ? data.map((b) => `
+    <div class="card" data-url="${esc(b.url)}"><div class="pad" style="padding:10px 14px">
+      <span class="hint">${b.status_code === 0 ? 'unreachable' : b.status_code} · ${esc(b.source)} · </span><a href="${esc(b.url)}" target="_blank" rel="noopener">${esc(b.url.slice(0, 60))}</a>
+      ${b.source.startsWith('news (removed)') ? '<div class="hint" style="margin-top:4px">Already pulled from the wire.</div>' : `<div class="admin-row" style="margin-top:6px"><button class="btn bl-ignore" style="font-size:12px;padding:4px 10px">It's fine, stop flagging it</button><span class="hint">Dead for real? Fix the page or the film's link, it clears on the next patrol.</span></div>`}
+    </div></div>`).join('')
     : `<div class="empty">All links alive at last patrol.</div>`;
+  box.querySelectorAll('.bl-ignore').forEach((btn) => btn.onclick = async () => {
+    const card = btn.closest('.card'); const url = card.dataset.url;
+    const { error } = await sb.from('link_ignores').insert({ url });
+    if (error) return toast(error.message);
+    await sb.from('broken_links').delete().eq('url', url);
+    toast('Ignored. The patrol skips it from now on.'); loadBrokenLinks();
+  });
 }
 
 async function loadNewMembers() {

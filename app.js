@@ -293,13 +293,18 @@ $('spotSubmit')?.addEventListener('click', async () => {
 });
 
 /* ---------- the wire (news) ---------- */
-let newsCat = 'all';
+let newsCat = 'all', newsQ = '', newsTimer = null;
 async function loadNews() {
   const el = $('news');
   let q = sb.from('news_items').select('title,url,source,category,summary,published_at').order('published_at', { ascending: false }).limit(60);
   if (newsCat !== 'all') q = q.eq('category', newsCat);
+  if (newsQ) {
+    const term = '%' + newsQ.replace(/[%_,()]/g, ' ').trim() + '%';
+    q = q.or(`title.ilike.${term},summary.ilike.${term},source.ilike.${term}`);
+  }
   const { data, error } = await q;
   if (error) { el.innerHTML = `<div class="empty">${esc(error.message)}</div>`; return; }
+  if (!(data || []).length && newsQ) { el.innerHTML = `<div class="empty">Nothing on the wire for "${esc(newsQ)}". Try fewer words.</div>`; return; }
   el.innerHTML = (data || []).length ? data.map((n) => `
     <div class="card"><div class="pad">
       <div class="post-head"><span class="chip ${n.category === 'paranormal' ? '' : 'red'}">${n.category === 'paranormal' ? '👻 PARANORMAL' : '🎬 HORROR'}</span> · ${esc(n.source)} · ${timeAgo(n.published_at)}</div>
@@ -310,6 +315,10 @@ async function loadNews() {
 for (const [id, cat] of [['newsAll', 'all'], ['newsHorror', 'horror'], ['newsPara', 'paranormal']]) {
   $(id)?.addEventListener('click', () => { newsCat = cat; loadNews(); });
 }
+$('newsQ')?.addEventListener('input', () => {
+  clearTimeout(newsTimer);
+  newsTimer = setTimeout(() => { newsQ = $('newsQ').value.trim(); loadNews(); }, 300);
+});
 
 /* ---------- posting ---------- */
 async function resizeImage(file, maxW = 1280) {
