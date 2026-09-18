@@ -6,7 +6,7 @@ let chip;
 if (bar) {
   chip = document.createElement('span');
   chip.id = 'memberCount';
-  bar.insertBefore(chip, bar.querySelector('#authChip'));
+  bar.insertBefore(chip, bar.querySelector('.authStack') || bar.querySelector('#authChip'));
 }
 let count = 0;
 async function refreshCount() {
