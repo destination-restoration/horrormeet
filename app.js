@@ -73,7 +73,7 @@ function renderAuthState() {
     if (!myProfile?.username) promptUsername();
   } else {
     chip.textContent = 'Sign in';
-    chip.classList.remove('red');
+    chip.classList.add('red');
     $('composerAuthed')?.classList.add('hidden');
     $('composerAnon')?.classList.remove('hidden');
     $('threadAuthed')?.classList.add('hidden');
