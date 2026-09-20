@@ -99,33 +99,6 @@ async function promptUsername() {
   }
 }
 
-$('sendCodeBtn')?.addEventListener('click', async () => {
-  const email = $('emailInput').value.trim();
-  const password = $('pwInput').value;
-  if (!email || !password) return toast('Email and password, both.');
-  if ($('keepIn')?.checked) sessionStorage.removeItem('hm_nokeep');
-  else sessionStorage.setItem('hm_nokeep', '1');
-  $('sendCodeBtn').disabled = true;
-  const { error } = await sb.auth.signInWithPassword({ email, password });
-  $('sendCodeBtn').disabled = false;
-  if (error) {
-    if (error.message.includes('Invalid login')) return toast('Wrong email or password. Early member without a password yet? Tap Forgot password to set one.');
-    if (error.message.includes('not confirmed')) return toast('Confirm your email first: check your inbox for the confirmation link.');
-    return toast(error.message);
-  }
-  await refreshSession();
-  toast('Welcome back.');
-  loadFeed(); loadEvents();
-});
-
-$('forgotBtn')?.addEventListener('click', async () => {
-  const email = $('emailInput').value.trim();
-  if (!email) return toast('Type your email above first, then tap Forgot password.');
-  const { error } = await sb.auth.resetPasswordForEmail(email, { redirectTo: 'https://horrormeet.com' });
-  if (error) return toast(error.message);
-  toast('Reset link sent. Open it, then you will be asked for a new password.');
-});
-
 sb.auth.onAuthStateChange(async (event) => {
   if (event === 'PASSWORD_RECOVERY') {
     let pw = null;
@@ -139,24 +112,8 @@ sb.auth.onAuthStateChange(async (event) => {
   }
 });
 
-$('verifyBtn')?.addEventListener('click', async () => {
-  const email = $('emailInput').value.trim();
-  const token = $('codeInput').value.trim();
-  const { error } = await sb.auth.verifyOtp({ email, token, type: 'email' });
-  if (error) return toast('Wrong or expired code.');
-  await refreshSession();
-  toast('Signed in.');
-  loadFeed(); loadEvents();
-});
-
 $('authChip')?.addEventListener('click', async () => {
-  if (!session) {
-    document.querySelector('.tab[data-tab="feed"]')?.click();
-    $('emailInput')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    setTimeout(() => $('emailInput')?.focus(), 400);
-    toast('Enter your email below: we send a code, no password.');
-    return;
-  }
+  if (!session) { location.href = 'signin.html'; return; }
   if (!myProfile?.username) return promptUsername();
   openAccount();
 });

@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sign in · HorrorMeet</title>
+<meta name="theme-color" content="#0b0b0e">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Frijole&family=Rye&display=swap">
+<link rel="stylesheet" href="styles.css?v=20">
+<style>
+  .join-title{font-family:'Frijole',Impact,fantasy;font-size:26px;color:var(--white);text-shadow:3px 3px 0 var(--red-deep);margin:22px 0 4px}
+  .join-sub{color:var(--dim);font-size:14.5px;margin:0 0 18px}
+  label{display:block;font-family:'Rye',Georgia,serif;font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--red);margin:14px 0 6px}
+  .pwhint{font-size:12.5px;margin-top:5px;color:var(--faint)}
+  .divider{border-top:2px dashed var(--line);margin:24px 0 8px;position:relative}
+  .divider span{position:absolute;top:-11px;left:0;background:var(--black);padding-right:10px;font-family:'Rye',Georgia,serif;font-size:11px;letter-spacing:.14em;color:var(--faint);text-transform:uppercase}
+  .newhere{margin:14px 0 0;font-size:15px;color:var(--dim)}
+  .newhere a{font-size:16px}
+</style>
+</head>
+<body>
+<header class="app"><div class="tagline-bar"><div class="inner">the door is always unlocked for members.</div></div><div class="app-bar"><a class="logo" href="index.html#home">HORRORMEET</a></div>
+  <nav class="tabs">
+    <a class="tab" href="index.html#home"><span>Home</span></a>
+    <a class="tab" href="index.html#feed"><span>Sightings</span></a>
+    <a class="tab" href="index.html#board"><span>Board</span></a>
+    <a class="tab" href="index.html#films"><span>Films</span></a>
+    <a class="tab" href="index.html#news"><span>News</span></a>
+    <a class="tab" href="index.html#map"><span>Map</span></a>
+    <a class="tab" href="index.html#meetups"><span>Meetups</span></a>
+  </nav>
+  <div class="guides">
+    <a href="festivals.html"><span>🎟 CIRCUIT</span></a>
+    <a href="vault.html"><span>🗝 VAULT</span></a>
+    <a href="awards.html"><span>🏆 AWARDS</span></a>
+    <a href="seance.html"><span>🕯 SÉANCE</span></a>
+    <a href="market.html"><span>🩸 ESTATE SALE</span></a>
+    <a href="basement.html"><span>🔦 BASEMENT</span></a>
+    <a href="rooms.html"><span>🚪 ROOMS</span></a>
+    <a href="morgue.html"><span>⚰ MORGUE</span></a>
+    <a href="crew.html"><span>🎬 CREW</span></a>
+  </div>
+</header>
+<main class="wrap">
+  <div class="join-title">SIGN IN</div>
+  <p class="join-sub">Your email and your password. That is the whole key.</p>
+
+  <div class="card"><div class="pad" id="step1">
+    <label>Email</label>
+    <input id="sEmail" type="email" placeholder="you@email.com" autocomplete="email" autocapitalize="off" spellcheck="false">
+
+    <label>Password</label>
+    <input id="sPassword" type="password" placeholder="your password" autocomplete="current-password">
+    <div class="pwhint"><span id="sPwToggle" style="color:var(--red);cursor:pointer">Show</span></div>
+
+    <label class="hint" style="display:flex;align-items:center;gap:6px;margin:14px 0 0;cursor:pointer;text-transform:none;letter-spacing:0;font-family:Georgia,serif;color:var(--dim);font-size:13px"><input type="checkbox" id="sKeep" checked style="width:auto">Keep me signed in on this device</label>
+
+    <div class="actions" style="margin-top:18px">
+      <button class="btn red" id="sGo">Sign in</button>
+      <span class="hint"><span id="sForgot" style="color:var(--red);cursor:pointer">Forgot password?</span> We email you a reset link.</span>
+    </div>
+
+    <div class="divider"><span>Not a member yet</span></div>
+    <p class="newhere">The house is free, and the first hundred members keep the Surviving Print badge forever. <a href="join.html"><b>Register here</b></a>.</p>
+  </div>
+
+  <div class="pad hidden" id="step2">
+    <h3 style="margin:0 0 6px">You're in.</h3>
+    <p class="hint" style="margin:0 0 10px">Taking you back to the board...</p>
+    <div class="actions"><a class="btn" href="index.html#home">Go now</a></div>
+  </div></div>
+
+  <footer>Trouble getting in? Email <a href="mailto:landon.brittain@gmail.com">landon.brittain@gmail.com</a> and a human will let you in.<br><a href="index.html#home">back to the board</a></footer>
+</main>
+<div class="toast" id="toast"></div>
+<script type="module">
+import { sb, toast } from './app-core.js';
+const $ = (id) => document.getElementById(id);
+
+function nextUrl() {
+  const n = new URLSearchParams(location.search).get('next');
+  return (n && /^[A-Za-z0-9._#-]+$/.test(n)) ? n : 'index.html#home';
+}
+
+$('sPwToggle').addEventListener('click', () => {
+  const pw = $('sPassword'); const show = pw.type === 'password';
+  pw.type = show ? 'text' : 'password'; $('sPwToggle').textContent = show ? 'Hide' : 'Show';
+});
+
+async function signIn() {
+  try {
+    const email = $('sEmail').value.trim();
+    const password = $('sPassword').value;
+    if (!email.includes('@')) return toast('Enter your email.');
+    if (!password) return toast('Enter your password.');
+    if ($('sKeep').checked) sessionStorage.removeItem('hm_nokeep');
+    else sessionStorage.setItem('hm_nokeep', '1');
+    $('sGo').disabled = true;
+    const { error } = await sb.auth.signInWithPassword({ email, password });
+    $('sGo').disabled = false;
+    if (error) {
+      if (error.message.includes('Invalid login')) return toast('Wrong email or password. Joined before we had passwords? Tap Forgot password.');
+      if (error.message.includes('not confirmed')) return toast('Confirm your email first: check your inbox for the link we sent.');
+      return toast(error.message);
+    }
+    $('step1').classList.add('hidden');
+    $('step2').classList.remove('hidden');
+    toast('Welcome back.');
+    setTimeout(() => { location.href = nextUrl(); }, 900);
+  } catch (err) { $('sGo').disabled = false; toast('Something broke: ' + (err?.message || err)); console.error(err); }
+}
+$('sGo').addEventListener('click', signIn);
+for (const id of ['sEmail', 'sPassword']) $(id).addEventListener('keydown', (e) => { if (e.key === 'Enter') signIn(); });
+
+$('sForgot').addEventListener('click', async () => {
+  const email = $('sEmail').value.trim();
+  if (!email.includes('@')) return toast('Type your email above first, then tap Forgot password.');
+  const { error } = await sb.auth.resetPasswordForEmail(email, { redirectTo: 'https://horrormeet.com/signin.html' });
+  if (error) return toast(error.message);
+  toast('Reset link sent. Open it and you can set a new password right here.');
+});
+
+/* arriving from a reset email */
+sb.auth.onAuthStateChange(async (event) => {
+  if (event !== 'PASSWORD_RECOVERY') return;
+  let pw = null;
+  while (!pw || pw.length < 8) {
+    pw = prompt('Set your new password (at least 8 characters):');
+    if (pw === null) return;
+  }
+  const { error } = await sb.auth.updateUser({ password: pw });
+  if (error) return toast(error.message);
+  toast('Password set. That is your key from now on.');
+  setTimeout(() => { location.href = nextUrl(); }, 900);
+});
+
+/* already signed in? don't make them do it twice */
+(async () => {
+  const { data } = await sb.auth.getSession();
+  if (data?.session && !location.hash.includes('type=recovery')) {
+    $('step1').classList.add('hidden');
+    $('step2').classList.remove('hidden');
+    $('step2').querySelector('h3').textContent = "You're already signed in.";
+    $('step2').querySelector('.hint').textContent = 'Nothing to do here.';
+  }
+})();
+</script>
+<script defer src="nav.js?v=10"></script>
+<script type="module" src="live.js?v=4"></script>
+</body>
+</html>

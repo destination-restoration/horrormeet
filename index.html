@@ -143,13 +143,11 @@
         </div>
       </div>
       <div id="composerAnon">
-        <h3 style="margin:0 0 4px;font-family:Georgia,serif;text-transform:none;letter-spacing:0;color:var(--text);font-size:17px">Sign in</h3>
-          <p class="hint" style="margin:0 0 10px">Members: email and password.</p>
-        <div class="auth-panel" style="padding:0">
-          <div class="row"><input id="emailInput" type="email" placeholder="you@email.com" autocomplete="email"></div>
-          <div class="row"><input id="pwInput" type="password" placeholder="password" autocomplete="current-password"><button class="btn" id="sendCodeBtn">Sign in</button></div>
-          <label class="hint" style="display:flex;align-items:center;gap:6px;margin-top:8px;cursor:pointer"><input type="checkbox" id="keepIn" checked style="width:auto">Keep me signed in on this device</label>
-          <p class="hint" style="margin:10px 0 0"><span id="forgotBtn" style="color:var(--red);cursor:pointer">Forgot password?</span> We'll email you a reset. New here? <a href="join.html"><b>Sign up</b></a>: claim your handle in 30 seconds.</p>
+        <h3 style="margin:0 0 4px;font-family:Georgia,serif;text-transform:none;letter-spacing:0;color:var(--text);font-size:17px">Members can post sightings</h3>
+        <p class="hint" style="margin:0 0 12px">Sign in with your email and password, or claim a handle. Both take under a minute.</p>
+        <div class="actions" style="margin:0">
+          <a class="btn red" href="signin.html?next=index.html%23feed">Sign in</a>
+          <a class="btn" href="join.html">Register</a>
         </div>
       </div>
     </div>
@@ -304,7 +302,7 @@
 
 <div id="doorFx"><div class="frame"><div class="panel"></div></div></div>
 <div class="toast" id="toast"></div>
-<script type="module" src="app.js?v=19"></script>
+<script type="module" src="app.js?v=20"></script>
 <script defer src="nav.js?v=10"></script>
 <script type="module" src="live.js?v=4"></script>
 </body>
