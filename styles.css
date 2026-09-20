@@ -420,3 +420,6 @@ header.app.doors-hidden nav.tabs, header.app.doors-hidden .guides{max-height:non
 .signupLink{font-size:11px;color:var(--dim);letter-spacing:.04em;white-space:nowrap;text-decoration:none;font-weight:400}
 .signupLink b{color:var(--red);text-decoration:underline}
 .signupLink:hover b{color:var(--white)}
+
+/* film posters are portrait one-sheets: show the whole thing, never crop the title off */
+.card img.photo.poster{object-fit:contain;max-height:600px;background:#07070a}

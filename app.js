@@ -599,7 +599,7 @@ async function loadFilms() {
   if (!data.length) { box.innerHTML = `<div class="empty">The shelf is waiting for its first film. Filmmakers: that could be yours.</div>`; return; }
   box.innerHTML = data.map((f) => `
     <article class="card">
-      ${f.poster_url ? `<img class="photo" src="${esc(f.poster_url)}" alt="${esc(f.title)} poster" loading="lazy" style="max-height:340px">` : ''}
+      ${f.poster_url ? `<img class="photo poster" src="${esc(f.poster_url)}" alt="${esc(f.title)} poster" loading="lazy">` : ''}
       <div class="pad">
         <div class="post-head">${f.featured ? '🏆 ' : ''}submitted by <span class="u">@${esc(f.profiles?.username || '?')}</span>${f.roles ? ' · ' + esc(f.roles) : ''}</div>
         <h3>${esc(f.title)}${f.year ? ` <span style="color:var(--faint);font-weight:400">(${f.year})</span>` : ''}</h3>
