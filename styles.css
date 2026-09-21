@@ -19,7 +19,7 @@ input:focus,textarea:focus{border-color:var(--red)}
 .victorian{font-family:'Rye',Georgia,serif;font-weight:400}
 
 /* diagonal two-tone header, poster-style */
-header.app{position:sticky;top:0;z-index:20;background:var(--black);border-bottom:3px solid var(--red)}
+header.app{position:sticky;top:0;z-index:1100;background:var(--black);border-bottom:3px solid var(--red)}
 .tagline-bar{background:var(--red);color:var(--white);font-family:'Rye',Georgia,serif;
   font-size:12px;letter-spacing:.14em;text-transform:lowercase;padding:5px 14px}
 .tagline-bar .inner{max-width:640px;margin:0 auto}
@@ -89,7 +89,7 @@ nav.tabs{display:flex;max-width:640px;margin:0 auto;padding:0 14px 12px;gap:0}
 .auth-panel .row input{flex:1}
 
 .empty{color:var(--faint);text-align:center;padding:34px 10px;font-size:14.5px;font-style:italic}
-.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:var(--red);border:2px solid var(--white);color:var(--white);padding:11px 18px;font-size:14px;font-weight:700;z-index:50;box-shadow:4px 4px 0 rgba(0,0,0,.6);opacity:0;transition:opacity .25s;pointer-events:none;max-width:88vw;text-align:center}
+.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:var(--red);border:2px solid var(--white);color:var(--white);padding:11px 18px;font-size:14px;font-weight:700;z-index:1500;box-shadow:4px 4px 0 rgba(0,0,0,.6);opacity:0;transition:opacity .25s;pointer-events:none;max-width:88vw;text-align:center}
 .toast.show{opacity:1}
 .section-note{font-family:'Rye',Georgia,serif;font-size:13px;color:var(--red);margin:20px 4px 4px;text-transform:uppercase;letter-spacing:.16em}
 footer{margin-top:34px;padding:18px 4px;color:var(--faint);font-size:12.5px;text-align:center;border-top:3px solid var(--red)}
@@ -115,7 +115,7 @@ footer a{color:var(--red)}
 @media (prefers-reduced-motion: reduce){.tagline-bar .inner::after{animation:none;display:none}}
 
 /* vignette: the room gets darker at the edges */
-body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:40;
+body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:1050;
   background:radial-gradient(ellipse at 50% 42%,transparent 62%,rgba(0,0,0,.42) 100%)}
 
 /* blood selection + scrollbar */
@@ -176,7 +176,7 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:40;
 .tab.active::before{background:#5a0a0f}
 
 /* the passage: fullscreen door-open transition */
-#doorFx{position:fixed;inset:0;z-index:90;background:#000;display:none;perspective:900px;overflow:hidden}
+#doorFx{position:fixed;inset:0;z-index:1300;background:#000;display:none;perspective:900px;overflow:hidden}
 #doorFx.go{display:block;animation:passage .68s ease-in forwards}
 #doorFx .frame{position:absolute;inset:8% 18%;border:6px solid #241012;background:#050203;
   box-shadow:0 0 0 3px var(--red-deep), 0 0 80px rgba(0,0,0,.9) inset}
@@ -351,7 +351,7 @@ header.app.doors-hidden nav.tabs, header.app.doors-hidden .guides{max-height:non
 #memberCount{color:var(--dim);font-size:11.5px;letter-spacing:.06em;text-transform:uppercase;
   border:1px solid var(--line);padding:4px 9px;margin-right:8px;white-space:nowrap}
 #memberCount b{color:var(--red)}
-#liveDrop{position:fixed;top:-46px;left:50%;transform:translateX(-50%);z-index:95;
+#liveDrop{position:fixed;top:-46px;left:50%;transform:translateX(-50%);z-index:1400;
   background:#140b0c;color:var(--white);border:1.5px solid var(--red);border-top:none;
   font-family:'Rye',Georgia,serif;font-size:12px;letter-spacing:.08em;
   padding:8px 18px 7px;border-radius:0 0 8px 8px;transition:top .45s cubic-bezier(.2,.9,.3,1.1);
@@ -423,3 +423,6 @@ header.app.doors-hidden nav.tabs, header.app.doors-hidden .guides{max-height:non
 
 /* film posters are portrait one-sheets: show the whole thing, never crop the title off */
 .card img.photo.poster{object-fit:contain;max-height:600px;background:#07070a}
+
+/* the map draws its own layers at z-index 400-1000; keep it under the sticky header */
+#mapEl{position:relative;z-index:1}
