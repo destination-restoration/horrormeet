@@ -207,21 +207,45 @@ async function loadMap() {
     const PAGE = 1000;
     for (let from = 0; ; from += PAGE) {
       const { data, error } = await sb.from('map_spots')
-        .select('id,title,category,lat,lng,for_sale')
+        .select('id,title,category,kind,lat,lng,for_sale')
         .eq('status', 'approved').order('id').range(from, from + PAGE - 1);
       if (error || !data || !data.length) break;
       mapIndex = mapIndex.concat(data);
       if (data.length < PAGE) break;
     }
   }
+  renderMapFilters();
   drawPins();
+}
+
+const FILTERS = [
+  { key: 'all',        label: 'All',         test: () => true },
+  { key: 'haunted',    label: '\u{1F47B} Haunted',     test: (s) => s.kind === 'haunted' },
+  { key: 'film set',   label: '\u{1F3AC} Film sets',   test: (s) => s.kind === 'film set' },
+  { key: 'prison',     label: '\u{26D3} Prisons',      test: (s) => s.kind === 'prison' },
+  { key: 'ghost town', label: '\u{1F3DA} Ghost towns', test: (s) => s.kind === 'ghost town' },
+  { key: 'sale',       label: '\u{1F3F7} For sale',    test: (s) => !!s.for_sale, cls: 'sale' },
+];
+function renderMapFilters() {
+  const box = $('mapFilters');
+  if (!box || !mapIndex) return;
+  box.innerHTML = '';
+  for (const f of FILTERS) {
+    const n = mapIndex.filter(f.test).length;
+    if (!n && f.key !== 'all') continue;
+    const b = document.createElement('button');
+    b.className = (f.cls || '') + (mapCat === f.key ? ' on' : '');
+    b.innerHTML = esc(f.label) + ' <span class="n">' + n.toLocaleString('en-US') + '</span>';
+    b.onclick = () => { mapCat = f.key; renderMapFilters(); drawPins(); };
+    box.appendChild(b);
+  }
 }
 
 function drawPins() {
   mapCluster.clearLayers();
   mapMarkers.clear();
-  const rows = mapIndex.filter((s) =>
-    mapCat === 'all' ? true : mapCat === 'sale' ? s.for_sale : s.category === mapCat);
+  const active = FILTERS.find((f) => f.key === mapCat) || FILTERS[0];
+  const rows = mapIndex.filter(active.test);
   const markers = rows.map((s) => {
     const m = L.circleMarker([s.lat, s.lng], pinStyle(s));
     m.bindPopup(`<b>${esc(s.title)}</b><div class="loadingpop">opening...</div>`, { minWidth: 230 });
@@ -231,7 +255,7 @@ function drawPins() {
   });
   mapCluster.addLayers(markers);
   const note = $('mapCount');
-  if (note) note.textContent = rows.length.toLocaleString('en-US') + ' place' + (rows.length === 1 ? '' : 's') + ' on the atlas';
+  if (note) note.textContent = rows.length.toLocaleString('en-US') + ' place' + (rows.length === 1 ? '' : 's') + ' shown';
 }
 
 async function fillPopup(marker, id) {
@@ -271,9 +295,7 @@ function mapsUrl(kind, s) {
     ? `https://maps.apple.com/?ll=${ll}&q=${q}`
     : `https://www.google.com/maps/search/?api=1&query=${ll}`;
 }
-for (const [id, cat] of [['mapAll', 'all'], ['mapFilm', 'film'], ['mapReal', 'real'], ['mapSale', 'sale']]) {
-  $(id)?.addEventListener('click', () => { mapCat = cat; if (mapIndex) drawPins(); else loadMap(); });
-}
+
 $('mapAddBtn')?.addEventListener('click', () => {
   if (!session) return toast('Sign in on the Sightings tab to add locations.');
   addMode = !addMode;

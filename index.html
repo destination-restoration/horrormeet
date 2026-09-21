@@ -23,6 +23,18 @@
     display:flex;align-items:center;justify-content:center;font-family:Georgia,serif;font-weight:700;
     box-shadow:0 0 10px rgba(179,18,27,.7)}
   .hm-cluster span{line-height:1}
+  .mapfilters{display:flex;flex-wrap:wrap;gap:6px}
+  .mapfilters button{background:var(--black);border:2px solid var(--line);color:var(--dim);
+    font-family:Georgia,serif;font-size:12.5px;padding:5px 10px;cursor:pointer;white-space:nowrap;
+    display:inline-flex;align-items:center;gap:6px;line-height:1.2}
+  .mapfilters button .n{font-weight:700;color:var(--white);font-size:12px}
+  .mapfilters button:hover{border-color:var(--red);color:var(--white)}
+  .mapfilters button.on{border-color:var(--red);background:var(--red);color:#fff}
+  .mapfilters button.on .n{color:#fff}
+  .mapfilters button.sale{border-color:#2ecc71;color:#2ecc71}
+  .mapfilters button.sale .n{color:#2ecc71}
+  .mapfilters button.sale.on{background:#2ecc71;border-color:#2ecc71;color:#08110b}
+  .mapfilters button.sale.on .n{color:#08110b}
   .leaflet-popup-content .loadingpop{color:#8b7f84;font-size:12.5px}
   .leaflet-popup-content-wrapper,.leaflet-popup-tip{background:#161014;color:#eee;border:1px solid #b3121b;border-radius:0}
   .leaflet-popup-content{font-family:Georgia,serif;font-size:14px}
@@ -271,15 +283,11 @@
   <section id="tab-map" class="hidden">
     <div class="section-note">The atlas · where horror actually lives</div>
     <div class="composer" style="padding:10px 14px;margin-bottom:10px">
-      <div class="actions" style="margin:0;flex-wrap:wrap">
-        <button class="btn" id="mapAll">All</button>
-        <button class="btn" id="mapFilm">🎬 Filming locations</button>
-        <button class="btn" id="mapReal">👻 Real horror</button>
-        <button class="btn" id="mapSale" style="border-color:#2ecc71;color:#2ecc71">🏷 For sale</button>
-        <span class="spacer"></span>
+      <div id="mapFilters" class="mapfilters"></div>
+      <div class="actions" style="margin:8px 0 0">
         <button class="btn red" id="mapAddBtn">+ Add a location</button>
+        <span class="hint" id="mapCount"></span>
       </div>
-      <p class="hint" id="mapCount" style="margin:8px 0 0;color:var(--red)"></p>
       <p class="hint" id="mapAddHint" style="margin:8px 0 0">Members can add spots: filming locations, true-crime and haunted sites. Every submission is reviewed by a human before it appears. Tap any pin for the address, directions, and what the place is worth. <span style="color:#2ecc71">Green pins are on the market right now.</span> Private homes: look from the sidewalk, never knock.</p>
     </div>
     <div id="mapEl"></div>
@@ -317,7 +325,7 @@
   <div class="actions" style="margin-top:8px"><span class="hint"><span id="authFixClose" style="color:var(--red);cursor:pointer">Close</span> · Still stuck? <a href="mailto:landon.brittain@gmail.com">Email Landon</a> and he'll let you in by hand.</span></div>
 </div>
 <div class="toast" id="toast"></div>
-<script type="module" src="app.js?v=23"></script>
+<script type="module" src="app.js?v=24"></script>
 <script defer src="nav.js?v=10"></script>
 <script type="module" src="live.js?v=4"></script>
 </body>
