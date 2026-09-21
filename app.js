@@ -159,16 +159,38 @@ document.querySelectorAll('.tab').forEach((t) =>
 
 
 
-/* ---------- the atlas (map) ---------- */
-let map = null, mapLayer = null, mapCat = 'all', addMode = false, pendingPin = null;
+/* ---------- the atlas (map) ----------
+   Built to carry thousands of pins: one light index loads every spot (id, name,
+   where, what kind), markers are clustered, and the full detail row is fetched
+   only when someone actually opens a pin. */
+let map = null, mapCluster = null, mapCat = 'all', addMode = false, pendingPin = null;
+let mapIndex = null, mapMarkers = new Map(), spotCache = new Map();
+
+const PIN_COLORS = { film: '#b3121b', real: '#e8d9a0', sale: '#2ecc71' };
+function pinStyle(s) {
+  const sale = !!s.for_sale;
+  const c = sale ? PIN_COLORS.sale : (s.category === 'film' ? PIN_COLORS.film : PIN_COLORS.real);
+  return { radius: sale ? 9 : 7, weight: sale ? 3 : 2, color: c, fillColor: c,
+           fillOpacity: sale ? 0.95 : 0.8, className: sale ? 'pin-sale' : '' };
+}
+
 async function loadMap() {
-  if (!window.L) { setTimeout(loadMap, 300); return; }
+  if (!window.L || !window.L.markerClusterGroup) { setTimeout(loadMap, 300); return; }
   if (!map) {
     map = L.map('mapEl', { worldCopyJump: true }).setView([37.5, -96], 4);
     L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
       attribution: '&copy; OpenStreetMap contributors', maxZoom: 19, className: 'dark-tiles'
     }).addTo(map);
-    mapLayer = L.layerGroup().addTo(map);
+    mapCluster = L.markerClusterGroup({
+      maxClusterRadius: 55, showCoverageOnHover: false, chunkedLoading: true,
+      iconCreateFunction: (cluster) => {
+        const n = cluster.getChildCount();
+        const size = n < 10 ? 34 : n < 100 ? 42 : 52;
+        return L.divIcon({ html: `<span>${n}</span>`, className: 'hm-cluster',
+                           iconSize: L.point(size, size) });
+      }
+    });
+    map.addLayer(mapCluster);
     map.on('click', (e) => {
       if (!addMode) return;
       pendingPin?.remove();
@@ -179,38 +201,69 @@ async function loadMap() {
     });
   }
   setTimeout(() => map.invalidateSize(), 100);
-  let q = sb.from('map_spots').select('id,title,category,description,address,lat,lng,est_value,value_note,sale_history,for_sale,list_price,listing_url,profiles(username)').eq('status', 'approved');
-  if (mapCat === 'sale') q = q.eq('for_sale', true);
-  else if (mapCat !== 'all') q = q.eq('category', mapCat);
-  const { data } = await q;
-  mapLayer.clearLayers();
-  (data || []).forEach((s) => {
-    const isFilm = s.category === 'film';
-    const sale = !!s.for_sale;
-    const money = (n) => '$' + Math.round(n).toLocaleString('en-US');
-    const valueLine = sale
-      ? `<div class="forsale">🏷 FOR SALE${s.list_price ? ' · ' + money(s.list_price) : ''}${s.listing_url ? ` · <a href="${esc(s.listing_url)}" target="_blank" rel="noopener">see the listing</a>` : ''}</div>`
-      : (s.est_value ? `<div class="val">💰 Est. value ${money(s.est_value)}${s.value_note ? ` <span class="valnote">(${esc(s.value_note)})</span>` : ''}</div>` : '');
-    const histLine = s.sale_history ? `<div class="valnote">🧾 ${esc(s.sale_history)}</div>` : '';
-    L.circleMarker([s.lat, s.lng], {
-      radius: sale ? 10 : 8, weight: sale ? 3 : 2,
-      color: sale ? '#2ecc71' : (isFilm ? '#b3121b' : '#e8d9a0'),
-      fillColor: sale ? '#2ecc71' : (isFilm ? '#b3121b' : '#e8d9a0'),
-      fillOpacity: sale ? 0.95 : 0.75,
-      className: sale ? 'pin-sale' : ''
-    }).bindPopup(
-      `<div class="cat">${isFilm ? '🎬 Filming location' : '👻 Real horror'}${sale ? ' · <span class="saletag">ON THE MARKET</span>' : ''}</div>` +
-      `<b>${esc(s.title)}</b><br>${esc(s.description || '')}` +
-      valueLine + histLine +
-      `<div class="addr">📍 ${s.address ? esc(s.address) : `${s.lat.toFixed(4)}, ${s.lng.toFixed(4)}`}</div>` +
-      `<div class="maplinks">` +
-        `<a href="${mapsUrl('apple', s)}" target="_blank" rel="noopener">Apple Maps</a>` +
-        `<a href="${mapsUrl('google', s)}" target="_blank" rel="noopener">Google Maps</a>` +
-      `</div>` +
-      (s.profiles?.username ? `<span style="color:#8b7f84;font-size:12px">added by @${esc(s.profiles.username)}</span>` : '')
-    ).addTo(mapLayer);
-  });
+
+  if (!mapIndex) {
+    mapIndex = [];
+    const PAGE = 1000;
+    for (let from = 0; ; from += PAGE) {
+      const { data, error } = await sb.from('map_spots')
+        .select('id,title,category,lat,lng,for_sale')
+        .eq('status', 'approved').order('id').range(from, from + PAGE - 1);
+      if (error || !data || !data.length) break;
+      mapIndex = mapIndex.concat(data);
+      if (data.length < PAGE) break;
+    }
+  }
+  drawPins();
 }
+
+function drawPins() {
+  mapCluster.clearLayers();
+  mapMarkers.clear();
+  const rows = mapIndex.filter((s) =>
+    mapCat === 'all' ? true : mapCat === 'sale' ? s.for_sale : s.category === mapCat);
+  const markers = rows.map((s) => {
+    const m = L.circleMarker([s.lat, s.lng], pinStyle(s));
+    m.bindPopup(`<b>${esc(s.title)}</b><div class="loadingpop">opening...</div>`, { minWidth: 230 });
+    m.on('popupopen', () => fillPopup(m, s.id));
+    mapMarkers.set(s.id, m);
+    return m;
+  });
+  mapCluster.addLayers(markers);
+  const note = $('mapCount');
+  if (note) note.textContent = rows.length.toLocaleString('en-US') + ' place' + (rows.length === 1 ? '' : 's') + ' on the atlas';
+}
+
+async function fillPopup(marker, id) {
+  let s = spotCache.get(id);
+  if (!s) {
+    const { data } = await sb.from('map_spots')
+      .select('id,title,category,description,address,lat,lng,est_value,value_note,sale_history,for_sale,list_price,listing_url,source_url,profiles(username)')
+      .eq('id', id).single();
+    if (!data) { marker.setPopupContent('Could not load this one. Try again.'); return; }
+    s = data; spotCache.set(id, s);
+  }
+  const isFilm = s.category === 'film';
+  const sale = !!s.for_sale;
+  const money = (n) => '$' + Math.round(n).toLocaleString('en-US');
+  const valueLine = sale
+    ? `<div class="forsale">🏷 FOR SALE${s.list_price ? ' · ' + money(s.list_price) : ''}${s.listing_url ? ` · <a href="${esc(s.listing_url)}" target="_blank" rel="noopener">see the listing</a>` : ''}</div>`
+    : (s.est_value ? `<div class="val">💰 Est. value ${money(s.est_value)}${s.value_note ? ` <span class="valnote">(${esc(s.value_note)})</span>` : ''}</div>` : '');
+  const histLine = s.sale_history ? `<div class="valnote">🧾 ${esc(s.sale_history)}</div>` : '';
+  const srcLine = s.source_url ? `<div class="valnote"><a href="${esc(s.source_url)}" target="_blank" rel="noopener">read more</a></div>` : '';
+  marker.setPopupContent(
+    `<div class="cat">${isFilm ? '🎬 Filming location' : '👻 Real horror'}${sale ? ' · <span class="saletag">ON THE MARKET</span>' : ''}</div>` +
+    `<b>${esc(s.title)}</b><br>${esc(s.description || '')}` +
+    valueLine + histLine +
+    `<div class="addr">📍 ${s.address ? esc(s.address) : `${s.lat.toFixed(4)}, ${s.lng.toFixed(4)}`}</div>` +
+    `<div class="maplinks">` +
+      `<a href="${mapsUrl('apple', s)}" target="_blank" rel="noopener">Apple Maps</a>` +
+      `<a href="${mapsUrl('google', s)}" target="_blank" rel="noopener">Google Maps</a>` +
+    `</div>` + srcLine +
+    (s.profiles?.username ? `<span style="color:#8b7f84;font-size:12px">added by @${esc(s.profiles.username)}</span>` : '')
+  );
+}
+
 function mapsUrl(kind, s) {
   const q = encodeURIComponent(s.address ? `${s.title}, ${s.address}` : s.title);
   const ll = `${s.lat},${s.lng}`;
@@ -219,7 +272,7 @@ function mapsUrl(kind, s) {
     : `https://www.google.com/maps/search/?api=1&query=${ll}`;
 }
 for (const [id, cat] of [['mapAll', 'all'], ['mapFilm', 'film'], ['mapReal', 'real'], ['mapSale', 'sale']]) {
-  $(id)?.addEventListener('click', () => { mapCat = cat; loadMap(); });
+  $(id)?.addEventListener('click', () => { mapCat = cat; if (mapIndex) drawPins(); else loadMap(); });
 }
 $('mapAddBtn')?.addEventListener('click', () => {
   if (!session) return toast('Sign in on the Sightings tab to add locations.');
@@ -244,6 +297,7 @@ $('spotSubmit')?.addEventListener('click', async () => {
     lat: ll.lat, lng: ll.lng, submitter: session.user.id, status: 'pending'
   });
   if (error) return toast(error.message);
+  mapIndex = null;
   toast('Submitted. A mod will walk the grounds before it posts.');
   $('spotTitle').value = ''; $('spotDesc').value = ''; $('spotAddr').value = '';
   $('spotCancel').click();

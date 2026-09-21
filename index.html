@@ -14,9 +14,16 @@
 <link rel="stylesheet" href="styles.css?v=21">
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 <script defer src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css">
+<script defer src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
 <style>
   #mapEl{height:62vh;min-height:380px;border:2px solid var(--line);background:#111}
   #mapEl .dark-tiles{filter:invert(1) hue-rotate(180deg) brightness(.85) contrast(.9) saturate(.4)}
+  .hm-cluster{background:rgba(179,18,27,.85);border:2px solid #f3ede4;color:#fff;border-radius:50%;
+    display:flex;align-items:center;justify-content:center;font-family:Georgia,serif;font-weight:700;
+    box-shadow:0 0 10px rgba(179,18,27,.7)}
+  .hm-cluster span{line-height:1}
+  .leaflet-popup-content .loadingpop{color:#8b7f84;font-size:12.5px}
   .leaflet-popup-content-wrapper,.leaflet-popup-tip{background:#161014;color:#eee;border:1px solid #b3121b;border-radius:0}
   .leaflet-popup-content{font-family:Georgia,serif;font-size:14px}
   .leaflet-popup-content b{color:#e8babf}
@@ -272,6 +279,7 @@
         <span class="spacer"></span>
         <button class="btn red" id="mapAddBtn">+ Add a location</button>
       </div>
+      <p class="hint" id="mapCount" style="margin:8px 0 0;color:var(--red)"></p>
       <p class="hint" id="mapAddHint" style="margin:8px 0 0">Members can add spots: filming locations, true-crime and haunted sites. Every submission is reviewed by a human before it appears. Tap any pin for the address, directions, and what the place is worth. <span style="color:#2ecc71">Green pins are on the market right now.</span> Private homes: look from the sidewalk, never knock.</p>
     </div>
     <div id="mapEl"></div>
@@ -309,7 +317,7 @@
   <div class="actions" style="margin-top:8px"><span class="hint"><span id="authFixClose" style="color:var(--red);cursor:pointer">Close</span> · Still stuck? <a href="mailto:landon.brittain@gmail.com">Email Landon</a> and he'll let you in by hand.</span></div>
 </div>
 <div class="toast" id="toast"></div>
-<script type="module" src="app.js?v=22"></script>
+<script type="module" src="app.js?v=23"></script>
 <script defer src="nav.js?v=10"></script>
 <script type="module" src="live.js?v=4"></script>
 </body>
