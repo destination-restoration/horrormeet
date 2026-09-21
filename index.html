@@ -205,6 +205,7 @@
           <img id="eAvatarPreview" src="icon-180.png" alt="avatar" style="width:64px;height:64px;object-fit:cover;border:2px solid var(--red)">
           <div style="flex:1"><label class="hint">Profile picture / icon</label><input id="eAvatar" type="file" accept="image/*"></div>
         </div>
+        <div class="row"><label class="hint" style="display:block;margin-bottom:4px">Username (this is what everyone sees)</label><input id="eUsername" maxlength="24" placeholder="3-24 letters, numbers, underscores" autocapitalize="off" spellcheck="false"><div class="hint" id="eUsernameNote" style="margin-top:4px"></div></div>
         <div class="row"><input id="ePhone" maxlength="20" placeholder="Phone (optional, never public)"></div>
         <div class="row"><input id="eWebsite" maxlength="300" placeholder="Your site or social link (optional)"></div>
         <div class="row"><input id="eShortFilm" maxlength="300" placeholder="Link to your favorite under-seen short film (optional)"></div>
@@ -301,8 +302,14 @@
 </main>
 
 <div id="doorFx"><div class="frame"><div class="panel"></div></div></div>
+<div id="authFix" class="hidden" style="position:fixed;left:0;right:0;bottom:0;z-index:60;background:#1c0d10;border-top:3px solid var(--red);padding:14px 16px;max-width:640px;margin:0 auto;box-shadow:0 -8px 24px rgba(0,0,0,.6)">
+  <div style="font-family:'Rye',Georgia,serif;color:var(--red);font-size:12px;letter-spacing:.12em;text-transform:uppercase;margin-bottom:6px">That link didn't work</div>
+  <p class="hint" id="authFixWhy" style="margin:0 0 10px">Your confirmation link was already used or it expired. Put your email in and we'll send a fresh one.</p>
+  <div class="row" style="display:flex;gap:8px;flex-wrap:wrap"><input id="authFixEmail" type="email" placeholder="you@email.com" autocomplete="email" style="flex:1;min-width:180px"><button class="btn red" id="authFixSend">Send a new link</button></div>
+  <div class="actions" style="margin-top:8px"><span class="hint"><span id="authFixClose" style="color:var(--red);cursor:pointer">Close</span> · Still stuck? <a href="mailto:landon.brittain@gmail.com">Email Landon</a> and he'll let you in by hand.</span></div>
+</div>
 <div class="toast" id="toast"></div>
-<script type="module" src="app.js?v=21"></script>
+<script type="module" src="app.js?v=22"></script>
 <script defer src="nav.js?v=10"></script>
 <script type="module" src="live.js?v=4"></script>
 </body>

@@ -629,6 +629,8 @@ function fillEditor() {
   if (myProfile.avatar_url) $('eAvatarPreview').src = myProfile.avatar_url;
   sb.from('profiles_private').select('phone').eq('id', session.user.id).single()
     .then(({ data }) => { if (data?.phone) $('ePhone').value = data.phone; });
+  $('eUsername').value = myProfile.username || '';
+  $('eUsernameNote').textContent = '';
   $('eWebsite').value = myProfile.website_url || '';
   $('eShortFilm').value = myProfile.short_film_url || '';
   $('eFavMovie').value = myProfile.fav_movie || '';
@@ -659,6 +661,14 @@ $('saveProfileBtn')?.addEventListener('click', async () => {
       const { error: upErr } = await sb.storage.from('avatars').upload(path, blob, { contentType: 'image/jpeg', upsert: true });
       if (upErr) throw upErr;
       avatar_url = sb.storage.from('avatars').getPublicUrl(path).data.publicUrl + '?t=' + Date.now();
+    }
+    const wantedName = $('eUsername').value.trim();
+    if (wantedName && wantedName !== (myProfile.username || '')) {
+      if (!/^[A-Za-z0-9_]{3,24}$/.test(wantedName)) { toast('Username: 3-24 letters, numbers or underscores.'); return; }
+      const { data: taken } = await sb.from('profiles').select('id').ilike('username', wantedName).neq('id', session.user.id).limit(1);
+      if (taken && taken.length) { toast('@' + wantedName + ' is taken. Pick another.'); return; }
+      const { error: nameErr } = await sb.from('profiles').update({ username: wantedName }).eq('id', session.user.id);
+      if (nameErr) { toast(nameErr.message.includes('duplicate') ? 'That username is taken.' : nameErr.message); return; }
     }
     await sb.from('profiles_private').upsert({ id: session.user.id, phone: $('ePhone').value.trim() || null });
     const { error } = await sb.from('profiles').update({
@@ -806,6 +816,37 @@ document.addEventListener('click', (e) => {
   }
 });
 
+
+/* a confirmation or reset link that failed lands here with an error in the hash.
+   the old build ignored it and showed a normal homepage, which is why people got stuck. */
+(function handleAuthLinkError() {
+  const h = new URLSearchParams((location.hash || '').replace(/^#/, ''));
+  const q = new URLSearchParams(location.search);
+  const code = h.get('error_code') || q.get('error_code');
+  const desc = h.get('error_description') || q.get('error_description');
+  if (!code && !desc) return;
+  const box = $('authFix');
+  if (!box) return;
+  if (desc) {
+    const pretty = decodeURIComponent(desc.replace(/\+/g, ' '));
+    $('authFixWhy').textContent = /expired|invalid/i.test(pretty)
+      ? 'That confirmation link was already used or it expired. Put your email in and we will send a fresh one.'
+      : pretty + ' Put your email in and we will send you a new link.';
+  }
+  box.classList.remove('hidden');
+  history.replaceState(null, '', location.pathname);
+  $('authFixClose').onclick = () => box.classList.add('hidden');
+  $('authFixSend').onclick = async () => {
+    const email = $('authFixEmail').value.trim();
+    if (!email.includes('@')) return toast('Enter the email you signed up with.');
+    $('authFixSend').disabled = true;
+    const { error } = await sb.auth.resend({ type: 'signup', email });
+    $('authFixSend').disabled = false;
+    if (error) return toast(error.message);
+    toast('New link sent. Open it soon, they expire.');
+    box.classList.add('hidden');
+  };
+})();
 
 /* tree nav: rooms are hash links, hashchange opens the tab */
 function openTabByHash() {
