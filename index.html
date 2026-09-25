@@ -11,7 +11,7 @@
 <link rel="icon" href="icon-180.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Frijole&family=Rye&display=swap">
-<link rel="stylesheet" href="styles.css?v=22">
+<link rel="stylesheet" href="styles.css?v=23">
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 <script defer src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css">
@@ -83,6 +83,10 @@
     <div class="spacer"></div>
     <div class="authStack"><button id="authChip" class="chip red">Sign in</button><a id="signupChip" class="signupLink" href="join.html">New here? <b>Register</b></a></div>
   </div>
+  <form class="sitesearch" action="search.html" method="get" role="search">
+    <input type="search" name="q" maxlength="80" placeholder="Search everything: a film, a haunted place, a name..." autocomplete="off" aria-label="Search HorrorMeet">
+    <button type="submit" aria-label="Search">Search</button>
+  </form>
   <nav class="tabs">
     <button class="tab active" data-tab="home"><span>Home</span></button>
     <button class="tab" data-tab="feed"><span>Sightings</span></button>
@@ -283,6 +287,8 @@
   <section id="tab-map" class="hidden">
     <div class="section-note">The atlas · where horror actually lives</div>
     <div class="composer" style="padding:10px 14px;margin-bottom:10px">
+      <div class="row mapsearch"><input id="mapQ" type="search" maxlength="80" placeholder="Search the atlas: Amityville, Overlook, Eastern State..." autocomplete="off"></div>
+      <div id="mapHits" class="hidden"></div>
       <div id="mapFilters" class="mapfilters"></div>
       <div class="actions" style="margin:8px 0 0">
         <button class="btn red" id="mapAddBtn">+ Add a location</button>

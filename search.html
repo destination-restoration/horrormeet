@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Search · HorrorMeet</title>
+<meta name="theme-color" content="#0b0b0e">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Frijole&family=Rye&display=swap">
+<link rel="stylesheet" href="styles.css?v=23">
+<style>
+  .join-title{font-family:'Frijole',Impact,fantasy;font-size:26px;color:var(--white);text-shadow:3px 3px 0 var(--red-deep);margin:22px 0 4px}
+  .join-sub{color:var(--dim);font-size:14.5px;margin:0 0 14px}
+</style>
+</head>
+<body>
+<header class="app"><div class="tagline-bar"><div class="inner">the classics never needed permission.</div></div><div class="app-bar"><a class="logo" href="index.html#home">HORRORMEET</a></div>
+  <form class="sitesearch" action="search.html" method="get" role="search">
+    <input type="search" name="q" maxlength="80" placeholder="Search everything: a film, a haunted place, a name..." autocomplete="off" aria-label="Search HorrorMeet">
+    <button type="submit" aria-label="Search">Search</button>
+  </form>
+  <nav class="tabs">
+    <a class="tab" href="index.html#home"><span>Home</span></a>
+    <a class="tab" href="index.html#feed"><span>Sightings</span></a>
+    <a class="tab" href="index.html#board"><span>Board</span></a>
+    <a class="tab" href="index.html#films"><span>Films</span></a>
+    <a class="tab" href="index.html#news"><span>News</span></a>
+    <a class="tab" href="index.html#map"><span>Map</span></a>
+    <a class="tab" href="index.html#meetups"><span>Meetups</span></a>
+  </nav>
+  <div class="guides">
+    <a href="festivals.html"><span>🎟 CIRCUIT</span></a>
+    <a href="vault.html" class="on"><span>🗝 VAULT</span></a>
+    <a href="awards.html"><span>🏆 AWARDS</span></a>
+    <a href="seance.html"><span>🕯 SÉANCE</span></a>
+    <a href="market.html"><span>🩸 ESTATE SALE</span></a>
+    <a href="basement.html"><span>🔦 BASEMENT</span></a>
+    <a href="rooms.html"><span>🚪 ROOMS</span></a>
+    <a href="morgue.html"><span>⚰ MORGUE</span></a>
+    <a href="crew.html"><span>🎬 CREW</span></a>
+  </div>
+</header>
+<main class="wrap">
+  <div class="join-title">SEARCH THE HOUSE</div>
+  <p class="join-sub" id="sHead">Every room at once: news, the atlas, the shelf, the vault, the morgue, the board, meetups.</p>
+
+  <form class="row" id="sForm" style="margin:0 0 4px">
+    <input id="sq" type="search" maxlength="80" placeholder="Amityville Horror, Nosferatu, Eastern State..." autocomplete="off" autofocus>
+  </form>
+  <div class="schips" id="sChips"></div>
+  <div id="sOut"><div class="empty">Type something above. Two letters is enough to start.</div></div>
+
+  <footer>Missing something you know we have? Email <a href="mailto:landon.brittain@gmail.com">landon.brittain@gmail.com</a>.<br><a href="index.html#home">back to the board</a></footer>
+</main>
+<div class="toast" id="toast"></div>
+<script type="module">
+import { sb } from './app-core.js';
+const $ = (id) => document.getElementById(id);
+const esc = (s) => String(s == null ? '' : s).replace(/[&<>"']/g, (c) =>
+  ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+
+/* one table, one query. every room writes into search_index, so adding a new
+   kind of content later means adding a trigger, not another search box. */
+const KINDS = {
+  news:     { label: 'News',       tab: 'index.html#news' },
+  atlas:    { label: 'The atlas',  tab: 'index.html#map' },
+  film:     { label: 'Film shelf', tab: 'index.html#films' },
+  vault:    { label: 'The vault',  tab: 'vault.html' },
+  morgue:   { label: 'The morgue', tab: 'morgue.html' },
+  board:    { label: 'The board',  tab: 'index.html#board' },
+  sighting: { label: 'Sightings',  tab: 'index.html#feed' },
+  meetup:   { label: 'Meetups',    tab: 'index.html#meetups' },
+};
+const ORDER = ['news', 'atlas', 'film', 'vault', 'morgue', 'board', 'sighting', 'meetup'];
+
+let rows = [], only = 'all', timer = null, lastQ = '';
+
+function when(t) {
+  if (!t) return '';
+  const d = new Date(t);
+  if (isNaN(d)) return '';
+  return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+}
+
+function render() {
+  const out = $('sOut');
+  if (!lastQ || lastQ.length < 2) {
+    out.innerHTML = '<div class="empty">Type something above. Two letters is enough to start.</div>';
+    $('sChips').innerHTML = '';
+    return;
+  }
+  if (!rows.length) {
+    out.innerHTML = '<div class="empty">Nothing in the house for "' + esc(lastQ) + '" yet. '
+      + 'Try one word instead of three, or a different spelling.</div>';
+    $('sChips').innerHTML = '';
+    return;
+  }
+
+  /* filter chips, counted */
+  const counts = {};
+  for (const r of rows) counts[r.kind] = (counts[r.kind] || 0) + 1;
+  const chips = $('sChips');
+  chips.innerHTML = '';
+  const mk = (key, label, n) => {
+    const b = document.createElement('button');
+    b.type = 'button';
+    b.className = only === key ? 'on' : '';
+    b.innerHTML = esc(label) + ' ' + n.toLocaleString('en-US');
+    b.onclick = () => { only = key; render(); };
+    chips.appendChild(b);
+  };
+  mk('all', 'Everything', rows.length);
+  for (const k of ORDER) if (counts[k]) mk(k, KINDS[k].label, counts[k]);
+
+  const shown = only === 'all' ? rows : rows.filter((r) => r.kind === only);
+  const groups = only === 'all' ? ORDER.filter((k) => counts[k]) : [only];
+
+  let html = '';
+  for (const k of groups) {
+    const set = shown.filter((r) => r.kind === k);
+    if (!set.length) continue;
+    const meta = KINDS[k] || { label: k, tab: 'index.html#home' };
+    html += '<div class="sgroup"><h3>' + esc(meta.label)
+         + ' <span class="n">' + set.length.toLocaleString('en-US') + '</span></h3>';
+    for (const r of set) {
+      const ext = /^https?:/i.test(r.href);
+      const href = r.href || meta.tab;
+      html += '<a class="sres" href="' + esc(href) + '"' + (ext ? ' target="_blank" rel="noopener"' : '') + '>'
+           + '<b>' + esc(r.title) + '</b>'
+           + '<div class="meta">' + [esc(meta.label), esc((r.extra || '').trim()), when(r.happened_at)]
+               .filter(Boolean).join(' · ') + '</div>'
+           + (r.snippet ? '<p>' + esc(r.snippet) + '</p>' : '')
+           + '</a>';
+    }
+    html += '</div>';
+  }
+  out.innerHTML = html;
+}
+
+async function run(q) {
+  lastQ = q;
+  if (!q || q.length < 2) { rows = []; render(); return; }
+  $('sOut').innerHTML = '<div class="empty">Looking...</div>';
+  const { data, error } = await sb.rpc('site_search', { q, lim: 120 });
+  if (error) {
+    $('sOut').innerHTML = '<div class="empty">Search broke: ' + esc(error.message) + '</div>';
+    return;
+  }
+  rows = data || [];
+  only = 'all';
+  render();
+  const u = new URL(location.href);
+  u.searchParams.set('q', q);
+  history.replaceState(null, '', u);
+  $('sHead').textContent = rows.length
+    ? rows.length.toLocaleString('en-US') + ' thing' + (rows.length === 1 ? '' : 's') + ' in the house match "' + q + '".'
+    : 'Every room at once: news, the atlas, the shelf, the vault, the morgue, the board, meetups.';
+}
+
+$('sForm').addEventListener('submit', (e) => { e.preventDefault(); clearTimeout(timer); run($('sq').value.trim()); });
+$('sq').addEventListener('input', () => {
+  clearTimeout(timer);
+  timer = setTimeout(() => run($('sq').value.trim()), 280);
+});
+
+const initial = new URLSearchParams(location.search).get('q') || '';
+if (initial) { $('sq').value = initial; run(initial); }
+</script>
+<script defer src="nav.js?v=10"></script>
+<script type="module" src="live.js?v=4"></script>
+</body>
+</html>

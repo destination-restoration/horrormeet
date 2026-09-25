@@ -426,3 +426,44 @@ header.app.doors-hidden nav.tabs, header.app.doors-hidden .guides{max-height:non
 
 /* the map draws its own layers at z-index 400-1000; keep it under the sticky header */
 #mapEl{position:relative;z-index:1}
+
+/* ---------- global site search ---------- */
+.sitesearch{max-width:640px;margin:0 auto;padding:0 14px 8px;display:flex;gap:6px}
+.sitesearch input{flex:1;min-width:0;margin:0;padding:9px 11px;font-size:14.5px;
+  background:#121216;border:2px solid var(--line);color:var(--white);border-radius:2px}
+.sitesearch input:focus{outline:none;border-color:var(--red)}
+.sitesearch input::placeholder{color:var(--faint)}
+.sitesearch button{flex-shrink:0;font-family:'Rye',Georgia,serif;font-size:11px;letter-spacing:.12em;
+  text-transform:uppercase;padding:0 14px;background:var(--red-deep);color:var(--white);
+  border:2px solid var(--red);border-radius:2px;cursor:pointer}
+.sitesearch button:hover{background:var(--red)}
+@media (max-width:480px){
+  .sitesearch{padding:0 10px 6px}
+  .sitesearch input{font-size:14px;padding:8px 10px}
+  .sitesearch button{padding:0 10px;font-size:10px}
+}
+
+/* ---------- search results page ---------- */
+.sgroup{margin:22px 0 0}
+.sgroup h3{font-family:'Rye',Georgia,serif;font-size:13px;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--red);margin:0 0 8px;border-bottom:2px dashed var(--line);padding-bottom:6px}
+.sgroup h3 .n{color:var(--faint);letter-spacing:.06em}
+.sres{display:block;padding:9px 0;border-bottom:1px solid var(--line);text-decoration:none}
+.sres:last-child{border-bottom:none}
+.sres b{color:var(--white);font-size:15.5px;display:block}
+.sres .meta{color:var(--faint);font-size:12px;margin-top:2px}
+.sres p{color:var(--dim);font-size:13.5px;margin:4px 0 0;line-height:1.45}
+.sres:hover b{color:var(--red)}
+.schips{display:flex;flex-wrap:wrap;gap:6px;margin:14px 0 0}
+.schips button{font-family:'Rye',Georgia,serif;font-size:11px;letter-spacing:.1em;text-transform:uppercase;
+  padding:6px 10px;background:#141418;color:var(--dim);border:2px solid var(--line);border-radius:2px;cursor:pointer}
+.schips button.on{background:var(--red-deep);color:var(--white);border-color:var(--red)}
+
+/* ---------- atlas search ---------- */
+.mapsearch{margin:8px 0 0}
+#mapHits{margin:8px 0 0;max-height:230px;overflow-y:auto;border:2px solid var(--line);border-radius:2px;background:#101014}
+#mapHits button{display:block;width:100%;text-align:left;background:none;border:none;
+  border-bottom:1px solid var(--line);color:var(--white);padding:8px 10px;font-size:14px;cursor:pointer;font-family:Georgia,serif}
+#mapHits button:last-child{border-bottom:none}
+#mapHits button:hover{background:#1a1a20;color:var(--red)}
+#mapHits button span{color:var(--faint);font-size:12px}

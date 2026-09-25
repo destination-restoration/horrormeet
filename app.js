@@ -165,6 +165,7 @@ document.querySelectorAll('.tab').forEach((t) =>
    only when someone actually opens a pin. */
 let map = null, mapCluster = null, mapCat = 'all', addMode = false, pendingPin = null;
 let mapIndex = null, mapMarkers = new Map(), spotCache = new Map();
+let mapQ = '';
 
 const PIN_COLORS = { film: '#b3121b', real: '#e8d9a0', sale: '#2ecc71' };
 function pinStyle(s) {
@@ -226,12 +227,19 @@ const FILTERS = [
   { key: 'ghost town', label: '\u{1F3DA} Ghost towns', test: (s) => s.kind === 'ghost town' },
   { key: 'sale',       label: '\u{1F3F7} For sale',    test: (s) => !!s.for_sale, cls: 'sale' },
 ];
+/* the atlas search is client side on purpose: the whole light index is already
+   in memory, so typing filters thousands of pins with no round trip. */
+function mapMatches(s) {
+  if (!mapQ) return true;
+  const hay = ((s.title || '') + ' ' + (s.kind || '')).toLowerCase();
+  return mapQ.split(/\s+/).every((w) => hay.includes(w));
+}
 function renderMapFilters() {
   const box = $('mapFilters');
   if (!box || !mapIndex) return;
   box.innerHTML = '';
   for (const f of FILTERS) {
-    const n = mapIndex.filter(f.test).length;
+    const n = mapIndex.filter((s) => f.test(s) && mapMatches(s)).length;
     if (!n && f.key !== 'all') continue;
     const b = document.createElement('button');
     b.className = (f.cls || '') + (mapCat === f.key ? ' on' : '');
@@ -245,7 +253,7 @@ function drawPins() {
   mapCluster.clearLayers();
   mapMarkers.clear();
   const active = FILTERS.find((f) => f.key === mapCat) || FILTERS[0];
-  const rows = mapIndex.filter(active.test);
+  const rows = mapIndex.filter((s) => active.test(s) && mapMatches(s));
   const markers = rows.map((s) => {
     const m = L.circleMarker([s.lat, s.lng], pinStyle(s));
     m.bindPopup(`<b>${esc(s.title)}</b><div class="loadingpop">opening...</div>`, { minWidth: 230 });
@@ -255,7 +263,53 @@ function drawPins() {
   });
   mapCluster.addLayers(markers);
   const note = $('mapCount');
-  if (note) note.textContent = rows.length.toLocaleString('en-US') + ' place' + (rows.length === 1 ? '' : 's') + ' shown';
+  if (note) note.textContent = rows.length.toLocaleString('en-US') + ' place' + (rows.length === 1 ? '' : 's') + ' shown'
+    + (mapQ ? ' for "' + mapQ + '"' : '');
+  renderMapHits(rows);
+  if (mapQ && rows.length) fitTo(rows);
+}
+
+/* a short jump list under the search box, so a name takes you straight there */
+function renderMapHits(rows) {
+  const box = $('mapHits');
+  if (!box) return;
+  if (!mapQ) { box.classList.add('hidden'); box.innerHTML = ''; return; }
+  box.classList.remove('hidden');
+  if (!rows.length) {
+    box.innerHTML = '<button type="button" disabled>Nothing on the atlas by that name yet. '
+      + 'Add it with the button below.</button>';
+    return;
+  }
+  box.innerHTML = '';
+  for (const s of rows.slice(0, 40)) {
+    const b = document.createElement('button');
+    b.type = 'button';
+    b.innerHTML = esc(s.title) + ' <span>' + esc(s.kind || s.category || '') + '</span>';
+    b.onclick = () => flyToSpot(s);
+    box.appendChild(b);
+  }
+  if (rows.length > 40) {
+    const more = document.createElement('button');
+    more.type = 'button'; more.disabled = true;
+    more.innerHTML = '<span>' + (rows.length - 40).toLocaleString('en-US') + ' more on the map</span>';
+    box.appendChild(more);
+  }
+}
+
+function fitTo(rows) {
+  if (!map || !rows.length) return;
+  if (rows.length === 1) { map.setView([rows[0].lat, rows[0].lng], 13); return; }
+  try { map.fitBounds(rows.map((s) => [s.lat, s.lng]), { padding: [40, 40], maxZoom: 12 }); } catch (_) {}
+}
+
+function flyToSpot(s) {
+  if (!map) return;
+  map.setView([s.lat, s.lng], 15);
+  const m = mapMarkers.get(s.id);
+  if (!m) return;
+  // the marker may be inside a cluster: ask the cluster to reveal it first
+  if (mapCluster && mapCluster.zoomToShowLayer) mapCluster.zoomToShowLayer(m, () => m.openPopup());
+  else m.openPopup();
 }
 
 async function fillPopup(marker, id) {
@@ -351,6 +405,23 @@ for (const [id, cat] of [['newsAll', 'all'], ['newsHorror', 'horror'], ['newsPar
 $('newsQ')?.addEventListener('input', () => {
   clearTimeout(newsTimer);
   newsTimer = setTimeout(() => { newsQ = $('newsQ').value.trim(); loadNews(); }, 300);
+});
+
+let mapQTimer = null;
+$('mapQ')?.addEventListener('input', () => {
+  clearTimeout(mapQTimer);
+  mapQTimer = setTimeout(() => {
+    mapQ = $('mapQ').value.trim().toLowerCase();
+    if (!mapIndex) return;
+    renderMapFilters();
+    drawPins();
+  }, 180);
+});
+$('mapQ')?.addEventListener('keydown', (e) => {
+  if (e.key !== 'Enter') return;
+  e.preventDefault();
+  const first = $('mapHits')?.querySelector('button:not([disabled])');
+  first?.click();
 });
 
 /* ---------- posting ---------- */
