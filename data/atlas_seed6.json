@@ -1,0 +1,1343 @@
+[
+ {
+  "title": "Aldergrove, British Columbia (Bates Motel 2013)",
+  "category": "film",
+  "kind": "film set",
+  "description": "The replica Psycho motel and the Bates house were built from scratch on farmland on 272 Street in this Langley community and used for all five seasons. Production tore the house down the day after the final scene was shot in January 2017 and the rest of the set was demolished that February, so there is nothing left to visit.",
+  "lat": 49.059663,
+  "lng": -122.492238,
+  "source_url": "https://www.aldergrovestar.com/entertainment/video-the-end-of-the-bates-motel-in-langley-2194188"
+ },
+ {
+  "title": "71 Simcoe Street (Hannibal 2013)",
+  "category": "film",
+  "kind": "film set",
+  "description": "Hannibal Lecter's cavernous psychiatric office is the 1873 St Andrew's Church manse in downtown Toronto. It appears throughout all three seasons.",
+  "lat": 43.646805,
+  "lng": -79.385311,
+  "source_url": "https://www.set-jetter.com/ontheset/hannibal"
+ },
+ {
+  "title": "University of Toronto Scarborough (Hannibal 2013)",
+  "category": "film",
+  "kind": "film set",
+  "description": "The brutalist concrete Humanities Wing on Military Trail plays the FBI Academy at Quantico, including the lecture halls and the Behavioral Analysis Unit. It was designed by John Andrews, architect of the CN Tower.",
+  "lat": 43.786538,
+  "lng": -79.188998,
+  "source_url": "https://www.set-jetter.com/ontheset/hannibal"
+ },
+ {
+  "title": "David Dunlap Observatory (Hannibal 2013)",
+  "category": "film",
+  "kind": "film set",
+  "description": "The domed 1935 observatory in Richmond Hill stands in, with heavy digital help, for the Baltimore hospital for the criminally insane where Will Graham is held. The grounds are a public park.",
+  "lat": 43.862346,
+  "lng": -79.422387,
+  "source_url": "https://www.set-jetter.com/ontheset/hannibal"
+ },
+ {
+  "title": "50 Lowther Avenue (Hannibal 2013)",
+  "category": "film",
+  "kind": "film set",
+  "description": "Exterior of Hannibal's own Baltimore townhouse, the one he cooks and entertains in. This is a PRIVATE RESIDENCE: look from the sidewalk and never knock.",
+  "lat": 43.670711,
+  "lng": -79.397979,
+  "source_url": "https://www.set-jetter.com/ontheset/hannibal"
+ },
+ {
+  "title": "2350 Doulton Drive (Hannibal 2013)",
+  "category": "film",
+  "kind": "film set",
+  "description": "Dr Bedelia Du Maurier's coolly elegant house, on a ravine street in Mississauga. This is a PRIVATE RESIDENCE: view it from the road only.",
+  "lat": 43.542731,
+  "lng": -79.645777,
+  "source_url": "https://www.set-jetter.com/ontheset/hannibal"
+ },
+ {
+  "title": "514 Jarvis Street (Hannibal 2013)",
+  "category": "film",
+  "kind": "film set",
+  "description": "The Rundle House, a Victorian mansion on Jarvis Street, is the home of Tobias the string maker in the episode Fromage. It is a commercial building today.",
+  "lat": 43.667745,
+  "lng": -79.379315,
+  "source_url": "https://www.set-jetter.com/ontheset/hannibal"
+ },
+ {
+  "title": "Royal Ontario Museum (Hannibal 2013)",
+  "category": "film",
+  "kind": "film set",
+  "description": "The ROM doubles for the Baltimore natural history museum in the season two episode Naka-choko. It is open to the public.",
+  "lat": 43.667656,
+  "lng": -79.394699,
+  "source_url": "https://www.set-jetter.com/ontheset/hannibal"
+ },
+ {
+  "title": "Casa Loma Stables (Hannibal 2013)",
+  "category": "film",
+  "kind": "film set",
+  "description": "The Edwardian stables behind Casa Loma serve as Mason Verger's pig barns. They are part of the Casa Loma visitor site.",
+  "lat": 43.678687,
+  "lng": -79.41068,
+  "source_url": "https://www.set-jetter.com/ontheset/hannibal"
+ },
+ {
+  "title": "Rockwood Conservation Area (Hannibal 2013)",
+  "category": "film",
+  "kind": "film set",
+  "description": "The limestone cliffs and river here were used for a body discovery in the second season. It is a public conservation area near Guelph.",
+  "lat": 43.609207,
+  "lng": -80.147774,
+  "source_url": "https://www.set-jetter.com/ontheset/hannibal"
+ },
+ {
+  "title": "Novotel Toronto Centre (Hannibal 2013)",
+  "category": "film",
+  "kind": "film set",
+  "description": "Dressed with digital scenery to become the European hotel where Hannibal and Bedelia hide in season three. It still operates as a hotel.",
+  "lat": 43.646654,
+  "lng": -79.374119,
+  "source_url": "https://www.set-jetter.com/ontheset/hannibal"
+ },
+ {
+  "title": "Ardmore Studios, Bray (Penny Dreadful 2014)",
+  "category": "film",
+  "kind": "film set",
+  "description": "All three seasons were built and shot here, including a working two storey Victorian mansion for Sir Malcolm Murray's house. Ardmore is a working studio and not open to visitors.",
+  "lat": 53.196438,
+  "lng": -6.124457,
+  "source_url": "https://www.screenireland.ie/news-archive/view/2397"
+ },
+ {
+  "title": "Henrietta Street, Dublin (Penny Dreadful 2014)",
+  "category": "film",
+  "kind": "film set",
+  "description": "This Georgian cul-de-sac off Bolton Street played Victorian London, including the exterior of Sir Malcolm's home. Painted period shop signage from the shoot survived on the street for years afterwards.",
+  "lat": 53.352626,
+  "lng": -6.270486,
+  "source_url": "https://www.thejournal.ie/penny-dreadful-signs-dublin-3947916-Apr2018/"
+ },
+ {
+  "title": "Dame Lane, Dublin (Penny Dreadful 2014)",
+  "category": "film",
+  "kind": "film set",
+  "description": "In February 2014 this narrow city centre lane was dressed as Victorian London's Pulteney Lane. It is an ordinary pub lane today.",
+  "lat": 53.343882,
+  "lng": -6.263353,
+  "source_url": "https://en.wikipedia.org/wiki/Dame_Lane"
+ },
+ {
+  "title": "King's Inns, Dublin (Penny Dreadful 2014)",
+  "category": "film",
+  "kind": "film set",
+  "description": "The 18th century law society building stood in for the Explorers' Club where Sir Malcolm is feted. It is a working legal institution.",
+  "lat": 53.352893,
+  "lng": -6.271833,
+  "source_url": "https://www.thelocationguide.com/2014/03/ng-television-gothic-drama-series-penny-dreadful-films-in-dublin-and-county-wicklow/"
+ },
+ {
+  "title": "Powerscourt Estate, Enniskerry (Penny Dreadful 2014)",
+  "category": "film",
+  "kind": "film set",
+  "description": "One of the Wicklow houses used to build the show's Victorian England. The house and its terraced gardens are open to visitors.",
+  "lat": 53.185102,
+  "lng": -6.187131,
+  "source_url": "https://www.thelocationguide.com/2014/03/ng-television-gothic-drama-series-penny-dreadful-films-in-dublin-and-county-wicklow/"
+ },
+ {
+  "title": "Kilruddery House, Bray (Penny Dreadful 2014)",
+  "category": "film",
+  "kind": "film set",
+  "description": "The Brabazon family's Elizabethan revival house in County Wicklow supplied period interiors and exteriors. It opens to the public seasonally.",
+  "lat": 53.184657,
+  "lng": -6.102299,
+  "source_url": "https://www.thelocationguide.com/2014/03/ng-television-gothic-drama-series-penny-dreadful-films-in-dublin-and-county-wicklow/"
+ },
+ {
+  "title": "Island of Pag, Croatia (The Terror 2018)",
+  "category": "film",
+  "kind": "film set",
+  "description": "Three weeks of location work used Pag's treeless stone desert as the Arctic shore where the Franklin expedition's men camp and die. It is only a few hours from the Budapest stages where the ships were built.",
+  "lat": 44.496613,
+  "lng": 14.946185,
+  "source_url": "https://www.zadarfilmcommission.com/en/article/filming-of-the-terror-the-island-pag/47"
+ },
+ {
+  "title": "2108 Spruce Street (Servant 2019)",
+  "category": "film",
+  "kind": "film set",
+  "description": "The Turner brownstone the whole series revolves around. Interiors were built in a former paint factory in Delaware County, but this is the real front door: a PRIVATE RESIDENCE on a busy Center City block, so view it from the sidewalk.",
+  "lat": 39.94827,
+  "lng": -75.17674,
+  "source_url": "https://phillychitchat.com/2020/10/22/phillywood-m-night-shyamalans-servant-filmed-one-last-scene-last-night-announces-release-date/"
+ },
+ {
+  "title": "Fitler Square, Philadelphia (Servant 2019)",
+  "category": "film",
+  "kind": "film set",
+  "description": "The small park a few blocks from the Turner house, used for filming in the third season. It is a public square.",
+  "lat": 39.947608,
+  "lng": -75.179785,
+  "source_url": "https://phillychitchat.com/2021/04/21/apple-tvs-servant-3-filming-in-fitler-square/"
+ },
+ {
+  "title": "Beaver Bank, Nova Scotia (From 2022)",
+  "category": "film",
+  "kind": "film set",
+  "description": "The trapped town of Fromville is a purpose built set of about ten buildings in the woods near Beaver Bank, north of Halifax, expanded between seasons. It is a closed working set on private land.",
+  "lat": 44.807462,
+  "lng": -63.682855,
+  "source_url": "https://travelnoire.com/where-was-from-filmed"
+ },
+ {
+  "title": "Oakfield Provincial Park (From 2022)",
+  "category": "film",
+  "kind": "film set",
+  "description": "The forest that hems the town in was shot in this lakeside provincial park near Grand Lake. It is open to the public.",
+  "lat": 44.918353,
+  "lng": -63.586267,
+  "source_url": "https://travelnoire.com/where-was-from-filmed"
+ },
+ {
+  "title": "3760 72 Street, Delta (The Fall of the House of Usher 2023)",
+  "category": "film",
+  "kind": "film set",
+  "description": "Roderick Usher's mansion, including the dining room where the family gathers. The house looks antique but was built in 2010, and it is a PRIVATE RESIDENCE that has also been used by Arrow and Supernatural.",
+  "lat": 49.070612,
+  "lng": -123.02384,
+  "source_url": "https://dailyhive.com/vancouver/metro-vancouver-locations-netflix-fall-of-the-house-of-usher"
+ },
+ {
+  "title": "Holy Rosary Cathedral, Vancouver (The Fall of the House of Usher 2023)",
+  "category": "film",
+  "kind": "film set",
+  "description": "The Gothic Revival cathedral on Richards Street hosts the mass funeral in the first episode. It is an active Catholic cathedral.",
+  "lat": 49.281929,
+  "lng": -123.114598,
+  "source_url": "https://dailyhive.com/vancouver/metro-vancouver-locations-netflix-fall-of-the-house-of-usher"
+ },
+ {
+  "title": "Bridge Studios, Burnaby (The Fall of the House of Usher 2023)",
+  "category": "film",
+  "kind": "film set",
+  "description": "Many of the series interiors were built on stages here. It is a working studio, closed to the public.",
+  "lat": 49.262991,
+  "lng": -123.020565,
+  "source_url": "https://dailyhive.com/vancouver/metro-vancouver-locations-netflix-fall-of-the-house-of-usher"
+ },
+ {
+  "title": "Orange, Massachusetts (Castle Rock 2018)",
+  "category": "film",
+  "kind": "film set",
+  "description": "The Center Historic District of this small mill town was refitted as the downtown of Stephen King's Castle Rock, Maine. It is an ordinary working town the rest of the year.",
+  "lat": 42.590866,
+  "lng": -72.309777,
+  "source_url": "https://mafilm.org/2018/08/30/where-is-castle-rock-filmed-set-your-gps-for-a-creepy-stephen-king-inspired-road-trip/"
+ },
+ {
+  "title": "Tewksbury Hospital, Massachusetts (Castle Rock 2018)",
+  "category": "film",
+  "kind": "film set",
+  "description": "The old state hospital buildings play Juniper Hill Psychiatric Hospital. Part of the complex is now a small public health museum and the rest is still a working state hospital campus.",
+  "lat": 42.606947,
+  "lng": -71.21808,
+  "source_url": "https://mafilm.org/2018/08/30/where-is-castle-rock-filmed-set-your-gps-for-a-creepy-stephen-king-inspired-road-trip/"
+ },
+ {
+  "title": "New England Studios, Devens (Castle Rock 2018)",
+  "category": "film",
+  "kind": "film set",
+  "description": "The series home base for interiors, including the prison sets, on the former Fort Devens army base. It is a working studio.",
+  "lat": 42.540682,
+  "lng": -71.611794,
+  "source_url": "https://mafilm.org/2018/08/30/where-is-castle-rock-filmed-set-your-gps-for-a-creepy-stephen-king-inspired-road-trip/"
+ },
+ {
+  "title": "Providence Athenaeum (NOS4A2 2019)",
+  "category": "film",
+  "kind": "film set",
+  "description": "The 1838 subscription library on Benefit Street was used for a library sequence. Poe courted Sarah Helen Whitman in this building, and it is still a working library.",
+  "lat": 41.82581,
+  "lng": -71.406299,
+  "source_url": "https://www.valleybreeze.com/2018-11-20/cumberland-lincoln-area/nos4a2-films-across-rhode-island"
+ },
+ {
+  "title": "Goddard Memorial State Park, Warwick (NOS4A2 2019)",
+  "category": "film",
+  "kind": "film set",
+  "description": "Charlie Manx's Christmasland sequences were shot in this state park on Greenwich Bay. It is open to the public.",
+  "lat": 41.667226,
+  "lng": -71.431709,
+  "source_url": "https://www.valleybreeze.com/2018-11-20/cumberland-lincoln-area/nos4a2-films-across-rhode-island"
+ },
+ {
+  "title": "Warren Town Hall, Rhode Island (NOS4A2 2019)",
+  "category": "film",
+  "kind": "film set",
+  "description": "Stood in for the fictional town of Here, Iowa. It is a working municipal building.",
+  "lat": 41.729014,
+  "lng": -71.281819,
+  "source_url": "https://www.valleybreeze.com/2018-11-20/cumberland-lincoln-area/nos4a2-films-across-rhode-island"
+ },
+ {
+  "title": "West Warwick High School (NOS4A2 2019)",
+  "category": "film",
+  "kind": "film set",
+  "description": "Played Vic McQueen's William White Memorial High School. It is an operating public high school.",
+  "lat": 41.709078,
+  "lng": -71.515595,
+  "source_url": "https://www.valleybreeze.com/2018-11-20/cumberland-lincoln-area/nos4a2-films-across-rhode-island"
+ },
+ {
+  "title": "Selkirk, Manitoba (Channel Zero 2016)",
+  "category": "film",
+  "kind": "film set",
+  "description": "The first two seasons, Candle Cove and No-End House, were shot largely in and around this town north of Winnipeg, standing in for small town Ohio.",
+  "lat": 50.146986,
+  "lng": -96.880188,
+  "source_url": "https://en.wikipedia.org/wiki/Channel_Zero_(TV_series)"
+ },
+ {
+  "title": "Franklin Square Park, Southport (American Gothic 1995)",
+  "category": "film",
+  "kind": "film set",
+  "description": "The park was used by the short lived CBS series about Sheriff Lucas Buck's grip on the town of Trinity. It remains a public park.",
+  "lat": 33.920229,
+  "lng": -78.019053,
+  "source_url": "https://www.southport-oakisland.com/listing/american-gothic-1995-1996.html"
+ },
+ {
+  "title": "EUE/Screen Gems Studios, Wilmington (American Gothic 1995)",
+  "category": "film",
+  "kind": "film set",
+  "description": "The Wilmington studio complex was the production base for the series, which used the surrounding Carolina coast for its Southern Gothic look. It is still a working studio.",
+  "lat": 34.251591,
+  "lng": -77.920157,
+  "source_url": "https://www.wilmingtonfilm.com/television/"
+ },
+ {
+  "title": "Casa Loma, Toronto (Goosebumps 1995)",
+  "category": "film",
+  "kind": "film set",
+  "description": "The Gothic Revival folly played the medieval fortress in A Night in Terror Tower. It is open daily as a museum.",
+  "lat": 43.678101,
+  "lng": -79.409416,
+  "source_url": "https://www.yourcitywithin.com/6-places-where-the-90s-goosebumps-series-was-filmed-in-ontario/"
+ },
+ {
+  "title": "Camp Samac, Oshawa (Goosebumps 1995)",
+  "category": "film",
+  "kind": "film set",
+  "description": "The Scout camp north of Oshawa was Camp Nightmoon in Welcome to Camp Nightmare. It is still an active Scouts Canada camp.",
+  "lat": 43.945405,
+  "lng": -78.884718,
+  "source_url": "https://www.yourcitywithin.com/6-places-where-the-90s-goosebumps-series-was-filmed-in-ontario/"
+ },
+ {
+  "title": "Distillery District, Toronto (Goosebumps 1995)",
+  "category": "film",
+  "kind": "film set",
+  "description": "The Victorian brick lanes of the old Gooderham and Worts distillery appear in Say Cheese and Die. It is now a pedestrian arts and shopping district.",
+  "lat": 43.650328,
+  "lng": -79.3592,
+  "source_url": "https://www.yourcitywithin.com/6-places-where-the-90s-goosebumps-series-was-filmed-in-ontario/"
+ },
+ {
+  "title": "494 Whitevale Road, Pickering (Goosebumps 1995)",
+  "category": "film",
+  "kind": "film set",
+  "description": "Carly Beth's house in the very first episode, The Haunted Mask. This is a PRIVATE RESIDENCE in a tiny heritage hamlet: look from the road only.",
+  "lat": 43.888397,
+  "lng": -79.158048,
+  "source_url": "https://www.yourcitywithin.com/6-places-where-the-90s-goosebumps-series-was-filmed-in-ontario/"
+ },
+ {
+  "title": "Mimico Memorial Park, Etobicoke (Goosebumps 1995)",
+  "category": "film",
+  "kind": "film set",
+  "description": "Used for Be Careful What You Wish For in the second season. It is a public neighbourhood park.",
+  "lat": 43.60997,
+  "lng": -79.493681,
+  "source_url": "https://www.yourcitywithin.com/6-places-where-the-90s-goosebumps-series-was-filmed-in-ontario/"
+ },
+ {
+  "title": "Riverview Hospital, Coquitlam (The X-Files 1993)",
+  "category": "film",
+  "kind": "film set",
+  "description": "The closed 1913 psychiatric hospital supplied most of the show's hospital and asylum interiors from the pilot through season five, and it is one of the most filmed sites in British Columbia. The hospital shut in 1992 and the lands are being redeveloped.",
+  "lat": 49.249918,
+  "lng": -122.805297,
+  "source_url": "https://www.bcmag.ca/did-you-know-these-20-tv-shows-were-filmed-in-vancouver/"
+ },
+ {
+  "title": "Lynn Canyon Park, North Vancouver (The X-Files 1993)",
+  "category": "film",
+  "kind": "film set",
+  "description": "The old growth forest and suspension bridge stood in for the killer insect woods of Darkness Falls and many other monster-of-the-week forests. It is a free public park.",
+  "lat": 49.343901,
+  "lng": -123.018072,
+  "source_url": "https://www.bcmag.ca/did-you-know-these-20-tv-shows-were-filmed-in-vancouver/"
+ },
+ {
+  "title": "Buntzen Lake, Anmore (The X-Files 1993)",
+  "category": "film",
+  "kind": "film set",
+  "description": "Played Lake Okobogee, the Iowa lake where a girl is taken by lights in the first season episode Conduit. It is a BC Hydro recreation area open to the public.",
+  "lat": 49.347501,
+  "lng": -122.86012,
+  "source_url": "https://en.wikipedia.org/wiki/Conduit_(The_X-Files)"
+ },
+ {
+  "title": "Britannia Mine Museum, Britannia Beach (The X-Files 1993)",
+  "category": "film",
+  "kind": "film set",
+  "description": "The stepped 1920s copper mill became the Strughold Mining Company in the season two episode Paper Clip. Abandoned in the 1970s, it reopened as a museum in 2005.",
+  "lat": 49.623103,
+  "lng": -123.203961,
+  "source_url": "https://giggster.com/guide/movie-location/where-was-the-x-files-filmed"
+ },
+ {
+  "title": "Ruskin Dam, Mission (The X-Files 1993)",
+  "category": "film",
+  "kind": "film set",
+  "description": "The dam and the bridge across it were used for the alien abduction sequences in Patient X and The Red and the Black. It is a working BC Hydro dam.",
+  "lat": 49.195311,
+  "lng": -122.410659,
+  "source_url": "https://giggster.com/guide/movie-location/where-was-the-x-files-filmed"
+ },
+ {
+  "title": "Garry Point Park, Steveston (The X-Files 1993)",
+  "category": "film",
+  "kind": "film set",
+  "description": "Captain Scully's funeral was filmed at this park at the mouth of the Fraser River. It is a public waterfront park.",
+  "lat": 49.1256,
+  "lng": -123.196131,
+  "source_url": "https://giggster.com/guide/movie-location/where-was-the-x-files-filmed"
+ },
+ {
+  "title": "Marlene Dietrich Halle, Studio Babelsberg (Dark 2017)",
+  "category": "film",
+  "kind": "film set",
+  "description": "The interior of the Winden nuclear plant, including the reactor hall and the sealed chamber, was built as a set in this hall. Most of the series studio work was done at Babelsberg.",
+  "lat": 52.381994,
+  "lng": 13.11358,
+  "source_url": "https://www.atlasofwonders.com/2020/07/winden-dark-filming-locations.html"
+ },
+ {
+  "title": "Am Glockenturm, Berlin (Dark 2017)",
+  "category": "film",
+  "kind": "film set",
+  "description": "The main gate of the Winden nuclear power plant is this square beside the Olympic Stadium, with cooling towers added digitally behind it. It is a public street.",
+  "lat": 52.514585,
+  "lng": 13.239814,
+  "source_url": "https://www.atlasofwonders.com/2020/07/winden-dark-filming-locations.html"
+ },
+ {
+  "title": "Wildenbruch forest, Brandenburg (Dark 2017)",
+  "category": "film",
+  "kind": "film set",
+  "description": "The entrance to the Winden caves, where the children vanish and the time passage begins, was a fake rock face built in the forest near Wildenbruch. The woods are real, the cave never existed.",
+  "lat": 52.284816,
+  "lng": 13.064429,
+  "source_url": "https://www.atlasofwonders.com/2020/07/winden-dark-filming-locations.html"
+ },
+ {
+  "title": "Fahrtechnik Akademie, Kallinchen (Dark 2017)",
+  "category": "film",
+  "kind": "film set",
+  "description": "The forest road and the bus stop with the lonely traffic light are on the grounds of a driving academy near Zossen. It is private property.",
+  "lat": 52.211972,
+  "lng": 13.559271,
+  "source_url": "https://www.atlasofwonders.com/2020/07/winden-dark-filming-locations.html"
+ },
+ {
+  "title": "Reinfelder Schule, Berlin (Dark 2017)",
+  "category": "film",
+  "kind": "film set",
+  "description": "The Gesamtschule Winden, where Jonas, Martha and Bartosz are pupils. It is a working Berlin school.",
+  "lat": 52.497551,
+  "lng": 13.264679,
+  "source_url": "https://www.atlasofwonders.com/2020/07/winden-dark-filming-locations.html"
+ },
+ {
+  "title": "Akademie der Kuenste, Berlin (Dark 2017)",
+  "category": "film",
+  "kind": "film set",
+  "description": "The modernist arts academy building on the Hanseatenweg plays the Winden police station. It hosts public exhibitions.",
+  "lat": 52.518394,
+  "lng": 13.346415,
+  "source_url": "https://www.atlasofwonders.com/2020/07/winden-dark-filming-locations.html"
+ },
+ {
+  "title": "Suedwestkirchhof Stahnsdorf (Dark 2017)",
+  "category": "film",
+  "kind": "film set",
+  "description": "This huge forest cemetery south of Berlin supplied the chapel used by the Sic Mundus secret society. It is open to visitors.",
+  "lat": 52.385373,
+  "lng": 13.181778,
+  "source_url": "https://www.atlasofwonders.com/2020/07/winden-dark-filming-locations.html"
+ },
+ {
+  "title": "Einhornhoehle, Harz (Dark 2017)",
+  "category": "film",
+  "kind": "film set",
+  "description": "Real cavern interiors for the Winden cave passages were shot in this show cave in the Harz mountains. It runs guided tours.",
+  "lat": 51.637548,
+  "lng": 10.403973,
+  "source_url": "https://www.atlasofwonders.com/2020/07/winden-dark-filming-locations.html"
+ },
+ {
+  "title": "Schloss Lanke, Brandenburg (Dark 2017)",
+  "category": "film",
+  "kind": "film set",
+  "description": "The exterior of the Waldhotel Winden that Regina Tiedemann struggles to keep open. It is a private estate north of Berlin.",
+  "lat": 52.759749,
+  "lng": 13.565458,
+  "source_url": "https://www.atlasofwonders.com/2020/07/winden-dark-filming-locations.html"
+ },
+ {
+  "title": "Funkhaus Berlin (Dark 2017)",
+  "category": "film",
+  "kind": "film set",
+  "description": "The Sic Mundus time machine room was built in a studio of the former East German radio complex on the Spree. The Funkhaus is now a music and events venue.",
+  "lat": 52.479546,
+  "lng": 13.500286,
+  "source_url": "https://www.atlasofwonders.com/2020/07/winden-dark-filming-locations.html"
+ },
+ {
+  "title": "Ruedersdorf industrial site (Dark 2017)",
+  "category": "film",
+  "kind": "film set",
+  "description": "The vast works east of Berlin were used for the derelict factory scenes. Parts of the site are open as a museum park.",
+  "lat": 52.483711,
+  "lng": 13.82885,
+  "source_url": "https://www.atlasofwonders.com/2020/07/winden-dark-filming-locations.html"
+ },
+ {
+  "title": "Schloss Boernicke, Bernau (Dark 2017)",
+  "category": "film",
+  "kind": "film set",
+  "description": "The Tannhaus clock factory in 1888 is this manor house north east of Berlin.",
+  "lat": 52.66209,
+  "lng": 13.633108,
+  "source_url": "https://www.atlasofwonders.com/2020/07/winden-dark-filming-locations.html"
+ },
+ {
+  "title": "007 Stage, Pinewood Studios (Event Horizon 1997)",
+  "category": "film",
+  "kind": "film set",
+  "description": "The whole film was shot at Pinewood across seven stages from November 1996 to March 1997, with the gravity drive and engine room built on the enormous 007 Stage. Pinewood is a working studio, closed to the public.",
+  "lat": 51.552465,
+  "lng": -0.532162,
+  "source_url": "https://en.wikipedia.org/wiki/Event_Horizon_(film)"
+ },
+ {
+  "title": "Texas School for the Deaf, Austin (The Faculty 1998)",
+  "category": "film",
+  "kind": "film set",
+  "description": "Herrington High, the Ohio school whose teachers turn out to be parasitic aliens, is this Austin campus on South Congress Avenue. It is an operating state school.",
+  "lat": 30.254456,
+  "lng": -97.750236,
+  "source_url": "https://movie-locations.com/movies/f/Faculty.php"
+ },
+ {
+  "title": "University of Toronto, St George campus (Urban Legend 1998)",
+  "category": "film",
+  "kind": "film set",
+  "description": "Stanley Hall of the fictional Pendleton University in New Hampshire is the downtown Toronto campus. It is open to walk through.",
+  "lat": 43.663468,
+  "lng": -79.396816,
+  "source_url": "https://movie-locations.com/movies/u/Urban-Legend.php"
+ },
+ {
+  "title": "Former Lakeshore Psychiatric Hospital, Toronto (Urban Legend 1998)",
+  "category": "film",
+  "kind": "film set",
+  "description": "The fraternity house was the old Lakeshore Psychiatric Hospital on the lakefront. The surviving cottages are now part of Humber College's Lakeshore campus.",
+  "lat": 43.596328,
+  "lng": -79.515978,
+  "source_url": "https://movie-locations.com/movies/u/Urban-Legend.php"
+ },
+ {
+  "title": "Amuzu Theatre, Southport (I Know What You Did Last Summer 1997)",
+  "category": "film",
+  "kind": "film set",
+  "description": "The Southport Community Theatre where Helen is crowned Croaker Queen and Barry is later stalked in the balcony. The small brick cinema still stands on Howe Street.",
+  "lat": 33.918404,
+  "lng": -78.019471,
+  "source_url": "https://movie-locations.com/movies/i/I-Know-What-You-Did-Last-Summer.php"
+ },
+ {
+  "title": "150 Yacht Basin Drive, Southport (I Know What You Did Last Summer 1997)",
+  "category": "film",
+  "kind": "film set",
+  "description": "Ollie's Oyster Bar, where the four friends celebrate before the drive that ruins them, was the Old American Fish Company on the Southport waterfront.",
+  "lat": 33.916188,
+  "lng": -78.022967,
+  "source_url": "https://movie-locations.com/movies/i/I-Know-What-You-Did-Last-Summer.php"
+ },
+ {
+  "title": "209 Short Street, Southport (I Know What You Did Last Summer 1997)",
+  "category": "film",
+  "kind": "film set",
+  "description": "Julie James' house, where the note reading I know what you did last summer arrives. This is a PRIVATE RESIDENCE: look from the sidewalk and never knock.",
+  "lat": 33.918611,
+  "lng": -78.025313,
+  "source_url": "https://movie-locations.com/movies/i/I-Know-What-You-Did-Last-Summer.php"
+ },
+ {
+  "title": "106 Yacht Basin Drive, Southport (I Know What You Did Last Summer 1997)",
+  "category": "film",
+  "kind": "film set",
+  "description": "Dressed as the Southport Muscle gym where Barry is menaced by the man with the hook. It is now the Fishy Fishy Cafe.",
+  "lat": 33.91731,
+  "lng": -78.023302,
+  "source_url": "https://movie-locations.com/movies/i/I-Know-What-You-Did-Last-Summer.php"
+ },
+ {
+  "title": "107 South Wright Street, Burgaw (I Know What You Did Last Summer 1997)",
+  "category": "film",
+  "kind": "film set",
+  "description": "Shiver's, the Shivers family department store, was Harrell's Department Store in Burgaw, about 40 miles inland from Southport.",
+  "lat": 34.550861,
+  "lng": -77.926716,
+  "source_url": "https://movie-locations.com/movies/i/I-Know-What-You-Did-Last-Summer.php"
+ },
+ {
+  "title": "Kitsilano Secondary School, Vancouver (Disturbing Behavior 1998)",
+  "category": "film",
+  "kind": "film set",
+  "description": "Cradle Bay High, where the Blue Ribbon students are quietly reprogrammed. It is an operating Vancouver public high school.",
+  "lat": 49.262107,
+  "lng": -123.163611,
+  "source_url": "http://www.thennowmovielocations.com/2016/08/disturbing-behavior.html"
+ },
+ {
+  "title": "Cleveland Dam, North Vancouver (Disturbing Behavior 1998)",
+  "category": "film",
+  "kind": "film set",
+  "description": "The dam on Capilano Road used for the film's cliffside scenes. It is a public park with a walkway across the dam crest.",
+  "lat": 49.360159,
+  "lng": -123.110518,
+  "source_url": "http://www.thennowmovielocations.com/2016/08/disturbing-behavior.html"
+ },
+ {
+  "title": "Lyttelton, New Zealand (The Frighteners 1996)",
+  "category": "film",
+  "kind": "film set",
+  "description": "The port town's hillside houses and harbour became Fairwater for three weeks of shooting, including the street where Frank first meets Ray's ghost and the cemetery. Much of the old town centre was damaged and rebuilt after the 2011 Canterbury earthquake.",
+  "lat": -43.602474,
+  "lng": 172.720573,
+  "source_url": "https://en.wikipedia.org/wiki/The_Frighteners"
+ },
+ {
+  "title": "Tatra National Park, Slovakia (Ravenous 1999)",
+  "category": "film",
+  "kind": "film set",
+  "description": "The High Tatras stood in for the snowbound Sierra Nevada around Fort Spencer. It is Slovakia's oldest national park and open to hikers.",
+  "lat": 49.204209,
+  "lng": 20.226241,
+  "source_url": "https://en.wikipedia.org/wiki/Ravenous_(1999_film)"
+ },
+ {
+  "title": "Barrandov Studios, Prague (Ravenous 1999)",
+  "category": "film",
+  "kind": "film set",
+  "description": "Interiors and the fort sets were built here in 1998. It is a working studio.",
+  "lat": 50.030757,
+  "lng": 14.386875,
+  "source_url": "https://en.wikipedia.org/wiki/Ravenous_(1999_film)"
+ },
+ {
+  "title": "Eastern Columbia Building, Los Angeles (Stigmata 1999)",
+  "category": "film",
+  "kind": "film set",
+  "description": "Frankie Paige's apartment building is the turquoise terracotta Eastern Columbia Building on South Broadway. It was converted to condominiums in 2006.",
+  "lat": 34.042745,
+  "lng": -118.256209,
+  "source_url": "https://thecinemaholic.com/where-was-stigmata-filmed/"
+ },
+ {
+  "title": "St Vincent de Paul Church, Los Angeles (Stigmata 1999)",
+  "category": "film",
+  "kind": "film set",
+  "description": "The Churrigueresque church on West Adams appears in several of the film's church scenes. It is an active Catholic parish and a frequent film location.",
+  "lat": 34.028856,
+  "lng": -118.276327,
+  "source_url": "https://thecinemaholic.com/where-was-stigmata-filmed/"
+ },
+ {
+  "title": "Greystone Mansion, Beverly Hills (Stigmata 1999)",
+  "category": "film",
+  "kind": "film set",
+  "description": "The 1928 Doheny mansion was used for interiors in the film. It is a city park and a heavily used filming location.",
+  "lat": 34.092075,
+  "lng": -118.401588,
+  "source_url": "https://thecinemaholic.com/where-was-stigmata-filmed/"
+ },
+ {
+  "title": "Tower Theatre, Los Angeles (End of Days 1999)",
+  "category": "film",
+  "kind": "film set",
+  "description": "The shuttered movie theatre Jericho Cane stumbles into is the 1927 Tower Theatre on South Broadway. It was restored and is now an Apple store.",
+  "lat": 34.043459,
+  "lng": -118.254521,
+  "source_url": "https://thecinemaholic.com/where-was-end-of-days-filmed/"
+ },
+ {
+  "title": "Belasco Theater, Los Angeles (End of Days 1999)",
+  "category": "film",
+  "kind": "film set",
+  "description": "The dark passageway just inside the closed theatre was shot at the Belasco on South Hill Street. It is now a nightclub and music venue.",
+  "lat": 34.040239,
+  "lng": -118.259264,
+  "source_url": "https://thecinemaholic.com/where-was-end-of-days-filmed/"
+ },
+ {
+  "title": "Los Angeles Theatre (End of Days 1999)",
+  "category": "film",
+  "kind": "film set",
+  "description": "The Vatican interiors were shot in the lavish 1931 Los Angeles Theatre. It survives as an events and filming venue.",
+  "lat": 34.046563,
+  "lng": -118.252819,
+  "source_url": "https://thecinemaholic.com/where-was-end-of-days-filmed/"
+ },
+ {
+  "title": "Los Angeles County Arboretum, Arcadia (End of Days 1999)",
+  "category": "film",
+  "kind": "film set",
+  "description": "Used for exterior sequences standing in for the East Coast. It is a public botanical garden.",
+  "lat": 34.144388,
+  "lng": -118.051944,
+  "source_url": "https://thecinemaholic.com/where-was-end-of-days-filmed/"
+ },
+ {
+  "title": "Palacio Biester, Sintra (The Ninth Gate 1999)",
+  "category": "film",
+  "kind": "film set",
+  "description": "Victor Fargas' decaying mansion, where Corso finds the second copy of the book. The 1880 chalet was restored and opened to the public in 2022.",
+  "lat": 38.793883,
+  "lng": -9.394308,
+  "source_url": "https://en.wikipedia.org/wiki/The_Ninth_Gate"
+ },
+ {
+  "title": "Chateau de Ferrieres, France (The Ninth Gate 1999)",
+  "category": "film",
+  "kind": "film set",
+  "description": "Liana Telfer's estate. The 19th century Rothschild chateau east of Paris can be visited.",
+  "lat": 48.819659,
+  "lng": 2.712055,
+  "source_url": "https://en.wikipedia.org/wiki/The_Ninth_Gate"
+ },
+ {
+  "title": "Chateau de Puivert, Aude (The Ninth Gate 1999)",
+  "category": "film",
+  "kind": "film set",
+  "description": "The ruined Cathar castle in the Pyrenean foothills is the Devil's Tower of the final scenes. It is open to visitors.",
+  "lat": 42.921124,
+  "lng": 2.055335,
+  "source_url": "https://en.wikipedia.org/wiki/The_Ninth_Gate"
+ },
+ {
+  "title": "Calle Buzones, Toledo (The Ninth Gate 1999)",
+  "category": "film",
+  "kind": "film set",
+  "description": "The narrow lane where the Ceniza brothers keep their bookbinding shop. It is an ordinary street in Toledo's old town.",
+  "lat": 39.860361,
+  "lng": -4.026951,
+  "source_url": "https://en.wikipedia.org/wiki/The_Ninth_Gate"
+ },
+ {
+  "title": "Reddick Public Library, Florida (Jeepers Creepers 2001)",
+  "category": "film",
+  "kind": "film set",
+  "description": "The Poho County sheriff's office where Trish and Darry try to report the Creeper. The small building sits on the old Gainesville road north of Ocala.",
+  "lat": 29.369635,
+  "lng": -82.198956,
+  "source_url": "https://movie-locations.com/movies/j/Jeepers-Creepers.php"
+ },
+ {
+  "title": "315 Northeast 14th Street, Ocala (Jeepers Creepers 2001)",
+  "category": "film",
+  "kind": "film set",
+  "description": "The Creeper's lair in the climax was White's Meat Packing plant north of Ocala. It has been completely demolished and the site redeveloped.",
+  "lat": 29.20085,
+  "lng": -82.133633,
+  "source_url": "https://movie-locations.com/movies/j/Jeepers-Creepers.php"
+ },
+ {
+  "title": "Danvers State Hospital site, Massachusetts (Session 9 2001)",
+  "category": "film",
+  "kind": "film set",
+  "description": "The entire film was shot inside the abandoned Kirkbride asylum on Hathorne Hill in autumn 2000, with almost no sets. Most of the building was torn down in 2007 and the site is now the Bradlee Danvers apartment complex, with only part of the central facade kept.",
+  "lat": 42.581234,
+  "lng": -70.974394,
+  "source_url": "https://en.wikipedia.org/wiki/Session_9"
+ },
+ {
+  "title": "Griffith Observatory, Los Angeles (House on Haunted Hill 1999)",
+  "category": "film",
+  "kind": "film set",
+  "description": "The house in the 1999 remake is mostly miniatures and matte paintings, but its entrance is the real Art Deco frontage of the Griffith Observatory. It is a free public observatory.",
+  "lat": 34.118219,
+  "lng": -118.300293,
+  "source_url": "https://movie-locations.com/movies/h/House-On-Haunted-Hill-1999.php"
+ },
+ {
+  "title": "Harlaxton Manor, Lincolnshire (The Haunting 1999)",
+  "category": "film",
+  "kind": "film set",
+  "description": "Hill House is this 1837 neo-Elizabethan folly near Grantham, toned down for the camera by blanking out its carved lettering and adding a porch. It is now Harlaxton College, part of the University of Evansville, and opens to visitors seasonally.",
+  "lat": 52.88072,
+  "lng": -0.670948,
+  "source_url": "https://movie-locations.com/movies/h/Haunting-1999.php"
+ },
+ {
+  "title": "Belvoir Castle, Leicestershire (The Haunting 1999)",
+  "category": "film",
+  "kind": "film set",
+  "description": "The Hill House kitchen scenes were shot at the Duke of Rutland's castle six miles from Harlaxton. It is open to the public.",
+  "lat": 52.894692,
+  "lng": -0.782689,
+  "source_url": "https://movie-locations.com/movies/h/Haunting-1999.php"
+ },
+ {
+  "title": "Village Roadshow Studios, Oxenford (Ghost Ship 2002)",
+  "category": "film",
+  "kind": "film set",
+  "description": "The Antonio Graza was built here as a nearly 100 foot full scale replica plus a 35 foot miniature, rather than shooting at sea. It is a working Gold Coast studio.",
+  "lat": -27.910695,
+  "lng": 153.311857,
+  "source_url": "https://en.wikipedia.org/wiki/Ghost_Ship_(2002_film)"
+ },
+ {
+  "title": "Split Point Lighthouse, Aireys Inlet (Darkness Falls 2003)",
+  "category": "film",
+  "kind": "film set",
+  "description": "The lighthouse of the town terrorised by the Tooth Fairy is this 1891 light on Victoria's Great Ocean Road. It runs public tours.",
+  "lat": -38.468003,
+  "lng": 144.104468,
+  "source_url": "https://en.wikipedia.org/wiki/Split_Point_Lighthouse"
+ },
+ {
+  "title": "Four Aces Movie Ranch, Palmdale (Identity 2003)",
+  "category": "film",
+  "kind": "film set",
+  "description": "The desert motel where ten strangers are trapped in the rain is the standing motel set at the Four Aces ranch in the Antelope Valley. It is private property that rents to productions.",
+  "lat": 34.587727,
+  "lng": -117.871899,
+  "source_url": "http://www.thennowmovielocations.com/2012/06/identity.html"
+ },
+ {
+  "title": "Felicity Plantation, Vacherie (The Skeleton Key 2005)",
+  "category": "film",
+  "kind": "film set",
+  "description": "Exteriors of the Devereaux house, the plantation where Caroline takes the hospice job. The 1846 house on the Mississippi is privately owned and used for filming rather than tours.",
+  "lat": 30.00545,
+  "lng": -90.76534,
+  "source_url": "https://en.wikipedia.org/wiki/Felicity_Plantation"
+ },
+ {
+  "title": "Colborne Street, Brantford (Silent Hill 2006)",
+  "category": "film",
+  "kind": "film set",
+  "description": "Silent Hill's Main Street, with the ash falling. The whole south side of this Brantford block has since been demolished.",
+  "lat": 43.138525,
+  "lng": -80.263621,
+  "source_url": "https://movie-locations.com/movies/s/Silent-Hill.php"
+ },
+ {
+  "title": "Lister Block, Hamilton (Silent Hill 2006)",
+  "category": "film",
+  "kind": "film set",
+  "description": "The exterior of the Grand Hotel. The 1923 building was derelict during filming and has since been restored as offices.",
+  "lat": 43.257797,
+  "lng": -79.8682,
+  "source_url": "https://movie-locations.com/movies/s/Silent-Hill.php"
+ },
+ {
+  "title": "Scottish Rite Club, Hamilton (Silent Hill 2006)",
+  "category": "film",
+  "kind": "film set",
+  "description": "The Queen Street entrance plays the Toluca County Orphanage, and the King Street West side becomes the Silent Hill church of Christabella's congregation.",
+  "lat": 43.259182,
+  "lng": -79.87954,
+  "source_url": "https://movie-locations.com/movies/s/Silent-Hill.php"
+ },
+ {
+  "title": "53 Dalhousie Street, Brantford (Silent Hill 2006)",
+  "category": "film",
+  "kind": "film set",
+  "description": "Braham's Archives, where Rose reads the town's history, on the corner of Queen Street. It is now a coffee shop.",
+  "lat": 43.139122,
+  "lng": -80.26617,
+  "source_url": "https://movie-locations.com/movies/s/Silent-Hill.php"
+ },
+ {
+  "title": "Alma College site, St Thomas (Silent Hill 2006)",
+  "category": "film",
+  "kind": "film set",
+  "description": "Midwich Elementary School, with the ruined classrooms and the boiler room, was the abandoned Alma College. The building burned down in 2008 and only ruins and the gates remain.",
+  "lat": 42.773315,
+  "lng": -81.190869,
+  "source_url": "https://movie-locations.com/movies/s/Silent-Hill.php"
+ },
+ {
+  "title": "Devil's Punch Bowl, Stoney Creek (Silent Hill 2006)",
+  "category": "film",
+  "kind": "film set",
+  "description": "The waterfall in the prologue that Sharon sleepwalks toward. It is a conservation area with a lookout over Hamilton.",
+  "lat": 43.2104,
+  "lng": -79.7558,
+  "source_url": "https://movie-locations.com/movies/s/Silent-Hill.php"
+ },
+ {
+  "title": "Bowen Island, British Columbia (The Wicker Man 2006)",
+  "category": "film",
+  "kind": "film set",
+  "description": "Summersisle was assembled from about 40 locations, most of them on Bowen Island a 20 minute ferry ride from Vancouver, shot in summer 2005. The island is a residential community reachable by public ferry.",
+  "lat": 49.376821,
+  "lng": -123.369464,
+  "source_url": "https://en.wikipedia.org/wiki/The_Wicker_Man_(2006_film)"
+ },
+ {
+  "title": "Tamborine Mountain, Queensland (The Ruins 2008)",
+  "category": "film",
+  "kind": "film set",
+  "description": "Three quarters of a Mayan pyramid, big enough for the cast to climb, was built on this Gold Coast hinterland plateau over about seven weeks. The set is long gone and the mountain is a rainforest and winery area.",
+  "lat": -27.948919,
+  "lng": 153.192901,
+  "source_url": "https://www.hollywoodreporter.com/business/business-news/ruins-production-builds-temple-108107/"
+ },
+ {
+  "title": "755 Main Street, Cambria (Arachnophobia 1990)",
+  "category": "film",
+  "kind": "film set",
+  "description": "The Victorian gingerbread funeral home where the spider escapes from the coffin stands at the back of this property, facing Arlington Street. Cambria plays the town of Canaima.",
+  "lat": 35.567524,
+  "lng": -121.099784,
+  "source_url": "https://movie-locations.com/movies/a/Arachnophobia.php"
+ },
+ {
+  "title": "4090 Burton Drive, Cambria (Arachnophobia 1990)",
+  "category": "film",
+  "kind": "film set",
+  "description": "Dr Ross Jennings' new medical practice, virtually unchanged since filming.",
+  "lat": 35.563197,
+  "lng": -121.082177,
+  "source_url": "https://movie-locations.com/movies/a/Arachnophobia.php"
+ },
+ {
+  "title": "1958 Richard Avenue, Cambria (Arachnophobia 1990)",
+  "category": "film",
+  "kind": "film set",
+  "description": "The Kendalls' house, where a spider gets into the popcorn during Wheel of Fortune. This is a PRIVATE RESIDENCE: view from the street only.",
+  "lat": 35.549265,
+  "lng": -121.075854,
+  "source_url": "https://movie-locations.com/movies/a/Arachnophobia.php"
+ },
+ {
+  "title": "Halter Ranch, Paso Robles (Arachnophobia 1990)",
+  "category": "film",
+  "kind": "film set",
+  "description": "The house of neighbour Margaret, the spider's first victim, is now part of the Halter Ranch Vineyard on Adelaida Road. The winery has a tasting room.",
+  "lat": 35.641055,
+  "lng": -120.854842,
+  "source_url": "https://movie-locations.com/movies/a/Arachnophobia.php"
+ },
+ {
+  "title": "Bergen Street station, Brooklyn (Jacob's Ladder 1990)",
+  "category": "film",
+  "kind": "film set",
+  "description": "The nightmarish subway sequence was shot on the abandoned lower level of this IND Culver Line station, which had to be re-tiled to look in service. The lower platforms are still closed to the public.",
+  "lat": 40.686145,
+  "lng": -73.990862,
+  "source_url": "https://en.wikipedia.org/wiki/Jacob%27s_Ladder_(1990_film)"
+ },
+ {
+  "title": "Seaview Hospital, Staten Island (Jacob's Ladder 1990)",
+  "category": "film",
+  "kind": "film set",
+  "description": "Hospital corridors were shot at the former Seaview tuberculosis hospital. Much of the complex is derelict and it is a designated landmark.",
+  "lat": 40.593146,
+  "lng": -74.134045,
+  "source_url": "https://en.wikipedia.org/wiki/Jacob%27s_Ladder_(1990_film)"
+ },
+ {
+  "title": "Essex County Veterans Courthouse, Newark (Jacob's Ladder 1990)",
+  "category": "film",
+  "kind": "film set",
+  "description": "Used for the courthouse scenes during the New York area shoot that began in September 1989. It is a working county courthouse.",
+  "lat": 40.737986,
+  "lng": -74.181476,
+  "source_url": "https://en.wikipedia.org/wiki/Jacob%27s_Ladder_(1990_film)"
+ },
+ {
+  "title": "Shepperton Studios, Surrey (Mary Shelley's Frankenstein 1994)",
+  "category": "film",
+  "kind": "film set",
+  "description": "The Frankenstein mansion exterior and the Geneva street scenes were built on the Shepperton backlot, with the ship sequences on H Stage, and a week of Arctic material shot in the Swiss Alps. Shepperton is a working studio.",
+  "lat": 51.407928,
+  "lng": -0.465519,
+  "source_url": "https://en.wikipedia.org/wiki/Mary_Shelley%27s_Frankenstein_(film)"
+ },
+ {
+  "title": "EUE/Screen Gems Studios, Wilmington (The Crow 1994)",
+  "category": "film",
+  "kind": "film set",
+  "description": "Then called Carolco Studios, this Wilmington lot held the film's sets. Brandon Lee was fatally wounded by a dummy round on Stage 4 here on 31 March 1993 and the film was finished with doubles and effects. It is still a working studio.",
+  "lat": 34.251591,
+  "lng": -77.920157,
+  "source_url": "https://en.wikipedia.org/wiki/The_Crow_(1994_film)"
+ },
+ {
+  "title": "746 South San Pedro Street, Los Angeles (Se7en 1995)",
+  "category": "film",
+  "kind": "film set",
+  "description": "The rainy shopfronts of the opening murder, where Somerset and Mills first meet. The distinctive iron grillwork on the doors is unchanged.",
+  "lat": 34.039628,
+  "lng": -118.247761,
+  "source_url": "https://movie-locations.com/movies/s/Seven-1995.php"
+ },
+ {
+  "title": "720 Beacon Avenue, Los Angeles (Se7en 1995)",
+  "category": "film",
+  "kind": "film set",
+  "description": "The roach infested house of the Gluttony victim, in Westlake east of MacArthur Park. It is a PRIVATE RESIDENCE and far less grim than the film makes it look.",
+  "lat": 34.053998,
+  "lng": -118.272474,
+  "source_url": "https://movie-locations.com/movies/s/Seven-1995.php"
+ },
+ {
+  "title": "Pacific Electric Building, Los Angeles (Se7en 1995)",
+  "category": "film",
+  "kind": "film set",
+  "description": "The third floor supplied the police station interiors, the same floor used in L.A. Confidential. The building is now lofts.",
+  "lat": 34.044648,
+  "lng": -118.249774,
+  "source_url": "https://movie-locations.com/movies/s/Seven-1995.php"
+ },
+ {
+  "title": "Biscuit Company Lofts, Los Angeles (Se7en 1995)",
+  "category": "film",
+  "kind": "film set",
+  "description": "The Fourteenth Precinct exterior was the old National Biscuit Company headquarters at 673 Mateo Street. It became apartments in 2006 and was readdressed as 1850 Industrial Street.",
+  "lat": 34.035453,
+  "lng": -118.232856,
+  "source_url": "https://movie-locations.com/movies/s/Seven-1995.php"
+ },
+ {
+  "title": "Rosslyn Hotel, Los Angeles (Se7en 1995)",
+  "category": "film",
+  "kind": "film set",
+  "description": "The station lobby where John Doe walks in covered in blood and surrenders. The long derelict hotel is now the Rosslyn Lofts.",
+  "lat": 34.046899,
+  "lng": -118.249021,
+  "source_url": "https://movie-locations.com/movies/s/Seven-1995.php"
+ },
+ {
+  "title": "650 South Spring Street, Los Angeles (Se7en 1995)",
+  "category": "film",
+  "kind": "film set",
+  "description": "The gloomy library where Somerset reads up on the seven deadly sins is the disused Bank of America building, also the New York vault in Marathon Man.",
+  "lat": 34.044679,
+  "lng": -118.252025,
+  "source_url": "https://movie-locations.com/movies/s/Seven-1995.php"
+ },
+ {
+  "title": "Pan American Lofts, Los Angeles (Se7en 1995)",
+  "category": "film",
+  "kind": "film set",
+  "description": "Where the barely alive Sloth victim is found, across the street from the Bradbury Building. The old Giant Penny sign and canopy were removed in the conversion to lofts.",
+  "lat": 34.051322,
+  "lng": -118.247995,
+  "source_url": "https://movie-locations.com/movies/s/Seven-1995.php"
+ },
+ {
+  "title": "Alexandria Hotel, Los Angeles (Se7en 1995)",
+  "category": "film",
+  "kind": "film set",
+  "description": "John Doe's apartment block, including the elaborate Mezzanine Ballroom the detectives run through. Once a luxury hotel, then a welfare hotel, it is now mixed residential housing.",
+  "lat": 34.047399,
+  "lng": -118.250147,
+  "source_url": "https://movie-locations.com/movies/s/Seven-1995.php"
+ },
+ {
+  "title": "Chester Williams Building, Los Angeles (Se7en 1995)",
+  "category": "film",
+  "kind": "film set",
+  "description": "Somerset emerges from this building opposite the Alexandria during the rooftop chase. It was also Karen's apartment block in Blade and the ledge in Inception.",
+  "lat": 34.048035,
+  "lng": -118.250305,
+  "source_url": "https://movie-locations.com/movies/s/Seven-1995.php"
+ },
+ {
+  "title": "117 East 6th Street, Los Angeles (Se7en 1995)",
+  "category": "film",
+  "kind": "film set",
+  "description": "The barbershop where the detectives wait for the library records. It is still in business, now as a beauty salon.",
+  "lat": 34.045171,
+  "lng": -118.249633,
+  "source_url": "https://movie-locations.com/movies/s/Seven-1995.php"
+ },
+ {
+  "title": "West Avenue I at 110th Street West, Lancaster (Se7en 1995)",
+  "category": "film",
+  "kind": "film set",
+  "description": "The field of high tension power lines in the Mojave where the box arrives and the film ends. It is near featureless desert on a grid of streets that were never built.",
+  "lat": 34.7045,
+  "lng": -118.3245,
+  "source_url": "https://movie-locations.com/movies/s/Seven-1995.php"
+ },
+ {
+  "title": "Field Museum, Chicago (The Relic 1997)",
+  "category": "film",
+  "kind": "film set",
+  "description": "The Kothoga rampages through a museum modelled on the Field, and the real building supplied the exteriors after the American Museum of Natural History in New York turned the production down. It is open daily.",
+  "lat": 41.866222,
+  "lng": -87.616891,
+  "source_url": "https://en.wikipedia.org/wiki/The_Relic"
+ },
+ {
+  "title": "R.C. Harris Water Treatment Plant, Toronto (Mimic 1997)",
+  "category": "film",
+  "kind": "film set",
+  "description": "The Art Deco waterworks on the Lake Ontario shore opens the film as the strange ward of glowing hospital beds. The plant still operates and the grounds are open to the public.",
+  "lat": 43.67438,
+  "lng": -79.27919,
+  "source_url": "https://movie-locations.com/movies/m/Mimic.php"
+ },
+ {
+  "title": "Osgoode Hall Great Library, Toronto (Mimic 1997)",
+  "category": "film",
+  "kind": "film set",
+  "description": "Dr Mann announces the Judas breed in this 19th century law library. Osgoode Hall is a working courthouse and law society.",
+  "lat": 43.652104,
+  "lng": -79.385795,
+  "source_url": "https://movie-locations.com/movies/m/Mimic.php"
+ },
+ {
+  "title": "Knox College Cloisters, Toronto (Mimic 1997)",
+  "category": "film",
+  "kind": "film set",
+  "description": "The Gothic interior of the Museum of Natural History where Susan Tyler collects insect specimens from the neighbourhood children. Knox is a theological college on the University of Toronto campus.",
+  "lat": 43.661439,
+  "lng": -79.396446,
+  "source_url": "https://movie-locations.com/movies/m/Mimic.php"
+ },
+ {
+  "title": "Wycliffe College, Toronto (Mimic 1997)",
+  "category": "film",
+  "kind": "film set",
+  "description": "Leonard Hall's faux medieval library is where Tyler and Gates realise the Judas breed is not sterile.",
+  "lat": 43.664516,
+  "lng": -79.395143,
+  "source_url": "https://movie-locations.com/movies/m/Mimic.php"
+ },
+ {
+  "title": "Wellington Destructor, Toronto (Mimic 1997)",
+  "category": "film",
+  "kind": "film set",
+  "description": "The disused 1920s rubbish incinerator is the water treatment plant where Jeremy shows off the body of a giant bug. It stood empty for decades and is being redeveloped.",
+  "lat": 43.640824,
+  "lng": -79.406478,
+  "source_url": "https://movie-locations.com/movies/m/Mimic.php"
+ },
+ {
+  "title": "Lower Bay station, Toronto (Mimic 1997)",
+  "category": "film",
+  "kind": "film set",
+  "description": "Delancey Street Station, where Susan Tyler asks a giant insect for the time, is the abandoned Lower Bay platform under Bay station. It was open for only six months in 1966 and is used mainly for filming.",
+  "lat": 43.670185,
+  "lng": -79.390269,
+  "source_url": "https://movie-locations.com/movies/m/Mimic.php"
+ },
+ {
+  "title": "610 South Broadway, Los Angeles (Blade 1998)",
+  "category": "film",
+  "kind": "film set",
+  "description": "The white terracotta building used as the hospital exterior Blade escapes from. Harold Lloyd dangled from it in Safety Last.",
+  "lat": 34.046374,
+  "lng": -118.252162,
+  "source_url": "https://movie-locations.com/movies/b/Blade.php"
+ },
+ {
+  "title": "761 South Broadway, Los Angeles (Blade 1998)",
+  "category": "film",
+  "kind": "film set",
+  "description": "The entrance to the Pearl vampire club was a dressed up shopfront at 8th Street and South Broadway, opposite the Tower Theatre.",
+  "lat": 34.044404,
+  "lng": -118.254244,
+  "source_url": "https://movie-locations.com/movies/b/Blade.php"
+ },
+ {
+  "title": "Maguire Gardens, Los Angeles (Blade 1998)",
+  "category": "film",
+  "kind": "film set",
+  "description": "The park where Deacon Frost taunts Blade in broad daylight, in front of the Los Angeles Central Library. It is a public garden.",
+  "lat": 34.050285,
+  "lng": -118.255091,
+  "source_url": "https://movie-locations.com/movies/b/Blade.php"
+ },
+ {
+  "title": "Summit Lake, Argyle, New York (Sleepaway Camp 1983)",
+  "category": "film",
+  "kind": "film set",
+  "description": "Camp Arawak was the real Camp Algonquin on the east side of Summit Lake, shot over five weeks in autumn 1982 as the camp was closing. The land was auctioned in 1987 and the cabins torn down, though the tennis courts and ball diamond can still be made out.",
+  "lat": 43.209677,
+  "lng": -73.461675,
+  "source_url": "https://en.wikipedia.org/wiki/Sleepaway_Camp"
+ },
+ {
+  "title": "Ransomville, New York (The Burning 1981)",
+  "category": "film",
+  "kind": "film set",
+  "description": "Camp Stonewood, where Cropsy works through the campers, was the former Camp Stonehaven outside this village west of Buffalo. The land is now the Stonehaven Nature Preserve.",
+  "lat": 43.241116,
+  "lng": -78.914793,
+  "source_url": "https://www.fangoria.com/watch-the-burning-where-it-was-filmed/"
+ },
+ {
+  "title": "Camp Scouthaven, Freedom, New York (The Burning 1981)",
+  "category": "film",
+  "kind": "film set",
+  "description": "The second camp used in the film, in the hills south of Buffalo. It is still an operating Scout camp.",
+  "lat": 42.462061,
+  "lng": -78.351738,
+  "source_url": "https://www.fangoria.com/watch-the-burning-where-it-was-filmed/"
+ },
+ {
+  "title": "Sydney Mines, Nova Scotia (My Bloody Valentine 1981)",
+  "category": "film",
+  "kind": "film set",
+  "description": "Valentine Bluffs is this Cape Breton coal town, where shooting began in September 1980. The Hanniger Mine was the real Princess Colliery, worked from 1875 to 1975 and since dismantled and buried, with a museum and park on the site.",
+  "lat": 46.234019,
+  "lng": -60.223992,
+  "source_url": "https://en.wikipedia.org/wiki/My_Bloody_Valentine_(film)"
+ },
+ {
+  "title": "Don Mills Collegiate Institute, Toronto (Prom Night 1980)",
+  "category": "film",
+  "kind": "film set",
+  "description": "Alexander Hamilton High, where the prom and the killings happen. The production took over the school's woodworking shop, and it is still a working Toronto school.",
+  "lat": 43.736957,
+  "lng": -79.339472,
+  "source_url": "https://www.fast-rewind.com/locations_promnight.htm"
+ },
+ {
+  "title": "St James Cemetery, Toronto (Prom Night 1980)",
+  "category": "film",
+  "kind": "film set",
+  "description": "The cemetery scenes were shot at this 1844 burial ground on Parliament Street, the oldest still operating cemetery in Toronto.",
+  "lat": 43.669584,
+  "lng": -79.369024,
+  "source_url": "https://www.fast-rewind.com/locations_promnight.htm"
+ },
+ {
+  "title": "6 Clarendon Crescent, Toronto (Black Christmas 1974)",
+  "category": "film",
+  "kind": "film set",
+  "description": "The Pi Kappa Sigma sorority house, with Billy hiding in the attic. This is a PRIVATE HOME on a tiny private road: look from the sidewalk and never knock.",
+  "lat": 43.682727,
+  "lng": -79.403393,
+  "source_url": "https://movie-locations.com/movies/b/Black-Christmas.php"
+ },
+ {
+  "title": "97 Main Street, Toronto (Black Christmas 1974)",
+  "category": "film",
+  "kind": "film set",
+  "description": "The Bedford police precinct, with the Main and Swanwick street sign that is genuinely there. The building is Community Centre 55 in East Danforth.",
+  "lat": 43.68206,
+  "lng": -79.299142,
+  "source_url": "https://movie-locations.com/movies/b/Black-Christmas.php"
+ },
+ {
+  "title": "Seeley Hall, Trinity College, Toronto (Black Christmas 1974)",
+  "category": "film",
+  "kind": "film set",
+  "description": "Where Peter plays and then smashes up the piano. Trinity College is part of the University of Toronto.",
+  "lat": 43.665309,
+  "lng": -79.395255,
+  "source_url": "https://movie-locations.com/movies/b/Black-Christmas.php"
+ },
+ {
+  "title": "Soldiers' Tower, University of Toronto (Black Christmas 1974)",
+  "category": "film",
+  "kind": "film set",
+  "description": "Mr Harrison waits in vain for his daughter beside Hart House, with the Trinity College tower visible through the arch. The 1924 tower is a First World War memorial.",
+  "lat": 43.66355,
+  "lng": -79.395224,
+  "source_url": "https://movie-locations.com/movies/b/Black-Christmas.php"
+ },
+ {
+  "title": "Rogers Locomotive Erecting Shop, Paterson (Alice Sweet Alice 1976)",
+  "category": "film",
+  "kind": "film set",
+  "description": "Several sequences were shot in this 19th century locomotive works, one of the buildings director Alfred Sole secured through his restoration architecture work in Paterson. It is now the Paterson Museum.",
+  "lat": 40.913532,
+  "lng": -74.178893,
+  "source_url": "https://en.wikipedia.org/wiki/Alice,_Sweet_Alice"
+ },
+ {
+  "title": "Great Falls of the Passaic, Paterson (Alice Sweet Alice 1976)",
+  "category": "film",
+  "kind": "film set",
+  "description": "The 77 foot falls in the middle of Paterson appear in the film. The site is now Paterson Great Falls National Historical Park.",
+  "lat": 40.915541,
+  "lng": -74.180529,
+  "source_url": "https://en.wikipedia.org/wiki/Alice,_Sweet_Alice"
+ },
+ {
+  "title": "320 Main Street, Paterson (Alice Sweet Alice 1976)",
+  "category": "film",
+  "kind": "film set",
+  "description": "The church exteriors were the First Presbyterian Church of Paterson, which was demolished two years after filming. Nothing of the building survives at the site.",
+  "lat": 40.914136,
+  "lng": -74.173287,
+  "source_url": "https://en.wikipedia.org/wiki/Alice,_Sweet_Alice"
+ },
+ {
+  "title": "10 Montague Terrace, Brooklyn Heights (The Sentinel 1977)",
+  "category": "film",
+  "kind": "film set",
+  "description": "Alison Parker's too cheap brownstone apartment, the one with the gateway to hell in it. Both the exterior and interiors were shot in this 1875 building, which is PRIVATE RESIDENTIAL: view it from the sidewalk.",
+  "lat": 40.695219,
+  "lng": -73.997862,
+  "source_url": "https://www.brownstoner.com/architecture/brooklyn-heights-historic-district-10-montague-terrace-henry-sanger-the-sentinel-film-history/"
+ },
+ {
+  "title": "Dunsmuir House, Oakland (Burnt Offerings 1976)",
+  "category": "film",
+  "kind": "film set",
+  "description": "The whole film was shot in and around this 1899 mansion in August 1975, with many of its 37 rooms re-papered in dark patterns for the mood and the earthquake damaged pool refilled for the swimming scenes. The city of Oakland owns it and the grounds are a public park.",
+  "lat": 37.742778,
+  "lng": -122.141111,
+  "source_url": "https://en.wikipedia.org/wiki/Burnt_Offerings_(film)"
+ },
+ {
+  "title": "50 Jesup Road, Westport (The Last House on the Left 1972)",
+  "category": "film",
+  "kind": "film set",
+  "description": "The bumbling sheriff's station exteriors were shot at the Westport police station, in producer Sean Cunningham's home town where most of the film was made using his own house, car and dogs to keep costs down.",
+  "lat": 41.140011,
+  "lng": -73.360161,
+  "source_url": "http://www.thennowmovielocations.com/2018/07/the-last-house-on-left-1972.html"
+ },
+ {
+  "title": "287 Wilton Road, Westport (The Last House on the Left 1972)",
+  "category": "film",
+  "kind": "film set",
+  "description": "The small cemetery beside this address, with the pond behind it, was used in the film. It is a roadside burial ground.",
+  "lat": 41.161796,
+  "lng": -73.376874,
+  "source_url": "http://www.thennowmovielocations.com/2018/07/the-last-house-on-left-1972.html"
+ },
+ {
+  "title": "Bridge Studios, Burnaby (Thirteen Ghosts 2001)",
+  "category": "film",
+  "kind": "film set",
+  "description": "The glass house was never a house: it was built indoors on this lot out of glass, copper, steel and brass, with the exterior added digitally over an empty patch of grass.",
+  "lat": 49.262991,
+  "lng": -123.020565,
+  "source_url": "https://en.wikipedia.org/wiki/Thirteen_Ghosts"
+ }
+]
