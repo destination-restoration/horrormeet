@@ -467,3 +467,9 @@ header.app.doors-hidden nav.tabs, header.app.doors-hidden .guides{max-height:non
 #mapHits button:last-child{border-bottom:none}
 #mapHits button:hover{background:#1a1a20;color:var(--red)}
 #mapHits button span{color:var(--faint);font-size:12px}
+
+/* ---------- meetups that already happened ---------- */
+.card.past{opacity:.72}
+.card.past .date{filter:grayscale(1)}
+.card.past:hover{opacity:1}
+.card.past .going{color:var(--faint)}

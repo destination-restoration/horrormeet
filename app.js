@@ -534,9 +534,13 @@ async function loadComments(id, card) {
 
 /* ---------- events ---------- */
 async function loadEvents() {
-  const { data, error } = await sb.from('events').select('*').gte('starts_at', new Date(Date.now() - 86400000).toISOString()).order('starts_at').limit(30);
+  const cutoff = new Date(Date.now() - 86400000).toISOString();
+  const [{ data, error }, { data: past }] = await Promise.all([
+    sb.from('events').select('*').gte('starts_at', cutoff).order('starts_at').limit(30),
+    sb.from('events').select('*').lt('starts_at', cutoff).order('starts_at', { ascending: false }).limit(12),
+  ]);
   const box = $('events');
-  if (error || !data?.length) { box.innerHTML = `<div class="empty">No meetups listed yet. Soon.</div>`; return; }
+  if (error || (!data?.length && !past?.length)) { box.innerHTML = `<div class="empty">No meetups listed yet. Soon.</div>`; return; }
   const months = ['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'];
   box.innerHTML = '';
   const kinds = [
@@ -585,6 +589,30 @@ async function loadEvents() {
     });
     box.appendChild(el);
   }
+  }
+  renderPastEvents(box, past || [], months);
+}
+
+/* the house has a history now: everything already run, newest first, no RSVP */
+function renderPastEvents(box, past, months) {
+  if (!past.length) return;
+  const head = document.createElement('div');
+  head.className = 'section-note';
+  head.textContent = 'Already happened \u00b7 where the house has been';
+  box.appendChild(head);
+  for (const ev of past) {
+    const d = new Date(ev.starts_at);
+    const el = document.createElement('div');
+    el.className = 'card past';
+    el.innerHTML = `<div class="pad event">
+      <div class="date"><div class="m">${months[d.getMonth()]}</div><div class="d">${d.getDate()}</div></div>
+      <div style="flex:1">
+        <h3>${esc(ev.title)}</h3>
+        <div class="where">${esc([ev.venue, ev.city].filter(Boolean).join(' \u00b7 '))} \u00b7 ${d.getFullYear()}</div>
+        <div class="going">${ev.captain ? 'HorrorMeet was there with @' + esc(ev.captain) : 'HorrorMeet was there'}${ev.link ? ` \u00b7 <a href="${esc(ev.link)}" target="_blank" rel="noopener">details</a>` : ''}</div>
+      </div>
+    </div>`;
+    box.appendChild(el);
   }
 }
 
