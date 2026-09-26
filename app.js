@@ -276,8 +276,11 @@ function renderMapHits(rows) {
   if (!mapQ) { box.classList.add('hidden'); box.innerHTML = ''; return; }
   box.classList.remove('hidden');
   if (!rows.length) {
-    box.innerHTML = '<button type="button" disabled>Nothing on the atlas by that name yet. '
-      + 'Add it with the button below.</button>';
+    /* the atlas search only sees titles, because only titles are held in memory.
+       the site-wide index reads descriptions too, so send them there. */
+    box.innerHTML = '<button type="button" disabled>No pin is named "' + esc(mapQ) + '". '
+      + 'Try <a href="search.html?q=' + encodeURIComponent(mapQ) + '" style="color:var(--red)">searching the whole house</a>, '
+      + 'which reads the write-ups as well, or add the place with the button below.</button>';
     return;
   }
   box.innerHTML = '';

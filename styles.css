@@ -473,3 +473,5 @@ header.app.doors-hidden nav.tabs, header.app.doors-hidden .guides{max-height:non
 .card.past .date{filter:grayscale(1)}
 .card.past:hover{opacity:1}
 .card.past .going{color:var(--faint)}
+#mapHits button[disabled]{color:var(--dim);cursor:default;line-height:1.5}
+#mapHits button[disabled] a{pointer-events:auto}
