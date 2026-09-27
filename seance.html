@@ -6,13 +6,25 @@
 <title>The Séance · HorrorMeet</title>
 <meta name="theme-color" content="#0b0b0e">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Frijole&family=Rye&display=swap">
-<link rel="stylesheet" href="styles.css?v=27">
+<link rel="stylesheet" href="styles.css?v=28">
 <style>
   .sx-title{font-family:'Frijole',Impact,fantasy;font-size:30px;color:var(--white);text-shadow:3px 3px 0 var(--red-deep);margin:24px 0 4px;line-height:1.2}
   .sx-sub{font-family:'Rye',Georgia,serif;color:var(--red);font-size:13px;letter-spacing:.16em;text-transform:uppercase;margin:0 0 18px}
   .rule{border:2px dashed var(--line);background:var(--panel);padding:14px 16px;margin:10px 0}
   .rule b{color:var(--white)}
   .candle{font-size:40px;text-align:center;margin:24px 0 6px;filter:drop-shadow(0 0 12px rgba(179,18,27,.6))}
+  .sit{border:2px solid var(--line);background:var(--panel);margin:16px 0;overflow:hidden}
+  .sit.featured{border-color:var(--red)}
+  .sit .vid{position:relative;width:100%;aspect-ratio:16/9;background:#000}
+  .sit .vid iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+  .sit .body{padding:14px 16px}
+  .sit h3{margin:0 0 3px;font-size:18px}
+  .sit .who{color:var(--red);font-size:12.5px;letter-spacing:.08em;text-transform:uppercase;font-family:'Rye',Georgia,serif}
+  .sit .when{color:var(--faint);font-size:12px;margin-top:3px}
+  .sit p{color:var(--dim);font-size:14.5px;margin:8px 0 0;line-height:1.5}
+  .sit .badge{display:inline-block;font-family:'Rye',Georgia,serif;font-size:10px;letter-spacing:.14em;
+    text-transform:uppercase;color:var(--red);border:1px solid var(--red);padding:1px 6px;margin-left:8px;vertical-align:2px}
+  #sitCount{font-family:'Rye',Georgia,serif;font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--faint);margin:20px 0 0}
 </style>
 </head>
 <body>
@@ -52,12 +64,56 @@
   <div class="candle">🕯</div>
 
   <div class="rule"><b>How a sitting works:</b> the guest is announced on the board · members drop questions in the summoning thread · at the appointed hour, the guest joins and answers live · the thread stays up forever as part of the record.</div>
-  <div class="rule"><b>First sittings are being scheduled now.</b> We're starting with working horror filmmakers and building toward names you grew up scared of. Watch the board for the first summoning.</div>
+  <div id="sitCount"></div>
+  <div id="sittings"></div>
   <div class="rule"><b>Made horror? Sit with us.</b> Directors, producers, FX artists, actors: if your work is on the film shelf, you can host a sitting. Message @LandonXXL on the board.</div>
 
   <p class="hint" style="margin-top:18px">Guests speak for themselves. The circle is respectful or the circle is closed. <a href="rules.html">House rules</a> apply.</p>
   <footer>THE SÉANCE · a HorrorMeet gathering · <a href="press.html">press</a> · <a href="index.html">back to the board</a><br><span class="social">follow the house: <a href="https://www.instagram.com/horrormeetapp" target="_blank" rel="noopener">Instagram @horrormeetapp</a> · <a href="https://www.youtube.com/@HorrorMeet" target="_blank" rel="noopener">YouTube</a></span></footer>
 </main>
+<script type="module">
+import { sb } from './app-core.js';
+const esc = (v) => String(v == null ? '' : v).replace(/[&<>"']/g, (c) =>
+  ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+
+/* sittings live in the database, so adding the next one costs nothing.
+   video is embedded from YouTube rather than hosted here: a static site has
+   no business serving video, and YouTube is where people search for it. */
+const box = document.getElementById('sittings');
+const { data, error } = await sb.from('seance_sittings')
+  .select('guest,guest_role,film,youtube_id,poster_url,summary,happened_at,featured')
+  .eq('status', 'published')
+  .order('featured', { ascending: false })
+  .order('happened_at', { ascending: false, nullsFirst: false })
+  .limit(50);
+
+if (error) {
+  box.innerHTML = '<div class="rule">The circle is quiet right now. ' + esc(error.message) + '</div>';
+} else if (!data || !data.length) {
+  box.innerHTML = '<div class="rule"><b>First sittings are being scheduled now.</b> '
+    + 'We are starting with working horror filmmakers and building toward names you grew up scared of. '
+    + 'Watch the board for the first summoning.</div>';
+} else {
+  document.getElementById('sitCount').textContent =
+    data.length + (data.length === 1 ? ' sitting' : ' sittings') + ' on the record';
+  box.innerHTML = data.map((r) => {
+    const when = r.happened_at
+      ? new Date(r.happened_at).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })
+      : '';
+    const vid = r.youtube_id
+      ? '<div class="vid"><iframe src="https://www.youtube-nocookie.com/embed/' + encodeURIComponent(r.youtube_id)
+        + '" title="' + esc(r.guest) + ' on HorrorMeet" loading="lazy" allowfullscreen '
+        + 'allow="accelerometer; clipboard-write; encrypted-media; picture-in-picture"></iframe></div>'
+      : '';
+    return '<div class="sit' + (r.featured ? ' featured' : '') + '">' + vid + '<div class="body">'
+      + '<h3>' + esc(r.guest) + (r.featured ? '<span class="badge">latest</span>' : '') + '</h3>'
+      + (r.guest_role ? '<div class="who">' + esc(r.guest_role) + '</div>' : '')
+      + (when ? '<div class="when">' + esc(when) + (r.film ? ' \u00b7 ' + esc(r.film) : '') + '</div>' : '')
+      + (r.summary ? '<p>' + esc(r.summary) + '</p>' : '')
+      + '</div></div>';
+  }).join('');
+}
+</script>
 <script defer src="nav.js?v=10"></script>
 <script type="module" src="live.js?v=4"></script>
 </body>
