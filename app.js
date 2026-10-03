@@ -1,4 +1,5 @@
 import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
+import { joinPrompt } from './gate.js';
 
 export const SUPABASE_URL = 'https://lwwtlsxvbzmddwdcbsnj.supabase.co';
 export const SUPABASE_KEY = 'sb_publishable_HexDGBDO-zSLkasLjsR6rw__Vi8JMZD';
@@ -12,6 +13,7 @@ const $ = (id) => document.getElementById(id);
 const toastEl = $('toast');
 let session = null;
 let myProfile = null;
+const savedIds = new Set(); // My Atlas pin ids, declared early: refreshSession can run before the map code
 
 export function toast(msg, ms = 2600) {
   toastEl.textContent = msg;
@@ -55,6 +57,7 @@ async function refreshSession() {
     myProfile = null;
   }
   renderAuthState();
+  loadSavedIds();
 }
 
 function renderAuthState() {
@@ -363,9 +366,35 @@ async function fillPopup(marker, id) {
       `<a href="${mapsUrl('apple', s)}" target="_blank" rel="noopener">Apple Maps</a>` +
       `<a href="${mapsUrl('google', s)}" target="_blank" rel="noopener">Google Maps</a>` +
     `</div>` + srcLine +
+    `<button type="button" class="savepin" data-spot="${s.id}">${savedIds.has(s.id) ? '\u2665 Saved to My Atlas' : '\u2661 Save to My Atlas'}</button>` +
     (s.profiles?.username ? `<span style="color:#8b7f84;font-size:12px">added by @${esc(s.profiles.username)}</span>` : '')
   );
 }
+
+/* My Atlas: members save pins; the ids load once per session so popups can show the state */
+async function loadSavedIds() {
+  savedIds.clear();
+  if (!session) return;
+  const { data } = await sb.from('saved_spots').select('spot_id');
+  for (const r of data || []) savedIds.add(r.spot_id);
+}
+document.addEventListener('click', async (e) => {
+  const b = e.target.closest('.savepin');
+  if (!b) return;
+  if (!session) return joinPrompt('save');
+  const id = Number(b.dataset.spot);
+  b.disabled = true;
+  if (savedIds.has(id)) {
+    const { error } = await sb.from('saved_spots').delete().eq('spot_id', id);
+    if (!error) { savedIds.delete(id); b.textContent = '\u2661 Save to My Atlas'; }
+    else toast(error.message);
+  } else {
+    const { error } = await sb.from('saved_spots').insert({ spot_id: id });
+    if (!error) { savedIds.add(id); b.textContent = '\u2665 Saved to My Atlas'; toast('Saved. Find it under Me.'); }
+    else toast(error.message);
+  }
+  b.disabled = false;
+});
 
 function mapsUrl(kind, s) {
   const q = encodeURIComponent(s.address ? `${s.title}, ${s.address}` : s.title);
@@ -376,7 +405,7 @@ function mapsUrl(kind, s) {
 }
 
 $('mapAddBtn')?.addEventListener('click', () => {
-  if (!session) return toast('Sign in on the Sightings tab to add locations.');
+  if (!session) return joinPrompt('pin');
   addMode = !addMode;
   document.body.classList.toggle('addmode', addMode);
   $('mapAddBtn').textContent = addMode ? 'Click the map to drop your pin...' : '+ Add a location';
@@ -461,7 +490,7 @@ async function resizeImage(file, maxW = 1280) {
 }
 
 $('postBtn')?.addEventListener('click', async () => {
-  if (!session) return toast('Sign in first.');
+  if (!session) return joinPrompt('post');
   const title = $('postTitle').value.trim();
   const body = $('postBody').value.trim();
   if (title.length < 3 || !body) return toast('Give it a title and a story.');
@@ -525,7 +554,7 @@ async function loadFeed() {
       if (box.classList.contains('open')) loadComments(id, card);
     });
     card.querySelector('.c-report').addEventListener('click', async () => {
-      if (!session) return toast('Sign in to report.');
+      if (!session) return joinPrompt('report');
       const reason = prompt('What is wrong with this post?');
       if (reason === null) return;
       await sb.from('reports').insert({ target_type: 'sighting', target_id: Number(id), reporter: session.user.id, reason });
@@ -533,7 +562,7 @@ async function loadFeed() {
     });
     const form = card.querySelector('.comment-form');
     form.querySelector('button').addEventListener('click', async () => {
-      if (!session) return toast('Sign in to comment.');
+      if (!session) return joinPrompt('comment');
       const input = form.querySelector('input');
       const body = input.value.trim();
       if (!body) return;
@@ -605,7 +634,7 @@ async function loadEvents() {
       <button class="btn ghost rsvp">RSVP</button>
     </div>`;
     el.querySelector('.rsvp').addEventListener('click', async () => {
-      if (!session) return toast('Sign in to RSVP.');
+      if (!session) return joinPrompt('rsvp');
       const { error: e2 } = await sb.from('rsvps').insert({ event_id: ev.id, user_id: session.user.id });
       if (e2 && e2.code === '23505') { await sb.from('rsvps').delete().match({ event_id: ev.id, user_id: session.user.id }); toast('RSVP removed.'); }
       else if (e2) toast(e2.message);
@@ -643,7 +672,7 @@ function renderPastEvents(box, past, months) {
 
 /* ---------- community board ---------- */
 $('threadBtn')?.addEventListener('click', async () => {
-  if (!session) return toast('Sign in first.');
+  if (!session) return joinPrompt('thread');
   const title = $('threadTitle').value.trim();
   const body = $('threadBody').value.trim();
   if (title.length < 3 || !body) return toast('Give it a topic and a first post.');
@@ -714,7 +743,7 @@ async function loadThreads() {
       if (c.classList.contains('open')) loadReplies(id, card);
     });
     card.querySelector('.t-report').addEventListener('click', async () => {
-      if (!session) return toast('Sign in to report.');
+      if (!session) return joinPrompt('report');
       const reason = prompt('What is wrong with this thread?');
       if (reason === null) return;
       await sb.from('reports').insert({ target_type: 'thread', target_id: Number(id), reporter: session.user.id, reason });
@@ -722,7 +751,7 @@ async function loadThreads() {
     });
     const form = card.querySelector('.comment-form');
     form.querySelector('button').addEventListener('click', async () => {
-      if (!session) return toast('Sign in to reply.');
+      if (!session) return joinPrompt('reply');
       const input = form.querySelector('input');
       const body = input.value.trim();
       if (!body) return;
@@ -748,7 +777,7 @@ async function loadReplies(id, card) {
 
 /* ---------- films ---------- */
 $('filmBtn')?.addEventListener('click', async () => {
-  if (!session) return toast('Sign in first.');
+  if (!session) return joinPrompt('film');
   const title = $('fTitle').value.trim();
   const watch_url = $('fWatch').value.trim();
   if (!title || !watch_url.startsWith('http')) return toast('Title and a valid watch link are required.');
@@ -850,7 +879,7 @@ $('eAvatar')?.addEventListener('change', () => {
 });
 
 $('saveProfileBtn')?.addEventListener('click', async () => {
-  if (!session) return toast('Sign in first.');
+  if (!session) return joinPrompt('profile');
   $('saveProfileBtn').disabled = true;
   try {
     let avatar_url = myProfile?.avatar_url || null;
@@ -897,7 +926,7 @@ $('saveProfileBtn')?.addEventListener('click', async () => {
 /* ---------- me / history ---------- */
 async function loadMe() {
   const prof = $('meProfile');
-  if (!session) { prof.innerHTML = `<span class="hint">Sign in on the Sightings tab to see your profile and history.</span>`; $('meEditorWrap')?.classList.add('hidden'); return; }
+  if (!session) { prof.innerHTML = `<span class="hint">Your profile, your saved places and your history live here.</span> <a class="btn" href="join.html?ref=gate-profile" style="margin-left:6px">Join free</a> <a class="btn ghost" href="signin.html">Sign in</a>`; $('mySaved') && ($('mySaved').innerHTML = '<div class="empty">Join to save places from the Atlas.</div>'); $('meEditorWrap')?.classList.add('hidden'); return; }
   const d = myProfile?.details || {};
   const badges = (myProfile?.badges || []).map((b) => `<span class="badge">${esc(b)}</span>`).join(' ');
   const identity = [
@@ -933,6 +962,13 @@ async function loadMe() {
   $('meEditorWrap')?.classList.remove('hidden');
   fillEditor();
 
+  await loadSavedIds();
+  const { data: saved } = await sb.from('saved_spots')
+    .select('spot_id,created_at,map_spots(id,title,kind)').order('created_at', { ascending: false });
+  if ($('mySaved')) $('mySaved').innerHTML = (saved || []).filter((r) => r.map_spots).length
+    ? saved.filter((r) => r.map_spots).map((r) => `<div class="card"><div class="pad"><div class="post-head">${esc(r.map_spots.kind || '')}</div><h3><a href="index.html?spot=${r.map_spots.id}#map" class="savedlink">${esc(r.map_spots.title)}</a></h3></div></div>`).join('')
+    : `<div class="empty">Nothing saved yet. Open any pin on the Atlas and tap Save.</div>`;
+
   const { data: myF } = await sb.from('films').select('id,title,status,created_at,watch_clicks').eq('submitter', session.user.id).order('created_at', { ascending: false });
   $('myFilms').innerHTML = (myF || []).length
     ? myF.map((f) => `<div class="card"><div class="pad"><div class="post-head">${timeAgo(f.created_at)} · <span class="pill ${f.status === 'pending' ? 'pending' : ''}">${f.status.toUpperCase()}</span></div><h3>${esc(f.title)}</h3></div></div>`).join('')
@@ -959,7 +995,8 @@ loadEvents();
 /* ---------- tombstone rating clicks (delegated) ---------- */
 document.addEventListener('click', async (e) => {
   const stone = e.target.closest('.stone');
-  if (!stone || !session) return;
+  if (!stone) return;
+  if (!session) return joinPrompt('rate');
   const wrap = stone.closest('.film-rate');
   if (!wrap) return;
   const film_id = Number(wrap.dataset.film);

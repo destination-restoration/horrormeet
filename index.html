@@ -11,7 +11,7 @@
 <link rel="icon" href="icon-180.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Frijole&family=Rye&display=swap">
-<link rel="stylesheet" href="styles.css?v=28">
+<link rel="stylesheet" href="styles.css?v=29">
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 <script defer src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css">
@@ -190,7 +190,7 @@
         <div class="row"><textarea id="threadBody" rows="3" maxlength="5000" placeholder="Say it. The board is live: threads post instantly and the mods can pull anything."></textarea></div>
         <div class="actions"><button class="btn" id="threadBtn">Post thread</button><span class="hint">Live posting. Behave. <a href="rules.html">House rules</a> apply.</span></div>
       </div>
-      <div id="threadAnon"><p class="hint" style="margin:0">Sign in on the Sightings tab to post here.</p></div>
+      <div id="threadAnon"><p class="hint" style="margin:0"><a href="join.html?ref=gate-thread">Join free</a> or <a href="signin.html">sign in</a> to post here.</p></div>
     </div>
     <div class="section-note">The board</div>
     <div id="threads"><div class="empty">Loading...</div></div>
@@ -211,7 +211,7 @@
         <div class="row"><label class="hint">Poster (optional)</label><input id="fPoster" type="file" accept="image/*"></div>
         <div class="actions"><button class="btn" id="filmBtn">Submit for review</button><span class="hint">Reviewed before posting. You must hold the rights. <a href="terms.html">Terms</a>.</span></div>
       </div>
-      <div id="filmAnon"><p class="hint" style="margin:0">Sign in on the Sightings tab to submit your film.</p></div>
+      <div id="filmAnon"><p class="hint" style="margin:0"><a href="join.html?ref=gate-film">Join free</a> or <a href="signin.html">sign in</a> to put your film on the shelf. It costs nothing.</p></div>
     </div>
     <div class="section-note">The film shelf</div>
     <div id="films"><div class="empty">Loading...</div></div>
@@ -261,6 +261,8 @@
       </div>
     </div>
 
+    <div class="section-note">My Atlas (saved places)</div>
+    <div id="mySaved"><div class="empty">Nothing yet.</div></div>
     <div class="section-note">My sightings (all statuses)</div>
     <div id="mySightings"><div class="empty">Nothing yet.</div></div>
     <div class="section-note">My films</div>
@@ -332,8 +334,8 @@
   <div class="actions" style="margin-top:8px"><span class="hint"><span id="authFixClose" style="color:var(--red);cursor:pointer">Close</span> · Still stuck? <a href="mailto:hello@horrormeet.com">Email the house</a> and he'll let you in by hand.</span></div>
 </div>
 <div class="toast" id="toast"></div>
-<script type="module" src="app.js?v=29"></script>
+<script type="module" src="app.js?v=30"></script>
 <script defer src="nav.js?v=10"></script>
-<script type="module" src="live.js?v=5"></script>
+<script type="module" src="live.js?v=6"></script>
 </body>
 </html>

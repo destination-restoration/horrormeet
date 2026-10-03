@@ -6,7 +6,7 @@
 <title>Register · HorrorMeet</title>
 <meta name="theme-color" content="#0b0b0e">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Frijole&family=Rye&display=swap">
-<link rel="stylesheet" href="styles.css?v=28">
+<link rel="stylesheet" href="styles.css?v=29">
 <style>
   .join-title{font-family:'Frijole',Impact,fantasy;font-size:26px;color:var(--white);text-shadow:3px 3px 0 var(--red-deep);margin:22px 0 4px}
   .join-sub{color:var(--dim);font-size:14.5px;margin:0 0 18px}
@@ -129,7 +129,7 @@ $('jSend').addEventListener('click', async () => {
   try { firstTouch = JSON.parse(localStorage.getItem('hm_ref') || '{}') || {}; } catch (_) {}
   const { error } = await sb.auth.signUp({ email, password, options: {
     emailRedirectTo: 'https://horrormeet.com',
-    data: { ref: firstTouch.ref || 'direct', landing: firstTouch.landing || null },
+    data: { ref: firstTouch.ref || new URLSearchParams(location.search).get('ref') || 'direct', landing: firstTouch.landing || null, gate: (() => { try { return localStorage.getItem('hm_gate'); } catch (_) { return null; } })() },
   } });
   $('jSend').disabled = false;
   if (error) return toast(error.message.includes('already registered') ? 'That email already has an account. Sign in on the main page.' : error.message);
@@ -148,6 +148,6 @@ $('jSend').addEventListener('click', async () => {
 $('jBack').addEventListener('click', () => { $('step2').classList.add('hidden'); $('step1').classList.remove('hidden'); });
 </script>
 <script defer src="nav.js?v=10"></script>
-<script type="module" src="live.js?v=5"></script>
+<script type="module" src="live.js?v=6"></script>
 </body>
 </html>

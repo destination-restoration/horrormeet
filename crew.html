@@ -6,7 +6,7 @@
 <title>The Crew · HorrorMeet</title>
 <meta name="theme-color" content="#0b0b0e">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Frijole&family=Rye&display=swap">
-<link rel="stylesheet" href="styles.css?v=28">
+<link rel="stylesheet" href="styles.css?v=29">
 <style>
   .cw-title{font-family:'Frijole',Impact,fantasy;font-size:30px;color:var(--white);text-shadow:3px 3px 0 var(--red-deep);margin:24px 0 4px;line-height:1.2}
   .cw-sub{font-family:'Rye',Georgia,serif;color:var(--red);font-size:13px;letter-spacing:.16em;text-transform:uppercase;margin:0 0 16px}
@@ -71,7 +71,7 @@
       <div class="row"><textarea id="cDetails" rows="3" maxlength="2000" placeholder="Details, how to apply, contact via the board"></textarea></div>
       <div class="actions"><button class="btn" id="cBtn">Submit for review</button><span class="hint">Reviewed before posting. Real productions only. <a href="rules.html">Rules</a>.</span></div>
     </div>
-    <div id="callAnon"><p class="hint" style="margin:0">Sign in on the <a href="index.html">main board</a> to post a casting call.</p></div>
+    <div id="callAnon"><p class="hint" style="margin:0"><a href="join.html?ref=gate-crew">Join free</a> or <a href="signin.html">sign in</a> to post a casting call.</p></div>
   </div>
 
   <div class="section-note">Open casting calls</div>
@@ -138,6 +138,6 @@ async function loadCalls() {
 loadCrew(); loadCalls();
 </script>
 <script defer src="nav.js?v=10"></script>
-<script type="module" src="live.js?v=5"></script>
+<script type="module" src="live.js?v=6"></script>
 </body>
 </html>

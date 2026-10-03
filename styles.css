@@ -475,3 +475,8 @@ header.app.doors-hidden nav.tabs, header.app.doors-hidden .guides{max-height:non
 .card.past .going{color:var(--faint)}
 #mapHits button[disabled]{color:var(--dim);cursor:default;line-height:1.5}
 #mapHits button[disabled] a{pointer-events:auto}
+
+/* My Atlas save button inside a map popup */
+.savepin{display:block;width:100%;margin:8px 0 4px;padding:6px 10px;background:transparent;border:1px solid var(--red);color:var(--white);font:600 12.5px/1.2 inherit;letter-spacing:.04em;cursor:pointer}
+.savepin:hover{background:var(--red)}
+.savepin:disabled{opacity:.6;cursor:wait}
