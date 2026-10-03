@@ -1,4 +1,5 @@
 import { sb } from './app-core.js';
+import './track.js';
 
 /* member counter chip: visible to everyone, signed in or not */
 const bar = document.querySelector('.app-bar');

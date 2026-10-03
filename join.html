@@ -125,7 +125,12 @@ $('jSend').addEventListener('click', async () => {
   const { data: taken } = await sb.from('profiles').select('id').ilike('username', u).limit(1);
   if (taken && taken.length) return toast('That username is taken.');
   $('jSend').disabled = true;
-  const { error } = await sb.auth.signUp({ email, password, options: { emailRedirectTo: 'https://horrormeet.com' } });
+  let firstTouch = {};
+  try { firstTouch = JSON.parse(localStorage.getItem('hm_ref') || '{}') || {}; } catch (_) {}
+  const { error } = await sb.auth.signUp({ email, password, options: {
+    emailRedirectTo: 'https://horrormeet.com',
+    data: { ref: firstTouch.ref || 'direct', landing: firstTouch.landing || null },
+  } });
   $('jSend').disabled = false;
   if (error) return toast(error.message.includes('already registered') ? 'That email already has an account. Sign in on the main page.' : error.message);
   localStorage.setItem('hm_join', JSON.stringify({
@@ -143,6 +148,6 @@ $('jSend').addEventListener('click', async () => {
 $('jBack').addEventListener('click', () => { $('step2').classList.add('hidden'); $('step1').classList.remove('hidden'); });
 </script>
 <script defer src="nav.js?v=10"></script>
-<script type="module" src="live.js?v=4"></script>
+<script type="module" src="live.js?v=5"></script>
 </body>
 </html>
