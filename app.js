@@ -217,6 +217,23 @@ async function loadMap() {
   }
   renderMapFilters();
   drawPins();
+  /* deep link from a static atlas page: index.html?spot=123#map opens that pin */
+  const want = Number(new URLSearchParams(location.search).get('spot'));
+  if (want) {
+    const s = mapIndex.find((r) => r.id === want);
+    /* pins are added to the cluster in chunks, so wait until this one is actually in it */
+    if (s) {
+      let tries = 0;
+      const open = () => {
+        const m = mapMarkers.get(s.id);
+        if (m && mapCluster.hasLayer(m)) flyToSpot(s);
+        else if (tries++ < 40) setTimeout(open, 150);
+        else map.setView([s.lat, s.lng], 15);
+      };
+      open();
+    }
+    history.replaceState(null, '', location.pathname + '#map');
+  }
 }
 
 const FILTERS = [
@@ -310,9 +327,14 @@ function flyToSpot(s) {
   map.setView([s.lat, s.lng], 15);
   const m = mapMarkers.get(s.id);
   if (!m) return;
-  // the marker may be inside a cluster: ask the cluster to reveal it first
-  if (mapCluster && mapCluster.zoomToShowLayer) mapCluster.zoomToShowLayer(m, () => m.openPopup());
-  else m.openPopup();
+  /* pins are circle markers, which zoomToShowLayer cannot see (it looks for an
+     icon), so its callback never fired. after the zoom settles, open the popup
+     directly if the pin is on screen, or break its cluster open first. */
+  setTimeout(() => {
+    const vp = mapCluster && mapCluster.getVisibleParent ? mapCluster.getVisibleParent(m) : m;
+    if (vp && vp !== m && vp.spiderfy) { vp.spiderfy(); setTimeout(() => m.openPopup(), 300); }
+    else m.openPopup();
+  }, 450);
 }
 
 async function fillPopup(marker, id) {
