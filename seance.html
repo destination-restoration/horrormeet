@@ -93,7 +93,7 @@ const esc = (v) => String(v == null ? '' : v).replace(/[&<>"']/g, (c) =>
    than hosted here: a static site has no business serving video, and YouTube is
    where people search for it. phone-shot Q&As are vertical, so they embed tall. */
 const { data, error } = await sb.from('seance_sittings')
-  .select('kind,guest,guest_role,film,youtube_id,summary,happened_at,featured,event,venue,panelists,host,vertical')
+  .select('kind,slug,guest,guest_role,film,youtube_id,summary,happened_at,featured,event,venue,panelists,host,vertical')
   .eq('status', 'published')
   .order('featured', { ascending: false })
   .order('happened_at', { ascending: false, nullsFirst: false })
@@ -117,6 +117,7 @@ const card = (r) => {
     + (r.panelists ? '<div class="panel"><span>On stage:</span> ' + esc(r.panelists) + '</div>' : '')
     + (r.host ? '<div class="panel"><span>Hosted by</span> ' + esc(r.host) + '</div>' : '')
     + (r.summary ? '<p>' + esc(r.summary) + '</p>' : '')
+    + (r.slug ? '<p><a href="qa/' + encodeURIComponent(r.slug) + '.html">Read what was said, with chapters \u2192</a></p>' : '')
     + '</div></div>';
 };
 const count = (n, one, many) => n + ' ' + (n === 1 ? one : many) + ' on the record';
