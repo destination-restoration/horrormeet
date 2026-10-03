@@ -1,4 +1,4 @@
-const CACHE = 'horrormeet-v59';
+const CACHE = 'horrormeet-v60';
 const SHELL = ['./index.html', './signin.html', './join.html', './styles.css?v=28', './app.js?v=27', './search.html', './press.html', './rules.html', './manifest.webmanifest'];
 self.addEventListener('install', (e) => {
   e.waitUntil(caches.open(CACHE).then((c) => c.addAll(SHELL)));
