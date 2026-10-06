@@ -1045,7 +1045,9 @@ document.querySelectorAll('[data-open]').forEach((el) =>
 document.addEventListener('click', (e) => {
   const b = e.target.closest('.watchBtn');
   if (!b) return;
-  sb.rpc('count_watch_click', { film_id: Number(b.dataset.film) });
+  /* supabase-js only sends a query once it is awaited or then'd; the bare call
+     here was never sent, which is why every film showed 0 viewers */
+  sb.rpc('count_watch_click', { film_id: Number(b.dataset.film) }).then(() => {}, () => {});
   const tag = b.parentElement.querySelector('span.hint');
   if (tag) {
     const n = (parseInt(tag.textContent.replace(/\D/g, ''), 10) || 0) + 1;
