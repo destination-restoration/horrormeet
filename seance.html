@@ -29,6 +29,7 @@
   .sit .panel span{color:var(--faint)}
   .sx-h{font-family:'Rye',Georgia,serif;color:var(--white);font-size:20px;letter-spacing:.06em;margin:34px 0 4px}
   .sx-h + .hint{margin:0 0 6px}
+  .prem{font-family:'Rye',Georgia,serif;color:var(--white);background:var(--red);display:inline-block;padding:3px 9px;font-size:12px;letter-spacing:.08em;margin:0 0 8px}
   #sitCount,#qaCount{font-family:'Rye',Georgia,serif;font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--faint);margin:20px 0 0}
 </style>
 </head>
@@ -93,7 +94,7 @@ const esc = (v) => String(v == null ? '' : v).replace(/[&<>"']/g, (c) =>
    than hosted here: a static site has no business serving video, and YouTube is
    where people search for it. phone-shot Q&As are vertical, so they embed tall. */
 const { data, error } = await sb.from('seance_sittings')
-  .select('kind,slug,guest,guest_role,film,youtube_id,summary,happened_at,featured,event,venue,panelists,host,vertical')
+  .select('kind,slug,guest,guest_role,film,youtube_id,summary,happened_at,featured,event,venue,panelists,host,vertical,premiere_at')
   .eq('status', 'published')
   .order('featured', { ascending: false })
   .order('happened_at', { ascending: false, nullsFirst: false })
@@ -110,8 +111,18 @@ const card = (r) => {
       + 'allow="accelerometer; clipboard-write; encrypted-media; picture-in-picture"></iframe></div>'
     : '';
   const meta = [when, r.kind === 'qa' ? where : r.film].filter(Boolean).join(' · ');
-  return '<div class="sit' + (r.featured ? ' featured' : '') + '">' + vid + '<div class="body">'
-    + '<h3>' + esc(r.guest) + (r.featured ? '<span class="badge">latest</span>' : '') + '</h3>'
+  /* a scheduled YouTube Premiere: the embed shows YouTube's own waiting room,
+     and the card carries the time plus a live countdown */
+  const pAt = r.premiere_at ? new Date(r.premiere_at) : null;
+  const upcoming = pAt && pAt.getTime() > Date.now() - 3 * 3600e3;
+  const pLine = upcoming
+    ? '<div class="prem" data-at="' + pAt.toISOString() + '">\u{1F56F} PREMIERE \u00b7 '
+      + esc(pAt.toLocaleString('en-US', { weekday: 'long', month: 'long', day: 'numeric', hour: 'numeric', minute: '2-digit', timeZone: 'America/Los_Angeles' }))
+      + ' PT <span class="cd"></span></div>'
+    : '';
+  return '<div class="sit' + (r.featured || upcoming ? ' featured' : '') + '"' + (upcoming ? ' id="premiere"' : '') + '>' + vid + '<div class="body">'
+    + pLine
+    + '<h3>' + esc(r.guest) + (upcoming ? '<span class="badge">premiere</span>' : r.featured ? '<span class="badge">latest</span>' : '') + '</h3>'
     + (r.guest_role ? '<div class="who">' + esc(r.guest_role) + '</div>' : '')
     + (meta ? '<div class="when">' + esc(meta) + '</div>' : '')
     + (r.panelists ? '<div class="panel"><span>On stage:</span> ' + esc(r.panelists) + '</div>' : '')
@@ -127,8 +138,10 @@ const sitBox = document.getElementById('sittings');
 if (error) {
   qaBox.innerHTML = '<div class="rule">The circle is quiet right now. ' + esc(error.message) + '</div>';
 } else {
-  const qas = (data || []).filter((r) => r.kind === 'qa');
-  const sits = (data || []).filter((r) => r.kind !== 'qa');
+  const soon = (r) => (r.premiere_at && new Date(r.premiere_at).getTime() > Date.now() - 3 * 3600e3 ? 0 : 1);
+  const rows = (data || []).slice().sort((a, b) => soon(a) - soon(b));
+  const qas = rows.filter((r) => r.kind === 'qa');
+  const sits = rows.filter((r) => r.kind !== 'qa');
   if (qas.length) {
     document.getElementById('qaCount').textContent = count(qas.length, 'Q&A', 'Q&As');
     qaBox.innerHTML = qas.map(card).join('');
@@ -144,8 +157,17 @@ if (error) {
       + 'Watch the board for the first summoning.</div>';
   }
 }
+const tick = () => document.querySelectorAll('.prem').forEach((el) => {
+  const ms = new Date(el.dataset.at).getTime() - Date.now();
+  const cd = el.querySelector('.cd');
+  if (ms <= 0) { cd.textContent = ms > -3 * 3600e3 ? '\u00b7 LIVE NOW' : ''; return; }
+  const h = Math.floor(ms / 3600e3), m = Math.floor((ms % 3600e3) / 60e3);
+  cd.textContent = '\u00b7 in ' + (h >= 24 ? Math.floor(h / 24) + 'd ' + (h % 24) + 'h' : h + 'h ' + m + 'm');
+});
+tick(); setInterval(tick, 30e3);
+if (location.hash === '#premiere') document.getElementById('premiere')?.scrollIntoView({ behavior: 'smooth' });
 </script>
 <script defer src="nav.js?v=10"></script>
-<script type="module" src="live.js?v=6"></script>
+<script type="module" src="live.js?v=7"></script>
 </body>
 </html>
