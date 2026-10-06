@@ -12,7 +12,7 @@
 <link rel="icon" href="icon-180.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Frijole&family=Rye&display=swap">
-<link rel="stylesheet" href="styles.css?v=29">
+<link rel="stylesheet" href="styles.css?v=30">
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 <script defer src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css">
@@ -209,6 +209,14 @@
         <div class="row"><textarea id="fSynopsis" rows="3" maxlength="2000" placeholder="Logline / synopsis"></textarea></div>
         <div class="row"><input id="fWatch" maxlength="300" placeholder="Watch link (YouTube, Vimeo, Tubi, your site...)"></div>
         <div class="row"><input id="fTrailer" maxlength="300" placeholder="Trailer link (optional)"></div>
+        <div class="row"><label class="hint" style="display:block;margin-bottom:4px">Where people can follow you (optional). Shown on your film card, and we count every visit we send.</label>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+            <input id="fSocIg" maxlength="60" placeholder="Instagram @handle" autocapitalize="off" spellcheck="false">
+            <input id="fSocTt" maxlength="60" placeholder="TikTok @handle" autocapitalize="off" spellcheck="false">
+            <input id="fSocYt" maxlength="80" placeholder="YouTube @handle" autocapitalize="off" spellcheck="false">
+            <input id="fSocX" maxlength="60" placeholder="X @handle" autocapitalize="off" spellcheck="false">
+          </div>
+          <input id="fSocSite" maxlength="200" placeholder="Website (https://...)" style="margin-top:8px"></div>
         <div class="row"><label class="hint">Poster (optional)</label><input id="fPoster" type="file" accept="image/*"></div>
         <div class="actions"><button class="btn" id="filmBtn">Submit for review</button><span class="hint">Reviewed before posting. You must hold the rights. <a href="terms.html">Terms</a>.</span></div>
       </div>
@@ -335,7 +343,7 @@
   <div class="actions" style="margin-top:8px"><span class="hint"><span id="authFixClose" style="color:var(--red);cursor:pointer">Close</span> · Still stuck? <a href="mailto:hello@horrormeet.com">Email the house</a> and he'll let you in by hand.</span></div>
 </div>
 <div class="toast" id="toast"></div>
-<script type="module" src="app.js?v=32"></script>
+<script type="module" src="app.js?v=33"></script>
 <script defer src="nav.js?v=10"></script>
 <script type="module" src="live.js?v=7"></script>
 </body>

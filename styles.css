@@ -480,3 +480,7 @@ header.app.doors-hidden nav.tabs, header.app.doors-hidden .guides{max-height:non
 .savepin{display:block;width:100%;margin:8px 0 4px;padding:6px 10px;background:transparent;border:1px solid var(--red);color:var(--white);font:600 12.5px/1.2 inherit;letter-spacing:.04em;cursor:pointer}
 .savepin:hover{background:var(--red)}
 .savepin:disabled{opacity:.6;cursor:wait}
+
+/* filmmaker socials on film cards */
+.socials{margin-top:8px;font-size:13.5px;color:var(--dim)}
+.socials a{color:var(--white);font-weight:600}

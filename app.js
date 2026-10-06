@@ -776,6 +776,33 @@ async function loadReplies(id, card) {
 }
 
 /* ---------- films ---------- */
+/* filmmaker socials: handles only (no free-text links), so the shelf cannot turn into a spam channel */
+const SOCIALS = [
+  ['ig', 'Instagram', (h) => 'https://www.instagram.com/' + h + '/'],
+  ['tt', 'TikTok', (h) => 'https://www.tiktok.com/@' + h],
+  ['yt', 'YouTube', (h) => 'https://www.youtube.com/@' + h],
+  ['x', 'X', (h) => 'https://x.com/' + h],
+];
+function cleanHandle(v) {
+  let h = (v || '').trim();
+  if (!h) return null;
+  h = h.replace(/^https?:\/\/(www\.)?(instagram\.com|tiktok\.com|youtube\.com|x\.com|twitter\.com)\//i, '');
+  h = h.replace(/^@/, '').replace(/[/?#].*$/, '').replace(/^@/, '');
+  return /^[A-Za-z0-9._-]{1,40}$/.test(h) ? h : null;
+}
+function cleanSite(v) {
+  const u = (v || '').trim();
+  if (!u) return null;
+  try { const x = new URL(u); return x.protocol === 'https:' || x.protocol === 'http:' ? x.href.slice(0, 200) : null; } catch (_) { return null; }
+}
+function socialLinks(f) {
+  const s = f.socials || {};
+  const links = SOCIALS.filter(([k]) => s[k]).map(([k, label, url]) =>
+    `<a class="soclink" data-film="${f.id}" href="${esc(url(s[k]))}" target="_blank" rel="noopener">${label}</a>`);
+  if (s.site) links.push(`<a class="soclink" data-film="${f.id}" href="${esc(s.site)}" target="_blank" rel="nofollow noopener">Website</a>`);
+  return links.length ? `<div class="socials">Follow the filmmaker: ${links.join(' · ')}</div>` : '';
+}
+
 $('filmBtn')?.addEventListener('click', async () => {
   if (!session) return joinPrompt('film');
   const title = $('fTitle').value.trim();
@@ -800,10 +827,15 @@ $('filmBtn')?.addEventListener('click', async () => {
       roles: $('fRoles').value.trim() || null,
       synopsis: $('fSynopsis').value.trim() || null,
       trailer_url: $('fTrailer').value.trim() || null,
-      poster_url
+      poster_url,
+      socials: Object.fromEntries([
+        ['ig', cleanHandle($('fSocIg').value)], ['tt', cleanHandle($('fSocTt').value)],
+        ['yt', cleanHandle($('fSocYt').value)], ['x', cleanHandle($('fSocX').value)],
+        ['site', cleanSite($('fSocSite').value)],
+      ].filter(([, v]) => v))
     });
     if (error) throw error;
-    ['fTitle','fYear','fRuntime','fSubgenre','fRoles','fSynopsis','fWatch','fTrailer','fPoster'].forEach((id) => ($(id).value = ''));
+    ['fTitle','fYear','fRuntime','fSubgenre','fRoles','fSynopsis','fWatch','fTrailer','fPoster','fSocIg','fSocTt','fSocYt','fSocX','fSocSite'].forEach((id) => ($(id).value = ''));
     toast('Submitted. A mod will review it before it hits the shelf.');
   } catch (e) { toast(e.message || 'Submission failed.'); }
   $('filmBtn').disabled = false;
@@ -818,7 +850,7 @@ async function loadFilms() {
   });
   const { data, error } = await sb
     .from('films')
-    .select('id,title,year,roles,synopsis,watch_url,trailer_url,poster_url,runtime_min,subgenre,featured,created_at,profiles!submitter(username)')
+    .select('id,title,year,roles,synopsis,watch_url,trailer_url,poster_url,runtime_min,subgenre,featured,created_at,watch_clicks,social_clicks,socials,profiles!submitter(username)')
     .eq('status', 'approved')
     .order('featured', { ascending: false })
     .order('created_at', { ascending: false })
@@ -847,6 +879,7 @@ async function loadFilms() {
           ${f.trailer_url ? `<a class="btn ghost" href="${esc(f.trailer_url)}" target="_blank" rel="noopener">Trailer</a>` : ''}
           <span class="hint watchcount" style="align-self:center;color:var(--white);font-weight:600">👁 HorrorMeet has sent ${f.watch_clicks || 0} viewer${(f.watch_clicks || 0) === 1 ? '' : 's'}</span>
         </div>
+        ${socialLinks(f)}${(f.social_clicks || 0) ? `<div class="hint" style="margin-top:2px">${f.social_clicks} visit${f.social_clicks === 1 ? '' : 's'} sent to the filmmaker's socials</div>` : ''}
       </div>
     </article>`).join('');
 }
@@ -1040,6 +1073,15 @@ document.querySelectorAll('[data-open]').forEach((el) =>
   el.textContent = `${pl(m.count, 'member')} inside · ${pl(s.count, 'sighting')} on record · ${pl(f.count, 'film')} on the shelf · founded 2026, Laurel Canyon`;
 })();
 
+
+/* social-link counter: one count per visitor per film per visit */
+document.addEventListener('click', (e) => {
+  const a = e.target.closest('.soclink');
+  if (!a) return;
+  const k = 'hm_fs_' + a.dataset.film;
+  try { if (sessionStorage.getItem(k)) return; sessionStorage.setItem(k, '1'); } catch (_) {}
+  sb.rpc('count_film_social', { film_id: Number(a.dataset.film) }).then(() => {}, () => {});
+});
 
 /* watch-click counter: every WATCH press is counted and shown on the card */
 document.addEventListener('click', (e) => {
