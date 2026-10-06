@@ -845,7 +845,7 @@ async function loadFilms() {
         <div class="admin-row">
           <a class="btn watchBtn" data-film="${f.id}" href="${esc(f.watch_url)}" target="_blank" rel="noopener">▶ Watch</a>
           ${f.trailer_url ? `<a class="btn ghost" href="${esc(f.trailer_url)}" target="_blank" rel="noopener">Trailer</a>` : ''}
-          <span class="hint" style="align-self:center">👁 sent ${f.watch_clicks || 0} viewer${(f.watch_clicks || 0) === 1 ? '' : 's'}</span>
+          <span class="hint watchcount" style="align-self:center;color:var(--white);font-weight:600">👁 HorrorMeet has sent ${f.watch_clicks || 0} viewer${(f.watch_clicks || 0) === 1 ? '' : 's'}</span>
         </div>
       </div>
     </article>`).join('');
@@ -1045,13 +1045,16 @@ document.querySelectorAll('[data-open]').forEach((el) =>
 document.addEventListener('click', (e) => {
   const b = e.target.closest('.watchBtn');
   if (!b) return;
+  /* one person, one count per visit, so the number shown to filmmakers is people sent, not taps */
+  const seenKey = 'hm_fw_' + b.dataset.film;
+  try { if (sessionStorage.getItem(seenKey)) return; sessionStorage.setItem(seenKey, '1'); } catch (_) {}
   /* supabase-js only sends a query once it is awaited or then'd; the bare call
      here was never sent, which is why every film showed 0 viewers */
   sb.rpc('count_watch_click', { film_id: Number(b.dataset.film) }).then(() => {}, () => {});
   const tag = b.parentElement.querySelector('span.hint');
   if (tag) {
     const n = (parseInt(tag.textContent.replace(/\D/g, ''), 10) || 0) + 1;
-    tag.textContent = `\u{1F441} sent ${n} viewer${n === 1 ? '' : 's'}`;
+    tag.textContent = `\u{1F441} HorrorMeet has sent ${n} viewer${n === 1 ? '' : 's'}`;
   }
 });
 

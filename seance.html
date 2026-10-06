@@ -29,6 +29,8 @@
   .sit .panel span{color:var(--faint)}
   .sx-h{font-family:'Rye',Georgia,serif;color:var(--white);font-size:20px;letter-spacing:.06em;margin:34px 0 4px}
   .sx-h + .hint{margin:0 0 6px}
+  .sit .views{color:var(--white);font-size:13.5px;margin-top:8px;font-weight:600}
+  .sit .views a{font-weight:600}
   .prem{font-family:'Rye',Georgia,serif;color:var(--white);background:var(--red);display:inline-block;padding:3px 9px;font-size:12px;letter-spacing:.08em;margin:0 0 8px}
   #sitCount,#qaCount{font-family:'Rye',Georgia,serif;font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--faint);margin:20px 0 0}
 </style>
@@ -86,6 +88,7 @@
 </main>
 <script type="module">
 import { sb } from './app-core.js';
+import { initSeanceCounters } from './viewcount.js';
 const esc = (v) => String(v == null ? '' : v).replace(/[&<>"']/g, (c) =>
   ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 
@@ -94,7 +97,7 @@ const esc = (v) => String(v == null ? '' : v).replace(/[&<>"']/g, (c) =>
    than hosted here: a static site has no business serving video, and YouTube is
    where people search for it. phone-shot Q&As are vertical, so they embed tall. */
 const { data, error } = await sb.from('seance_sittings')
-  .select('kind,slug,guest,guest_role,film,youtube_id,summary,happened_at,featured,event,venue,panelists,host,vertical,premiere_at')
+  .select('id,kind,slug,guest,guest_role,film,youtube_id,summary,happened_at,featured,event,venue,panelists,host,vertical,premiere_at')
   .eq('status', 'published')
   .order('featured', { ascending: false })
   .order('happened_at', { ascending: false, nullsFirst: false })
@@ -106,7 +109,7 @@ const card = (r) => {
     : '';
   const where = [r.event, r.venue].filter(Boolean).join(', ');
   const vid = r.youtube_id
-    ? '<div class="vid' + (r.vertical ? ' tall' : '') + '"><iframe src="https://www.youtube-nocookie.com/embed/'
+    ? '<div class="vid' + (r.vertical ? ' tall' : '') + '"><iframe data-seance="' + r.id + '" src="https://www.youtube-nocookie.com/embed/'
       + encodeURIComponent(r.youtube_id) + '" title="' + esc(r.guest) + ' on HorrorMeet" loading="lazy" allowfullscreen '
       + 'allow="accelerometer; clipboard-write; encrypted-media; picture-in-picture"></iframe></div>'
     : '';
@@ -128,6 +131,8 @@ const card = (r) => {
     + (r.panelists ? '<div class="panel"><span>On stage:</span> ' + esc(r.panelists) + '</div>' : '')
     + (r.host ? '<div class="panel"><span>Hosted by</span> ' + esc(r.host) + '</div>' : '')
     + (r.summary ? '<p>' + esc(r.summary) + '</p>' : '')
+    + (r.youtube_id ? '<div class="views"><span data-seance-count="' + r.id + '"></span> \u00b7 <a data-seance-yt="' + r.id
+      + '" href="https://www.youtube.com/watch?v=' + encodeURIComponent(r.youtube_id) + '" target="_blank" rel="noopener">Watch on YouTube \u2197</a></div>' : '')
     + (r.slug ? '<p><a href="qa/' + encodeURIComponent(r.slug) + '.html">Read what was said, with chapters \u2192</a></p>' : '')
     + '</div></div>';
 };
@@ -157,6 +162,7 @@ if (error) {
       + 'Watch the board for the first summoning.</div>';
   }
 }
+initSeanceCounters();
 const tick = () => document.querySelectorAll('.prem').forEach((el) => {
   const ms = new Date(el.dataset.at).getTime() - Date.now();
   const cd = el.querySelector('.cd');

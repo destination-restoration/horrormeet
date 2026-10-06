@@ -339,7 +339,7 @@ def yt_seconds(ts):
 
 
 def build_qa(write):
-    rows = [r for r in get('seance_sittings', 'select=kind,slug,guest,guest_role,film,youtube_id,summary,recap,chapters,'
+    rows = [r for r in get('seance_sittings', 'select=id,kind,slug,guest,guest_role,film,youtube_id,summary,recap,chapters,'
                                                 'happened_at,event,venue,panelists,host,vertical,duration,uploaded_at&status=eq.published')
             if r.get('slug') and r.get('youtube_id')]
     clean_dir('qa')
@@ -369,8 +369,10 @@ def build_qa(write):
   {f'<p class="hint"><b style="color:var(--white)">On stage:</b> {e(r["panelists"])}</p>' if r.get('panelists') else ''}
   {f'<p class="hint"><b style="color:var(--white)">Hosted by</b> {e(r["host"])}</p>' if r.get('host') else ''}
   <div style="position:relative;width:100%;{tall};background:#000">
-    <iframe src="https://www.youtube-nocookie.com/embed/{vid}" title="{e(r['guest'])}" loading="lazy" allowfullscreen allow="accelerometer; clipboard-write; encrypted-media; picture-in-picture" style="position:absolute;inset:0;width:100%;height:100%;border:0"></iframe>
+    <iframe data-seance="{r['id']}" src="https://www.youtube-nocookie.com/embed/{vid}" title="{e(r['guest'])}" loading="lazy" allowfullscreen allow="accelerometer; clipboard-write; encrypted-media; picture-in-picture" style="position:absolute;inset:0;width:100%;height:100%;border:0"></iframe>
   </div>
+  <p class="hint" style="color:var(--white);font-weight:600"><span data-seance-count="{r['id']}"></span> · <a data-seance-yt="{r['id']}" href="https://www.youtube.com/watch?v={vid}" target="_blank" rel="noopener">Watch on YouTube ↗</a></p>
+  <script type="module">import {{ initSeanceCounters }} from '../viewcount.js'; initSeanceCounters();</script>
   <div class="at-h2">What was said</div>
   <div class="at-body">{paras}</div>
   {chap}
