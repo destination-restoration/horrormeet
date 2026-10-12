@@ -14,6 +14,15 @@
   .sold .price{background:var(--faint)}
   .sold img{filter:grayscale(1) brightness(.7)}
   .cat{color:var(--red);font-size:11.5px;letter-spacing:.1em;text-transform:uppercase}
+  .gshop-intro{margin:0 4px 4px}
+  .gitem{display:flex;gap:14px;padding:14px}
+  .gitem img{width:110px;height:auto;aspect-ratio:2/3;object-fit:cover;flex:none;align-self:flex-start;border:2px solid var(--line);background:var(--bg)}
+  .gitem .gbody{min-width:0}
+  .gitem h3{margin:2px 0 6px}
+  .gitem .body-text{font-size:14px;margin-top:6px}
+  .gitem .btn{display:inline-block;margin-top:10px;text-decoration:none}
+  .gsent{margin-left:8px}
+  @media (max-width:480px){ .gitem img{width:84px} }
 </style>
 </head>
 <body>
@@ -47,6 +56,12 @@
 <main class="wrap">
   <div class="mx-title">THE ESTATE SALE</div>
   <div class="mx-sub">Buy · sell · trade the macabre · member to member</div>
+
+  <section id="from-the-seance" class="hidden">
+    <div class="section-note">From the Séance</div>
+    <p class="hint gshop-intro">Work made by the guests who sat at our table. Each link goes straight to the guest's own store: they sell it, they keep every dollar, and HorrorMeet takes no cut. <a href="seance.html">Watch the Séance</a>.</p>
+    <div id="gshop"></div>
+  </section>
 
   <div class="composer">
     <h3>List an item</h3>
@@ -154,6 +169,40 @@ async function load() {
   });
 }
 load();
+
+/* ---------- from the séance: guests' own work, linked out to their stores.
+   every click counts once per visit, so we can show a guest how many readers
+   HorrorMeet sent them. ---------- */
+async function loadShop() {
+  const { data } = await sb.from('guest_shop')
+    .select('id,guest,guest_note,title,year,kind,formats,blurb,cover_url,buy_url,store,clicks')
+    .eq('active', true).order('sort_order').order('id');
+  if (!data?.length) return;
+  $('gshop').innerHTML = data.map((g) => `
+    <div class="card"><div class="gitem">
+      ${g.cover_url ? `<img src="${esc(g.cover_url)}" alt="${esc(g.title)} cover" loading="lazy" width="110" height="165">` : ''}
+      <div class="gbody">
+        <div class="post-head"><span class="u">${esc(g.guest)}</span>${g.guest_note ? ' · <span class="cat">' + esc(g.guest_note) + '</span>' : ''}</div>
+        <h3>${esc(g.title)}${g.year ? ' <span class="hint">(' + g.year + ')</span>' : ''}</h3>
+        <div class="cat">${esc(g.kind)}${g.formats ? ' · ' + esc(g.formats) : ''}</div>
+        ${g.blurb ? `<p class="body-text">${esc(g.blurb)}</p>` : ''}
+        <a class="btn gbuy" data-id="${g.id}" href="${esc(g.buy_url)}" target="_blank" rel="noopener">Get it on ${esc(g.store)}</a>${g.clicks > 0 ? `<span class="hint gsent">${g.clicks.toLocaleString('en-US')} sent from HorrorMeet</span>` : ''}
+      </div>
+    </div></div>`).join('');
+  $('from-the-seance').classList.remove('hidden');
+  if (location.hash === '#from-the-seance') {
+    const h = document.querySelector('header.app')?.offsetHeight || 0;
+    window.scrollTo({ top: $('from-the-seance').getBoundingClientRect().top + scrollY - h - 8 });
+  }
+}
+$('gshop').addEventListener('click', (e) => {
+  const a = e.target.closest('.gbuy');
+  if (!a) return;
+  const key = 'hm_gs_' + a.dataset.id;
+  try { if (sessionStorage.getItem(key)) return; sessionStorage.setItem(key, '1'); } catch (_) {}
+  sb.rpc('count_shop_click', { item_id: Number(a.dataset.id) }).then(() => {}, () => {});
+});
+loadShop();
 
 /* ---------- dead letters: member-to-member DMs about listings ---------- */
 let dmTarget = null;

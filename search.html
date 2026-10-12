@@ -71,8 +71,10 @@ const KINDS = {
   board:    { label: 'The board',  tab: 'index.html#board' },
   sighting: { label: 'Sightings',  tab: 'index.html#feed' },
   meetup:   { label: 'Meetups',    tab: 'index.html#meetups' },
+  seance:   { label: 'The Séance', tab: 'seance.html' },
+  shop:     { label: 'From the Séance (Estate Sale)', tab: 'market.html#from-the-seance' },
 };
-const ORDER = ['news', 'atlas', 'film', 'vault', 'morgue', 'board', 'sighting', 'meetup'];
+const ORDER = ['news', 'seance', 'atlas', 'film', 'shop', 'vault', 'morgue', 'board', 'sighting', 'meetup'];
 
 let rows = [], only = 'all', timer = null, lastQ = '';
 
