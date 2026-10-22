@@ -232,10 +232,29 @@ async function loadReports() {
     <div class="card" data-id="${r.id}"><div class="pad">
       <div class="post-head">${esc(r.target_type)} #${r.target_id}</div>
       <p class="body-text">${esc(r.reason || 'no reason given')}</p>
-      <div class="admin-row"><button class="btn danger pull">Pull content</button></div>
+      ${r.target_type === 'dm_thread'
+        ? `<div class="admin-row"><button class="btn readDm">Read the conversation</button></div><div class="dmView"></div>`
+        : `<div class="admin-row"><button class="btn danger pull">Pull content</button></div>`}
     </div></div>`).join('') : `<div class="empty">No reports. Suspiciously quiet.</div>`;
   $('reports').querySelectorAll('.card').forEach((c, i) => {
-    c.querySelector('.pull').onclick = async () => {
+    const rd = c.querySelector('.readDm');
+    if (rd) rd.onclick = async () => {
+      const r = data[i];
+      const [{ data: msgs, error }, { data: people }] = await Promise.all([
+        sb.rpc('dm_admin_thread', { p_thread: r.target_id }),
+        sb.rpc('dm_admin_thread_people', { p_thread: r.target_id })]);
+      if (error) return toast(error.message);
+      const view = c.querySelector('.dmView');
+      view.innerHTML = (msgs || []).map((m) => `<div class="letter"><div class="lhead"><b>@${esc(m.sender_username)}</b> · ${new Date(m.created_at).toLocaleString()}</div><div class="lbody">${esc(m.body)}</div></div>`).join('')
+        + `<div class="admin-row">${(people || []).map((p) => `<button class="btn danger banDm" data-user="${p.user_id}" data-name="${esc(p.username)}">Take letters away from @${esc(p.username)}</button>`).join('')}</div>`;
+      view.querySelectorAll('.banDm').forEach((b) => b.onclick = async () => {
+        if (!confirm('Turn letters off for @' + b.dataset.name + ' permanently? Their letterbox closes and they cannot reopen it.')) return;
+        const { error: e2 } = await sb.rpc('dm_admin_ban', { p_user: b.dataset.user });
+        toast(e2 ? e2.message : 'Letters turned off for @' + b.dataset.name + '.');
+      });
+    };
+    const pl = c.querySelector('.pull');
+    if (pl) pl.onclick = async () => {
       const r = data[i];
       const table = { sighting: 'sightings', comment: 'comments', thread: 'threads', reply: 'thread_replies' }[r.target_type];
       await sb.from(table).update({ status: 'removed' }).eq('id', r.target_id);

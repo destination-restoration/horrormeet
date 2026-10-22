@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Dead Letters · HorrorMeet</title>
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#0b0b0e">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Frijole&family=Rye&display=swap">
+<link rel="stylesheet" href="styles.css?v=30">
+<style>
+  .mx-title{font-family:'Frijole',Impact,fantasy;font-size:30px;color:var(--white);text-shadow:3px 3px 0 var(--red-deep);margin:24px 0 4px;line-height:1.2}
+  .mx-sub{font-family:'Rye',Georgia,serif;color:var(--red);font-size:13px;letter-spacing:.16em;text-transform:uppercase;margin:0 0 18px}
+  .rules-list{margin:0 0 12px 18px;padding:0;color:var(--dim);font-size:14px;line-height:1.5}
+  .tick{display:flex;gap:8px;align-items:center;margin:6px 0;font-size:14px;color:var(--text)}
+  .tick input{width:auto}
+  .lb-status{font-size:13px;color:var(--faint);margin:0 4px 10px}
+  .linkish{background:none;border:0;color:var(--red);text-decoration:underline;cursor:pointer;padding:0;font-size:13px;box-shadow:none}
+  .lb-tabs{display:flex;gap:8px;margin:12px 0 4px}
+  .lb-tabs button{background:var(--black);color:var(--dim);border:2px solid var(--line);padding:7px 14px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;font-size:13px;box-shadow:none}
+  .lb-tabs button.on{color:var(--white);border-color:var(--red)}
+  .lrow{cursor:pointer}
+  .lrow.unread{border-color:var(--red)}
+  .lrow.unread .lbody{color:var(--white);font-weight:600}
+  .letter.mine{border-color:#3a3740;background:transparent}
+  .tag{color:var(--red);font-size:11px;letter-spacing:.08em;text-transform:uppercase}
+  .thead{margin:6px 4px 8px;font-size:14px}
+  .spacer{flex:1}
+  .actions{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+</style>
+</head>
+<body>
+<header class="app"><div class="tagline-bar"><div class="inner">some letters should never be opened. these are fine.</div></div><div class="app-bar"><a class="logo" href="index.html#home">HORRORMEET</a></div>
+  <form class="sitesearch" action="search.html" method="get" role="search">
+    <input type="search" name="q" maxlength="80" placeholder="Search everything: a film, a haunted place, a name..." autocomplete="off" aria-label="Search HorrorMeet">
+    <button type="submit" aria-label="Search">Search</button>
+  </form>
+  <nav class="tabs">
+    <a class="tab" href="index.html#home"><span>Home</span></a>
+    <a class="tab" href="index.html#feed"><span>Sightings</span></a>
+    <a class="tab" href="index.html#board"><span>Board</span></a>
+    <a class="tab" href="index.html#films"><span>Films</span></a>
+    <a class="tab" href="index.html#news"><span>News</span></a>
+    <a class="tab" href="index.html#map"><span>Map</span></a>
+    <a class="tab" href="index.html#meetups"><span>Meetups</span></a>
+  </nav>
+  <div class="guides">
+    <a href="festivals.html"><span>🎟 CIRCUIT</span></a>
+    <a href="vault.html"><span>🗝 VAULT</span></a>
+    <a href="awards.html"><span>🏆 AWARDS</span></a>
+    <a href="seance.html"><span>🕯 SÉANCE</span></a>
+    <a href="market.html"><span>🩸 ESTATE SALE</span></a>
+    <a href="basement.html"><span>🔦 BASEMENT</span></a>
+    <a href="rooms.html"><span>🚪 ROOMS</span></a>
+    <a href="morgue.html"><span>⚰ MORGUE</span></a>
+    <a href="crew.html"><span>🎬 CREW</span></a>
+    <a href="press.html"><span>📰 PRESS</span></a>
+  </div>
+</header>
+
+<main class="wrap">
+  <div class="mx-title">DEAD LETTERS</div>
+  <div class="mx-sub">Private letters between members</div>
+
+  <div id="anon" class="composer hidden"><p class="hint" style="margin:0"><a href="join.html?ref=gate-letters">Join free</a> or <a href="signin.html">sign in</a> to send and receive letters.</p></div>
+
+  <!-- letterbox switch: off by default, opt-in with 18+ and the rules -->
+  <div id="optin" class="composer hidden">
+    <h3>Open your letterbox</h3>
+    <p class="hint" style="margin:0 0 10px">Letters are off until you turn them on. With your letterbox open, other members who have opened theirs can send you <b>one</b> letter as a request. Nothing else gets through unless you accept it. You can close your letterbox, decline, block or report at any time.</p>
+    <ul class="rules-list">
+      <li>Members only, 18 and older.</li>
+      <li>No harassment, threats, sexual messages to anyone who did not ask for them, or anything involving minors. Ever.</li>
+      <li>No spam, no selling outside the Estate Sale, no asking for money.</li>
+      <li>First letters cannot contain links. Text only, no pictures.</li>
+      <li>Reported conversations are read by the HorrorMeet moderators. Nothing else is.</li>
+    </ul>
+    <label class="tick"><input type="checkbox" id="oAdult"> I am 18 or older.</label>
+    <label class="tick"><input type="checkbox" id="oRules"> I agree to the letter rules above and the <a href="terms.html#dm">terms</a>.</label>
+    <div class="actions"><button class="btn" id="oBtn">Open my letterbox</button></div>
+  </div>
+
+  <div id="box" class="hidden">
+    <div class="lb-status"><span id="lbState"></span> <button class="linkish" id="lbToggle" type="button"></button></div>
+
+    <div id="compose" class="dm-compose hidden">
+      <p class="hint" style="margin:0 0 6px">To <b id="cTo" style="color:var(--red)"></b><span id="cNote"></span></p>
+      <textarea id="cBody" maxlength="2000" placeholder="Write your letter..."></textarea>
+      <div class="actions" style="margin-top:6px"><button class="btn" id="cSend">Send letter</button><button class="btn ghost" id="cCancel" type="button">Cancel</button></div>
+    </div>
+
+    <div class="lb-tabs">
+      <button type="button" data-tab="inbox" class="on">Letters <span id="nInbox"></span></button>
+      <button type="button" data-tab="requests">Requests <span id="nReq"></span></button>
+    </div>
+    <div id="list"><div class="empty">Checking the mail...</div></div>
+
+    <div id="thread" class="hidden">
+      <div class="thead"><button class="linkish" id="tBack" type="button">&larr; all letters</button> <b id="tWho"></b></div>
+      <div id="tMsgs"></div>
+      <div id="tReq" class="dm-compose hidden">
+        <p class="hint" style="margin:0 0 8px">This is a request. They cannot send anything else until you accept. Declining is silent: they are not told.</p>
+        <div class="actions"><button class="btn" data-act="accept">Accept</button><button class="btn ghost" data-act="decline">Decline</button><button class="btn ghost" data-act="block">Block</button><button class="btn ghost" data-act="report">Report</button></div>
+      </div>
+      <div id="tWait" class="hint hidden" style="margin:8px 4px">Waiting for them to accept. You can send more once they do.</div>
+      <div id="tReply" class="dm-compose hidden">
+        <textarea id="rBody" maxlength="2000" placeholder="Reply..."></textarea>
+        <div class="actions" style="margin-top:6px"><button class="btn" id="rSend">Send</button><span class="spacer"></span><button class="linkish" data-act="block" type="button">Block</button> · <button class="linkish" data-act="report" type="button">Report</button></div>
+      </div>
+    </div>
+  </div>
+
+  <p class="hint" style="margin-top:18px">Never send money, codes or personal details to anyone you met here. Meet in public. If something feels off, block first, then report.</p>
+</main>
+
+<div class="toast" id="toast"></div>
+<script type="module" src="letters.js?v=1"></script>
+<script defer src="nav.js?v=10"></script>
+<script type="module" src="live.js?v=8"></script>
+</body>
+</html>

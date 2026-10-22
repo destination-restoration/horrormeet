@@ -83,14 +83,7 @@
   <div class="section-note">On the block</div>
   <div id="listings"><div class="empty">Dusting off the shelves...</div></div>
 
-  <div id="dmBox" class="dm-compose hidden">
-    <p class="hint" style="margin:0 0 6px">Writing to <b id="dmTo" style="color:var(--red)"></b> about <span id="dmAbout"></span>. Arrange everything (price, payment, shipping, meetup) between yourselves: HorrorMeet is not part of the sale.</p>
-    <textarea id="dmBody" maxlength="2000" placeholder="Ask about condition, price, shipping..."></textarea>
-    <div class="actions" style="margin-top:6px"><button class="btn" id="dmSend">Send letter</button><button class="btn" id="dmCancel" style="background:transparent;color:var(--dim)">Cancel</button></div>
-  </div>
-
-  <div class="section-note" id="lettersNote" style="display:none">Your dead letters</div>
-  <div id="letters"></div>
+  <p class="hint" style="margin-top:14px">Conversations about listings live in your <a href="letters.html">dead letters</a>.</p>
 
   <p class="hint" style="margin-top:16px">HorrorMeet is a bulletin board, not a broker: we process no payments, hold no escrow, and are not a party to any sale. Meet in public, verify before you pay, and treat provenance claims with a collector's skepticism.</p>
   <footer>THE ESTATE SALE · a HorrorMeet market · <a href="press.html">press</a> · <a href="index.html">back to the board</a><br><span class="social">follow the house: <a href="https://www.instagram.com/horrormeetapp" target="_blank" rel="noopener">Instagram @horrormeetapp</a> · <a href="https://www.youtube.com/@HorrorMeet" target="_blank" rel="noopener">YouTube</a></span></footer>
@@ -158,7 +151,7 @@ async function load() {
       ${l.price_usd != null ? `<div class="price">$${Number(l.price_usd).toLocaleString()}</div>` : '<div class="price">Make an offer</div>'}
       ${l.description ? `<p class="body-text" style="font-size:14px;margin-top:8px">${esc(l.description)}</p>` : ''}
       <p class="hint" style="margin-top:6px">All sales happen directly between members, off-platform. HorrorMeet only hosts the listing.</p>
-      ${session && l.seller !== session.user.id && l.status === 'active' ? `<div class="admin-row"><button class="btn dmSeller" data-seller="${l.seller}" data-listing="${l.id}" data-title="${esc(l.title)}">\u2709 Message seller</button></div>` : ''}
+      ${session && l.seller !== session.user.id && l.status === 'active' && l.profiles?.username ? `<div class="admin-row"><a class="btn" href="letters.html?to=${encodeURIComponent(l.profiles.username)}&listing=${l.id}">\u2709 Message seller</a></div>` : ''}
       ${session && l.seller === session.user.id && l.status === 'active' ? `<div class="admin-row"><button class="btn markSold" data-id="${l.id}">Mark sold</button></div>` : ''}
     </div>${l.photo_url ? `<img class="photo" src="${esc(l.photo_url)}" loading="lazy" width="600" height="400" style="height:auto;aspect-ratio:3/2;object-fit:cover">` : ''}</div>`).join('')
     : `<div class="empty">The block is bare. List the first relic.</div>`;
@@ -203,57 +196,8 @@ $('gshop').addEventListener('click', (e) => {
   sb.rpc('count_shop_click', { item_id: Number(a.dataset.id) }).then(() => {}, () => {});
 });
 loadShop();
-
-/* ---------- dead letters: member-to-member DMs about listings ---------- */
-let dmTarget = null;
-document.getElementById('listings').addEventListener('click', (e) => {
-  const b = e.target.closest('.dmSeller');
-  if (!b) return;
-  dmTarget = { seller: b.dataset.seller, listing: Number(b.dataset.listing), title: b.dataset.title };
-  document.getElementById('dmTo').textContent = 'the seller';
-  document.getElementById('dmAbout').textContent = '\u201C' + dmTarget.title + '\u201D';
-  document.getElementById('dmBox').classList.remove('hidden');
-  document.getElementById('dmBox').scrollIntoView({ behavior: 'smooth', block: 'center' });
-});
-document.getElementById('dmCancel')?.addEventListener('click', () => document.getElementById('dmBox').classList.add('hidden'));
-document.getElementById('dmSend')?.addEventListener('click', async () => {
-  const body = document.getElementById('dmBody').value.trim();
-  if (!body || !dmTarget || !session) return;
-  const { error } = await sb.from('dm_messages').insert({ sender: session.user.id, recipient: dmTarget.seller, listing_id: dmTarget.listing, body });
-  if (error) return toast(error.message);
-  toast('Letter sent. Replies land here under Your dead letters.');
-  document.getElementById('dmBody').value = ''; document.getElementById('dmBox').classList.add('hidden');
-  loadLetters();
-});
-
-async function loadLetters() {
-  if (!session) return;
-  const { data } = await sb.from('dm_messages')
-    .select('id,sender,recipient,body,created_at,listing_id,from:profiles!sender(username),to:profiles!recipient(username)')
-    .or(`sender.eq.${session.user.id},recipient.eq.${session.user.id}`)
-    .order('created_at', { ascending: false }).limit(60);
-  if (!data?.length) return;
-  document.getElementById('lettersNote').style.display = '';
-  document.getElementById('letters').innerHTML = data.map(msg => {
-    const mine = msg.sender === session.user.id;
-    const other = mine ? (msg.to?.username || '?') : (msg.from?.username || '?');
-    return `<div class="letter"><div class="lhead">${mine ? 'to' : 'from'} <b>@${esc(other)}</b> \u00B7 ${new Date(msg.created_at).toLocaleString([], {month:'short', day:'numeric', hour:'numeric', minute:'2-digit'})}
-      ${!mine ? `\u00B7 <span class="dmReply" data-user="${msg.sender}" style="cursor:pointer;color:var(--red)">reply</span>` : ''}</div>
-      <div class="lbody">${esc(msg.body)}</div></div>`;
-  }).join('');
-}
-document.getElementById('letters')?.addEventListener('click', (e) => {
-  const r = e.target.closest('.dmReply');
-  if (!r) return;
-  dmTarget = { seller: r.dataset.user, listing: null, title: 'your conversation' };
-  document.getElementById('dmTo').textContent = 'them';
-  document.getElementById('dmAbout').textContent = 'your conversation';
-  document.getElementById('dmBox').classList.remove('hidden');
-  document.getElementById('dmBox').scrollIntoView({ behavior: 'smooth', block: 'center' });
-});
-loadLetters();
 </script>
 <script defer src="nav.js?v=10"></script>
-<script type="module" src="live.js?v=7"></script>
+<script type="module" src="live.js?v=8"></script>
 </body>
 </html>

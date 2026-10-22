@@ -850,7 +850,7 @@ async function loadFilms() {
   });
   const { data, error } = await sb
     .from('films')
-    .select('id,title,year,roles,synopsis,watch_url,trailer_url,poster_url,runtime_min,subgenre,featured,created_at,watch_clicks,social_clicks,socials,profiles!submitter(username)')
+    .select('id,title,year,roles,synopsis,watch_url,trailer_url,poster_url,runtime_min,subgenre,featured,created_at,watch_clicks,social_clicks,socials,submitter,profiles!submitter(username,dm_open)')
     .eq('status', 'approved')
     .order('featured', { ascending: false })
     .order('created_at', { ascending: false })
@@ -877,6 +877,7 @@ async function loadFilms() {
         <div class="admin-row">
           <a class="btn watchBtn" data-film="${f.id}" href="${esc(f.watch_url)}" target="_blank" rel="noopener">▶ Watch</a>
           ${f.trailer_url ? `<a class="btn ghost" href="${esc(f.trailer_url)}" target="_blank" rel="noopener">Trailer</a>` : ''}
+          ${f.profiles?.dm_open && f.profiles?.username && (!session || session.user.id !== f.submitter) ? `<a class="btn ghost" href="letters.html?to=${encodeURIComponent(f.profiles.username)}">\u2709 Write to the filmmaker</a>` : ''}
           <span class="hint watchcount" style="align-self:center;color:var(--white);font-weight:600">👁 HorrorMeet has sent ${f.watch_clicks || 0} viewer${(f.watch_clicks || 0) === 1 ? '' : 's'}</span>
         </div>
         ${socialLinks(f)}${(f.social_clicks || 0) ? `<div class="hint" style="margin-top:2px">${f.social_clicks} visit${f.social_clicks === 1 ? '' : 's'} sent to the filmmaker's socials</div>` : ''}

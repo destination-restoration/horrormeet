@@ -58,3 +58,23 @@ sb.channel('front-porch')
   a.style.cssText = 'color:var(--red);font-size:11.5px;letter-spacing:.06em;border:1px solid var(--red);padding:4px 9px;margin-right:8px;text-decoration:none;white-space:nowrap';
   bar.insertBefore(a, chip);
 })();
+
+/* letters: a small envelope in the header for signed-in members, with the unread count */
+(async () => {
+  const { data: { session } } = await sb.auth.getSession();
+  if (!session || !bar || document.getElementById('lettersBtn')) return;
+  const a = document.createElement('a');
+  a.id = 'lettersBtn';
+  a.href = 'letters.html';
+  a.title = 'Dead letters';
+  a.textContent = '\u2709';
+  a.style.cssText = 'color:var(--white);font-size:17px;text-decoration:none;margin-right:6px;position:relative;line-height:1';
+  bar.insertBefore(a, chip);
+  const { data: n } = await sb.rpc('dm_unread_count');
+  if (n > 0) {
+    const b = document.createElement('span');
+    b.textContent = n > 9 ? '9+' : String(n);
+    b.style.cssText = 'position:absolute;top:-7px;right:-9px;background:var(--red);color:var(--white);font-size:10px;font-weight:700;border-radius:8px;padding:1px 4px;line-height:1.2';
+    a.appendChild(b);
+  }
+})();
