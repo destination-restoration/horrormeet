@@ -59,22 +59,35 @@ sb.channel('front-porch')
   bar.insertBefore(a, chip);
 })();
 
-/* letters: a small envelope in the header for signed-in members, with the unread count */
+/* letters: a big, labeled envelope button in the header for signed-in members, with the unread count */
 (async () => {
   const { data: { session } } = await sb.auth.getSession();
   if (!session || !bar || document.getElementById('lettersBtn')) return;
+  if (!document.getElementById('lettersCss')) {
+    const st = document.createElement('style');
+    st.id = 'lettersCss';
+    st.textContent = `
+#lettersBtn{display:inline-flex;align-items:center;gap:7px;color:var(--white);background:var(--red);border:2px solid var(--red);
+  padding:6px 12px 6px 10px;margin-right:8px;text-decoration:none;white-space:nowrap;position:relative;
+  font-family:Georgia,serif;font-weight:700;font-size:13px;letter-spacing:.08em;text-transform:uppercase;box-shadow:3px 3px 0 var(--red-deep)}
+#lettersBtn .env{font-size:26px;line-height:1}
+#lettersBtn .n{position:absolute;top:-10px;right:-10px;background:var(--white);color:var(--red);font-size:12px;font-weight:700;
+  border-radius:10px;padding:2px 6px;line-height:1.2;border:2px solid var(--red)}
+@media (max-width:560px){#lettersBtn{padding:3px 7px;gap:0;margin-right:4px;box-shadow:2px 2px 0 var(--red-deep)}#lettersBtn .lbl{display:none}#lettersBtn .env{font-size:22px}#lettersBtn .n{top:-8px;right:-8px;font-size:10px;padding:1px 4px}}
+@media (max-width:430px){.app-bar:has(#lettersBtn) #memberCount{display:none}}`;
+    document.head.appendChild(st);
+  }
   const a = document.createElement('a');
   a.id = 'lettersBtn';
   a.href = 'letters.html';
   a.title = 'Dead letters';
-  a.textContent = '\u2709';
-  a.style.cssText = 'color:var(--white);font-size:17px;text-decoration:none;margin-right:6px;position:relative;line-height:1';
+  a.innerHTML = '<span class="env">\u2709</span><span class="lbl">Letters</span>';
   bar.insertBefore(a, chip);
   const { data: n } = await sb.rpc('dm_unread_count');
   if (n > 0) {
     const b = document.createElement('span');
+    b.className = 'n';
     b.textContent = n > 9 ? '9+' : String(n);
-    b.style.cssText = 'position:absolute;top:-7px;right:-9px;background:var(--red);color:var(--white);font-size:10px;font-weight:700;border-radius:8px;padding:1px 4px;line-height:1.2';
     a.appendChild(b);
   }
 })();
