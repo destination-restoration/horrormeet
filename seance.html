@@ -32,6 +32,11 @@
   .sit .views{color:var(--white);font-size:13.5px;margin-top:8px;font-weight:600}
   .sit .views a{font-weight:600}
   .prem{font-family:'Rye',Georgia,serif;color:var(--white);background:var(--red);display:inline-block;padding:3px 9px;font-size:12px;letter-spacing:.08em;margin:0 0 8px}
+  .listen{display:flex;flex-wrap:wrap;gap:10px;margin:12px 0 2px}
+  .listen a.btn{display:inline-block;padding:9px 14px;font-size:13px}
+  .pod{border:2px solid var(--red);background:var(--panel);padding:14px 16px;margin:14px 0 6px}
+  .pod p{color:var(--dim);font-size:14.5px;margin:0 0 10px;line-height:1.5}
+  .pod iframe{display:block;width:100%;height:232px;border:0;border-radius:12px;margin-top:14px}
   #sitCount,#qaCount{font-family:'Rye',Georgia,serif;font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--faint);margin:20px 0 0}
 </style>
 </head>
@@ -72,6 +77,16 @@
   <div class="candle">🕯</div>
 
   <div class="rule"><b>How a sitting works:</b> the guest is announced on the board · members drop questions in the summoning thread · at the appointed hour, the guest joins and answers live · the thread stays up forever as part of the record.</div>
+  <div class="sx-h">🎧 Listen to The Séance</div>
+  <div class="pod">
+    <p>Every sitting is also a podcast. Follow the show on Spotify or Apple Podcasts so a new episode lands every Tuesday, and if it scared you, leave a rating. It is the fastest way to get the circle in front of more horror people.</p>
+    <div class="listen">
+      <a class="btn" href="https://open.spotify.com/show/20qpMJI0zQFF4KfFqhitvE" target="_blank" rel="noopener">Listen on Spotify ↗</a>
+      <a class="btn ghost" href="https://podcasts.apple.com/us/podcast/the-s%C3%A9ance/id6820220743" target="_blank" rel="noopener">Listen on Apple Podcasts ↗</a>
+      <a class="btn ghost" href="https://www.youtube.com/@HorrorMeet" target="_blank" rel="noopener">Watch on YouTube ↗</a>
+    </div>
+    <iframe src="https://open.spotify.com/embed/show/20qpMJI0zQFF4KfFqhitvE?utm_source=generator&amp;theme=0" title="The Séance on Spotify" loading="lazy" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"></iframe>
+  </div>
   <div class="sx-h">🕯 The Sittings</div>
   <p class="hint">One guest, the whole circle asking.</p>
   <div id="sitCount"></div>
@@ -85,7 +100,7 @@
 
 
   <p class="hint" style="margin-top:18px">Guests speak for themselves. The circle is respectful or the circle is closed. <a href="rules.html">House rules</a> apply.</p>
-  <footer>THE SÉANCE · a HorrorMeet gathering · <a href="press.html">press</a> · <a href="index.html">back to the board</a><br><span class="social">follow the house: <a href="https://www.instagram.com/horrormeetapp" target="_blank" rel="noopener">Instagram @horrormeetapp</a> · <a href="https://www.youtube.com/@HorrorMeet" target="_blank" rel="noopener">YouTube</a></span></footer>
+  <footer>THE SÉANCE · a HorrorMeet gathering · <a href="press.html">press</a> · <a href="index.html">back to the board</a><br><span class="social">follow the house: <a href="https://www.instagram.com/horrormeetapp" target="_blank" rel="noopener">Instagram @horrormeetapp</a> · <a href="https://www.youtube.com/@HorrorMeet" target="_blank" rel="noopener">YouTube</a> · <a href="https://open.spotify.com/show/20qpMJI0zQFF4KfFqhitvE" target="_blank" rel="noopener">Spotify</a> · <a href="https://podcasts.apple.com/us/podcast/the-s%C3%A9ance/id6820220743" target="_blank" rel="noopener">Apple Podcasts</a></span></footer>
 </main>
 <script type="module">
 import { sb } from './app-core.js';
@@ -104,6 +119,10 @@ const { data, error } = await sb.from('seance_sittings')
   .order('happened_at', { ascending: false, nullsFirst: false })
   .limit(100);
 
+/* the podcast feed (Spotify for Creators, which also feeds Apple) carries every
+   sitting, so each sitting card gets show-level listen buttons next to YouTube */
+const SPOTIFY = 'https://open.spotify.com/show/20qpMJI0zQFF4KfFqhitvE';
+const APPLE = 'https://podcasts.apple.com/us/podcast/the-s%C3%A9ance/id6820220743';
 const card = (r) => {
   const when = r.happened_at
     ? new Date(r.happened_at).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric', timeZone: 'America/Los_Angeles' })
@@ -134,6 +153,8 @@ const card = (r) => {
     + (r.summary ? '<p>' + esc(r.summary) + '</p>' : '')
     + (r.youtube_id ? '<div class="views"><span data-seance-count="' + r.id + '"></span> \u00b7 <a data-seance-yt="' + r.id
       + '" href="https://www.youtube.com/watch?v=' + encodeURIComponent(r.youtube_id) + '" target="_blank" rel="noopener">Watch on YouTube \u2197</a></div>' : '')
+    + (r.kind !== 'qa' ? '<div class="listen"><a class="btn" href="'+ SPOTIFY + '" target="_blank" rel="noopener">Listen on Spotify \u2197</a>'
+      + '<a class="btn ghost" href="' + APPLE + '" target="_blank" rel="noopener">Listen on Apple Podcasts \u2197</a></div>' : '')
     + (r.slug ? '<p><a href="qa/' + encodeURIComponent(r.slug) + '.html">Read what was said, with chapters \u2192</a></p>' : '')
     + '</div></div>';
 };
