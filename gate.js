@@ -21,6 +21,7 @@ const ACTIONS = {
   pin: 'add a place to the Atlas',
   save: 'save places to My Atlas',
   rate: 'rate films on the shelf',
+  vote: 'vote in the HorrorMeet Awards',
   report: 'report a post',
   chat: 'talk in the Basement',
   sell: 'list in the Estate Sale',

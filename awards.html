@@ -14,6 +14,22 @@
   .cat h3{margin:0 0 4px;font-size:16.5px}
   .cat p{margin:0;font-size:14px;color:var(--dim)}
   .cat .lore{font-size:12.5px;color:var(--faint);font-style:italic;margin-top:6px}
+  .poll{border:2px solid var(--red);background:var(--panel);padding:14px 16px;margin:14px 0}
+  .poll h3{margin:0 0 4px;font-family:'Rye',Georgia,serif;font-size:18px;color:var(--white)}
+  .poll .blurb{margin:0 0 10px;font-size:14px;color:var(--dim)}
+  .poll .closes{font-size:12px;color:var(--faint);letter-spacing:.08em;text-transform:uppercase;margin-bottom:10px}
+  .opt{display:flex;align-items:center;gap:10px;padding:8px 0;border-top:1px solid var(--line)}
+  .opt .lbl{flex:1;min-width:0}
+  .opt .lbl b{display:block;font-size:15px;color:var(--white)}
+  .opt .lbl span{font-size:12.5px;color:var(--faint)}
+  .opt .bar{height:6px;background:var(--red);margin-top:5px;max-width:100%}
+  .opt .n{font-size:12.5px;color:var(--dim);white-space:nowrap}
+  .opt .btn{padding:7px 12px;font-size:12.5px;box-shadow:none}
+  .opt.mine{background:rgba(163,22,33,.12)}
+  .opt.mine .btn{background:var(--black);border:2px solid var(--red)}
+  .poll .more{margin-top:8px}
+  .poll .share{font-size:12.5px;color:var(--faint);margin-top:10px}
+  .poll .share input{width:100%;margin-top:4px;font-size:12.5px}
 </style>
 </head>
 <body>
@@ -50,6 +66,9 @@
 
   <p style="color:var(--dim);font-size:15px;max-width:60ch">Every film on the <a href="index.html">shelf</a> is automatically in the running. Once a year, the founders and guest judges go through everything submitted and hand out awards to independent horror that deserved a bigger room. Community awards go to the members who kept the walls.</p>
 
+  <div class="section-note">Open votes · members only</div>
+  <div id="polls"><div class="empty">Counting the ballots...</div></div>
+
   <div class="section-note">Film awards · judged annually</div>
   <div class="cat"><h3>🏆 Best Feature</h3><p>The best independent horror feature on the shelf this year.</p></div>
   <div class="cat"><h3>🏆 Best Short</h3><p>The best independent horror short on the shelf this year.</p></div>
@@ -76,6 +95,66 @@
 
   <footer>THE HORRORMEET AWARDS · a Castle Productions thing · <a href="press.html">press</a> · <a href="index.html">back to the board</a><br><span class="social">follow the house: <a href="https://www.instagram.com/horrormeetapp" target="_blank" rel="noopener">Instagram @horrormeetapp</a> · <a href="https://www.youtube.com/@HorrorMeet" target="_blank" rel="noopener">YouTube</a></span></footer>
 </main>
+<div class="toast" id="toast"></div>
+<script type="module">
+import { sb, toast } from './app-core.js';
+import { joinPrompt } from './gate.js';
+const $ = (id) => document.getElementById(id);
+const esc = (t) => { const d = document.createElement('div'); d.textContent = t ?? ''; return d.innerHTML; };
+const { data: { session } } = await sb.auth.getSession();
+const want = new URLSearchParams(location.search).get('vote');   // ?vote=<option id> deep link from a filmmaker's share
+const ref = new URLSearchParams(location.search).get('ref');
+const expanded = new Set();
+
+async function load() {
+  const [{ data: polls }, { data: tallies }, mine] = await Promise.all([
+    sb.from('polls').select('id,slug,title,blurb,kind,opens_at,closes_at').lte('opens_at', new Date().toISOString()).order('closes_at'),
+    sb.from('poll_tallies').select('*'),
+    session ? sb.from('poll_votes').select('poll_id,option_id') : Promise.resolve({ data: [] }),
+  ]);
+  const myVotes = Object.fromEntries((mine.data || []).map((v) => [v.poll_id, v.option_id]));
+  const box = $('polls');
+  if (!polls?.length) { box.innerHTML = '<div class="empty">No vote is open right now.</div>'; return; }
+  box.innerHTML = polls.map((p) => {
+    const closed = new Date(p.closes_at) < new Date();
+    let opts = (tallies || []).filter((t) => t.poll_id === p.id);
+    const total = opts.reduce((a, o) => a + Number(o.votes), 0);
+    const max = Math.max(1, ...opts.map((o) => Number(o.votes)));
+    // shelf polls sort by votes then title; list polls keep their order unless votes exist
+    opts.sort((a, b) => (Number(b.votes) - Number(a.votes)) || (a.sort_order - b.sort_order) || a.label.localeCompare(b.label));
+    const limit = expanded.has(p.id) ? opts.length : 10;
+    const shown = opts.slice(0, limit);
+    const closes = new Date(p.closes_at).toLocaleDateString('en-US', { month: 'long', day: 'numeric' });
+    return `<div class="poll" data-poll="${p.id}">
+      <h3>${esc(p.title)}</h3>
+      <p class="blurb">${esc(p.blurb || '')}</p>
+      <div class="closes">${closed ? 'Closed' : 'Closes ' + closes} · ${total} vote${total === 1 ? '' : 's'}</div>
+      ${shown.map((o) => `<div class="opt ${myVotes[p.id] === o.option_id ? 'mine' : ''}" id="opt-${o.option_id}">
+        <div class="lbl"><b>${esc(o.label)}</b><span>${esc(o.sublabel || '')}</span><div class="bar" style="width:${Math.round(100 * Number(o.votes) / max)}%"></div></div>
+        <span class="n">${o.votes}</span>
+        ${closed ? '' : `<button class="btn vote" data-poll="${p.id}" data-opt="${o.option_id}">${myVotes[p.id] === o.option_id ? 'Your vote' : 'Vote'}</button>`}
+      </div>`).join('')}
+      ${opts.length > limit ? `<button class="btn ghost more" data-more="${p.id}">Show all ${opts.length}</button>` : ''}
+      <div class="share">Filmmakers: send your people here. Only members can vote, so they join on the way in.<input readonly value="https://horrormeet.com/awards.html?ref=vote-${esc(p.slug)}" onclick="this.select()"></div>
+    </div>`;
+  }).join('');
+  if (want) document.getElementById('opt-' + want)?.scrollIntoView({ block: 'center' });
+}
+
+$('polls').addEventListener('click', async (e) => {
+  const more = e.target.closest('[data-more]');
+  if (more) { expanded.add(Number(more.dataset.more)); return load(); }
+  const b = e.target.closest('.vote');
+  if (!b) return;
+  if (!session) return joinPrompt('vote');
+  b.disabled = true;
+  const { error } = await sb.rpc('cast_vote', { p_poll: Number(b.dataset.poll), p_option: Number(b.dataset.opt), p_ref: ref });
+  if (error) { toast(error.message); b.disabled = false; return; }
+  toast('Counted. You can change it any time before it closes.');
+  load();
+});
+load();
+</script>
 <script defer src="nav.js?v=10"></script>
 <script type="module" src="live.js?v=9"></script>
 </body>
