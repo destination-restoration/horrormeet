@@ -126,6 +126,7 @@ def shell(title, desc, canonical, body, depth, jsonld=None, tagline='the atlas o
   .at-join{{border:2px dashed var(--red);background:var(--panel);padding:14px 16px;margin:26px 0 10px}}
   .at-join b{{color:var(--white)}}
   .at-h2{{font-family:'Rye',Georgia,serif;color:var(--white);font-size:19px;margin:28px 0 6px}}
+  .at-transcript p{{font-size:14px;line-height:1.55;max-width:70ch}}
 </style>
 {ld}
 </head>
@@ -338,6 +339,56 @@ def yt_seconds(ts):
     return sum(v * 60 ** i for i, v in enumerate(reversed(parts)))
 
 
+
+def load_transcript(slug):
+    """captions/<slug>.srt -> list of (seconds, text). An optional <slug>.cuts.json
+    holds [[start, end], ...] second ranges to leave out (embargoed talk)."""
+    path = os.path.join(ROOT, 'data', 'transcripts', slug + '.srt')
+    if not os.path.exists(path):
+        return []
+    cuts = []
+    cpath = os.path.join(ROOT, 'data', 'transcripts', slug + '.cuts.json')
+    if os.path.exists(cpath):
+        cuts = json.load(open(cpath))
+    out = []
+    for block in re.split(r'\n\s*\n', open(path, encoding='utf-8').read().strip()):
+        lines = block.strip().split('\n')
+        if len(lines) < 3 or '-->' not in lines[1]:
+            continue
+        h, m, rest = lines[1].split(' --> ')[0].split(':')
+        sec = int(h) * 3600 + int(m) * 60 + float(rest.replace(',', '.'))
+        if any(a <= sec <= b for a, b in cuts):
+            continue
+        text = ' '.join(x.strip() for x in lines[2:])
+        text = re.sub(r'\s+', ' ', text).strip()
+        if text:
+            out.append((sec, text))
+    return out
+
+
+def transcript_html(slug, vid):
+    caps = load_transcript(slug)
+    if not caps:
+        return ''
+    blocks, cur, start = [], [], None
+    for sec, text in caps:
+        if start is None:
+            start = sec
+        cur.append(text)
+        if sec - start >= 45 or sum(len(t) for t in cur) > 600:
+            blocks.append((start, ' '.join(cur))); cur, start = [], None
+    if cur:
+        blocks.append((start, ' '.join(cur)))
+    def stamp(sec):
+        sec = int(sec); h, r = divmod(sec, 3600); m, s2 = divmod(r, 60)
+        return f'{h}:{m:02d}:{s2:02d}' if h else f'{m}:{s2:02d}'
+    rows = ''.join(
+        f'<p><a href="https://www.youtube.com/watch?v={vid}&amp;t={int(sec)}s" target="_blank" rel="noopener" style="color:var(--red);font-size:12px;letter-spacing:.06em">{stamp(sec)}</a> {e(text)}</p>'
+        for sec, text in blocks)
+    return ('<div class="at-h2">Transcript</div>'
+            '<p class="hint">Auto-captioned from the episode, lightly cleaned. Timestamps open that moment on YouTube.</p>'
+            f'<div class="at-body at-transcript">{rows}</div>')
+
 def build_qa(write):
     rows = [r for r in get('seance_sittings', 'select=id,kind,slug,guest,guest_role,film,youtube_id,summary,recap,chapters,'
                                                 'happened_at,event,venue,panelists,host,vertical,duration,uploaded_at&status=eq.published')
@@ -376,6 +427,7 @@ def build_qa(write):
   <div class="at-h2">What was said</div>
   <div class="at-body">{paras}</div>
   {chap}
+  {transcript_html(r['slug'], vid)}
   <div class="at-btns"><a class="btn" href="../seance.html">More premiere Q&amp;As</a></div>'''
         ld = {'@context': 'https://schema.org', '@type': 'VideoObject', 'name': title,
               'description': re.sub(r'\s+', ' ', recap)[:500],
