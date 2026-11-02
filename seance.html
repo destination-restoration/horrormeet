@@ -37,6 +37,12 @@
   .pod{border:2px solid var(--red);background:var(--panel);padding:14px 16px;margin:14px 0 6px}
   .pod p{color:var(--dim);font-size:14.5px;margin:0 0 10px;line-height:1.5}
   .pod iframe{display:block;width:100%;height:232px;border:0;border-radius:12px;margin-top:14px}
+  .toons{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px;margin:10px 0 6px}
+  .toon{display:block;border:2px solid var(--line);background:#000;color:var(--white);font-weight:400}
+  .toon.up{border-color:var(--red)}
+  .toon video{display:block;width:100%;aspect-ratio:16/9;object-fit:cover;background:#000}
+  .toon .cap{padding:7px 10px;font-size:13px;line-height:1.35}
+  .toon .cap b{font-family:'Rye',Georgia,serif;font-weight:400;color:var(--red);letter-spacing:.08em;font-size:11.5px;text-transform:uppercase;margin-right:6px}
   #sitCount,#qaCount{font-family:'Rye',Georgia,serif;font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--faint);margin:20px 0 0}
 </style>
 </head>
@@ -87,6 +93,11 @@
     </div>
     <iframe src="https://open.spotify.com/embed/show/20qpMJI0zQFF4KfFqhitvE?utm_source=generator&amp;theme=0" title="The Séance on Spotify" loading="lazy" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"></iframe>
   </div>
+  <div id="toonWrap" hidden>
+  <div class="sx-h">🎨 At the Table, Animated</div>
+  <p class="hint">Every guest gets drawn into the circle. This is the cartoon that plays on the TV behind the table while we record.</p>
+  <div class="toons" id="toons"></div>
+  </div>
   <div class="sx-h">🕯 The Sittings</div>
   <p class="hint">One guest, the whole circle asking.</p>
   <div id="sitCount"></div>
@@ -113,7 +124,7 @@ const esc = (v) => String(v == null ? '' : v).replace(/[&<>"']/g, (c) =>
    than hosted here: a static site has no business serving video, and YouTube is
    where people search for it. phone-shot Q&As are vertical, so they embed tall. */
 const { data, error } = await sb.from('seance_sittings')
-  .select('id,kind,slug,guest,guest_role,film,youtube_id,summary,happened_at,featured,event,venue,panelists,host,vertical,premiere_at')
+  .select('id,kind,slug,guest,guest_role,film,youtube_id,summary,happened_at,featured,event,venue,panelists,host,vertical,premiere_at,loop_video')
   .eq('status', 'published')
   .order('featured', { ascending: false })
   .order('happened_at', { ascending: false, nullsFirst: false })
@@ -143,7 +154,7 @@ const card = (r) => {
       + esc(pAt.toLocaleString('en-US', { weekday: 'long', month: 'long', day: 'numeric', hour: 'numeric', minute: '2-digit', timeZone: 'America/Los_Angeles' }))
       + ' PT <span class="cd"></span></div>'
     : '';
-  return '<div class="sit' + (r.featured || upcoming ? ' featured' : '') + '"' + (upcoming ? ' id="premiere"' : '') + '>' + vid + '<div class="body">'
+  return '<div class="sit' + (r.featured || upcoming ? ' featured' : '') + '" id="' + (upcoming ? 'premiere' : 'sit-' + r.id) + '">' + vid + '<div class="body">'
     + pLine
     + '<h3>' + esc(r.guest) + (upcoming ? '<span class="badge">premiere</span>' : r.featured ? '<span class="badge">latest</span>' : '') + '</h3>'
     + (r.guest_role ? '<div class="who">' + esc(r.guest_role) + '</div>' : '')
@@ -178,6 +189,28 @@ if (error) {
   if (sits.length) {
     document.getElementById('sitCount').textContent = count(sits.length, 'sitting', 'sittings');
     sitBox.innerHTML = sits.map(card).join('');
+    /* the cartoon table loops: 12-second seamless silent clips cut from the TV
+       loop, numbered by sitting order; they only play while on screen */
+    const order = sits.slice().sort((a, b) => new Date(a.happened_at) - new Date(b.happened_at));
+    const toons = order.map((r, i) => ({ r, n: i + 1 })).filter((t) => t.r.loop_video).reverse();
+    if (toons.length) {
+      const still = matchMedia('(prefers-reduced-motion: reduce)').matches;
+      document.getElementById('toons').innerHTML = toons.map(({ r, n }) => {
+        const up = r.premiere_at && new Date(r.premiere_at).getTime() > Date.now() - 3 * 3600e3;
+        const src = esc(r.loop_video);
+        return '<a class="toon' + (up ? ' up' : '') + '" href="#' + (up ? 'premiere' : 'sit-' + r.id) + '">'
+          + '<video muted loop playsinline preload="none" poster="' + src.replace(/\.mp4$/, '.jpg') + '" src="' + src + '"></video>'
+          + '<div class="cap"><b>Ep. ' + n + (up ? ' \u00b7 premieres ' + esc(new Date(r.premiere_at).toLocaleDateString('en-US', { weekday: 'short', month: 'numeric', day: 'numeric', timeZone: 'America/Los_Angeles' })) : '') + '</b>'
+          + esc(r.guest) + '</div></a>';
+      }).join('');
+      document.getElementById('toonWrap').hidden = false;
+      if (!still && 'IntersectionObserver' in window) {
+        const io = new IntersectionObserver((es) => es.forEach((e) => {
+          if (e.isIntersecting) e.target.play().catch(() => {}); else e.target.pause();
+        }), { threshold: 0.35 });
+        document.querySelectorAll('.toon video').forEach((v) => io.observe(v));
+      }
+    }
   } else {
     sitBox.innerHTML = '<div class="rule"><b>First sittings are being scheduled now.</b> '
       + 'We are starting with working horror filmmakers and building toward names you grew up scared of. '
