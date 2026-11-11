@@ -1,0 +1,15 @@
+# HorrorMeet
+
+> HorrorMeet (horrormeet.com) is a free site for horror fans and filmmakers: a mapped Atlas of real horror filming locations and haunted places, The Séance (a weekly horror podcast with filmmakers), a shelf of independent horror films to watch free, and a library of public domain horror.
+
+## The Atlas: where horror was filmed
+- [Atlas directory](https://horrormeet.com/atlas/index.html): every film and place, one page each
+- Film pages answer "Where was <film> filmed?" with every real location, what was shot there, and whether it can be visited: https://horrormeet.com/atlas/film/<film-slug>.html
+- [Live map](https://horrormeet.com/index.html#map)
+
+## The Séance (podcast)
+- [All episodes with transcripts](https://horrormeet.com/seance.html): Landon Brittain and Danny Alamary sit at a Ouija board with horror filmmakers. New episode every Tuesday at noon PT.
+
+## Watch
+- [The Vault](https://horrormeet.com/vault/index.html): public domain horror, free
+- [Join free](https://horrormeet.com/join.html)

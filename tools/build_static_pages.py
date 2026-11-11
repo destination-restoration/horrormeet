@@ -205,18 +205,76 @@ def main():
         write(r['url'], shell(title, meta, f"{BASE}/{r['url']}", body, 1, ld))
 
     # one page per film
+    def join_names(names):
+        names = list(names)
+        if len(names) <= 1:
+            return ''.join(names)
+        return ', '.join(names[:-1]) + ' and ' + names[-1]
+
+    film_pins = [(k, p) for k, pins in films.items() for p in pins]
     for k, pins in films.items():
         disp = pins[0]['film']
         n = len(pins)
-        title = f"Where was {disp} filmed? {n} real location{'s' if n != 1 else ''} | HorrorMeet Atlas"
-        meta = f"Every place {disp} was filmed that you can find on a map: {', '.join(p['place'] for p in pins[:4])}{' and more' if n > 4 else ''}."
+        places = [p['place'] for p in pins]
+        lead = (', '.join(places[:4]) + f' and {n - 4} more') if n > 4 else join_names(places)
+        if n >= 3:
+            title = f"Where Was {disp} Filmed? All {n} Real Locations, Mapped | HorrorMeet"
+        else:
+            title = f"Where Was {disp} Filmed? The Real Location{'s' if n != 1 else ''}, Mapped | HorrorMeet"
+        answer = f"{disp} was filmed at {lead}."
+        meta = (answer + ' What was shot at each place, where it is on the map, and whether you can visit.')[:300]
+        # other horror shot within 80 km of this film's first pin: the internal links Google follows
+        near = {}
+        for k2, p2 in film_pins:
+            if k2 == k:
+                continue
+            d = km(pins[0], p2)
+            if d <= 80 and (k2 not in near or d < near[k2][0]):
+                near[k2] = (d, p2['film'])
+        near_list = sorted(near.items(), key=lambda kv: kv[1][0])[:8]
+        near_html = ''
+        if near_list:
+            near_html = ('<div class="at-h2">More horror filmed nearby</div><ul class="at-list">' + ''.join(
+                f'<li><a href="{slug(k2)}.html">Where was {e(name)} filmed?</a> <span class="hint">· {max(1, round(d)):,} km away</span></li>'
+                for k2, (d, name) in near_list) + '</ul>')
+        def loc(p):
+            src = p.get('source_url') or ''
+            host = re.sub(r'^www\.', '', re.sub(r'^https?://([^/]+).*$', r'\1', src)) if src else ''
+            return (f'<li><h2 class="at-h2" style="margin:18px 0 4px"><a href="../../{p["url"]}">{e(p["place"])}</a></h2>'
+                    f'<p>{e(p.get("description") or "")}</p>'
+                    f'<p class="hint"><a href="../../index.html?spot={p["id"]}#map">See it on the map</a>'
+                    + (f' · Source: <a href="{e(src)}" rel="nofollow noopener" target="_blank">{e(host)}</a>' if src else '') + '</p></li>')
+        faq = [
+            (f'Where was {disp} filmed?', answer + ' Every location on this page is a real place with its spot on the HorrorMeet Atlas map.'),
+            (f'Can you visit the {disp} filming locations?',
+             'Many of them, yes. Each location above says whether it is a public place, a private home or no longer standing. '
+             'Private homes are for looking at from the sidewalk only: never knock, never step onto the property.'),
+            (f'How many {disp} filming locations are on the map?',
+             f'{n} so far. The Atlas grows every week, and members can add a location with a source.'),
+        ]
+        faq_html = '<div class="at-h2">Quick answers</div>' + ''.join(
+            f'<p><b style="color:var(--white)">{e(q)}</b><br>{e(a_)}</p>' for q, a_ in faq)
         body = f'''  <div class="at-crumb"><a href="../index.html">Atlas</a> › <a href="../index.html#films">Filming locations</a></div>
   <div class="at-kind">Filming locations</div>
   <h1 class="at-h1">Where was {e(disp)} filmed?</h1>
-  <p class="hint">{n} location{'s' if n != 1 else ''} on the HorrorMeet Atlas.</p>
-  <ul class="at-list">{''.join(f'<li><a href="../../{p["url"]}">{e(p["place"])}</a><p>{e(p.get("description") or "")}</p></li>' for p in pins)}</ul>
-  <div class="at-btns"><a class="btn" href="../../index.html?spot={pins[0]['id']}#map">Open them on the live map</a></div>'''
-        page = shell(title, meta, f"{BASE}/{film_url[k]}", body, 2)
+  <p class="at-body" style="max-width:70ch"><b style="color:var(--white)">{e(answer)}</b> {n} real location{'s' if n != 1 else ''} below, each with what was shot there and its place on the map.</p>
+  <div class="at-btns"><a class="btn" href="../../index.html?spot={pins[0]['id']}#map">Open {'them' if n != 1 else 'it'} on the live map</a></div>
+  <ul class="at-list" style="list-style:none;padding-left:0">{''.join(loc(p) for p in pins)}</ul>
+  {faq_html}
+  {near_html}
+  <p class="hint">Know a {e(disp)} location that is missing? <a href="../../join.html?ref=atlas-add">Join free</a> and add it with a source.</p>'''
+        url_ = f"{BASE}/{film_url[k]}"
+        ld = [
+            {'@context': 'https://schema.org', '@type': 'FAQPage', 'mainEntity': [
+                {'@type': 'Question', 'name': q, 'acceptedAnswer': {'@type': 'Answer', 'text': a_}} for q, a_ in faq]},
+            {'@context': 'https://schema.org', '@type': 'ItemList', 'name': f'{disp} filming locations', 'numberOfItems': n,
+             'itemListElement': [{'@type': 'ListItem', 'position': i + 1, 'name': p['place'], 'url': f"{BASE}/{p['url']}"}
+                                 for i, p in enumerate(pins)]},
+            {'@context': 'https://schema.org', '@type': 'BreadcrumbList', 'itemListElement': [
+                {'@type': 'ListItem', 'position': 1, 'name': 'Atlas', 'item': f'{BASE}/atlas/index.html'},
+                {'@type': 'ListItem', 'position': 2, 'name': f'Where was {disp} filmed?', 'item': url_}]},
+        ]
+        page = shell(title, meta, url_, body, 2, ld)
         write(film_url[k], page)
 
     # directory
