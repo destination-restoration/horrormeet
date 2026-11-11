@@ -98,7 +98,8 @@ import { sb } from './app-core.js';
     busy = true;
     if (reset) { offset = 0; document.getElementById('vList').innerHTML = ''; }
     var sel = sb.from('vault_films')
-      .select('identifier,title,year,director,blurb,rights_note,curated', { count: 'exact' });
+      .select('identifier,title,year,director,blurb,rights_note,curated', { count: 'exact' })
+      .eq('hidden', false); /* hidden = pulled by a rights audit; the row stays in the table */
     if (term) {
       var t = '%' + term.replace(/[%_,()]/g, ' ').trim() + '%';
       sel = sel.or('title.ilike.' + t + ',director.ilike.' + t + ',blurb.ilike.' + t);

@@ -327,7 +327,8 @@ def clean_dir(rel):
 
 
 def build_vault(write):
-    films = [f for f in get('vault_films', 'select=id,identifier,title,year,director,blurb,rights_note,link_status,downloads,curated&order=sort_order')
+    # hidden = unpublished by a rights audit (11/11/26). Rows stay in the table; they never get a page.
+    films = [f for f in get('vault_films', 'select=id,identifier,title,year,director,blurb,rights_note,link_status,downloads,curated&hidden=is.false&order=sort_order')
              if f.get('identifier') and f.get('title') and f.get('link_status') not in DEAD]
     # the archive holds several uploads of the same film (dubs, ipod encodes, re-uploads).
     # near-identical pages hurt ranking, so keep one page per film: curated first, then most watched.
@@ -384,7 +385,7 @@ def build_vault(write):
     items = sorted(films, key=lambda f: f['title'].lower())
     body = f'''  <div class="at-kind">The HorrorMeet Vault</div>
   <h1 class="at-h1">{len(films):,} horror films you can watch free</h1>
-  <p class="at-body" style="color:var(--dim);max-width:65ch">Public domain horror, legally free to stream: silent classics, Universal-era chillers, drive-in features and serials, every one playable right on its page. <a href="../vault.html">Search the Vault</a>.</p>
+  <p class="at-body" style="color:var(--dim);max-width:65ch">Public domain horror, legally free to stream: silent classics, poverty row chillers, drive-in features and serials, every one playable right on its page. <a href="../vault.html">Search the Vault</a>.</p>
   <ul class="at-cols">{''.join(f'<li><a href="{f["url"][6:]}">{e(f["title"])}</a></li>' for f in items)}</ul>'''
     write('vault/index.html', shell(f'The HorrorMeet Vault: {len(films):,} public domain horror films to watch free',
                                     'Watch classic horror free and legally: public domain horror films from the silent era to the drive-in, playable on every page.',
