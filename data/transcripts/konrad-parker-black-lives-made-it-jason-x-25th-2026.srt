@@ -1,560 +1,792 @@
 1
-00:00:00,000 --> 00:00:01,340
+00:00:00,000 --> 00:00:01,280
  All right, what's up, guys?
 
 2
-00:00:01,340 --> 00:00:03,560
- We are at one of the coolest events.
+00:00:01,280 --> 00:00:03,520
+ We are at one of the coolest events,
 
 3
-00:00:03,560 --> 00:00:06,600
- And we have our buddy Konrad, who throws some of the most
+00:00:03,520 --> 00:00:05,320
+ and we have our buddy Konrad,
 
 4
-00:00:06,600 --> 00:00:08,600
- amazing horror stuff.
+00:00:05,320 --> 00:00:08,520
+ who throws some of the most amazing horror stuff.
 
 5
-00:00:08,600 --> 00:00:10,040
+00:00:08,520 --> 00:00:09,980
  He is a legend.
 
 6
-00:00:10,040 --> 00:00:12,360
- I want to introduce Konrad right now.
+00:00:09,980 --> 00:00:12,280
+ I wanna introduce Konrad right now,
 
 7
-00:00:12,360 --> 00:00:13,840
- And he invited us--
+00:00:12,280 --> 00:00:13,840
+ and he invited us to-
 
 8
-00:00:13,840 --> 00:00:15,080
- He's a man under the mask.
+00:00:13,840 --> 00:00:15,040
+ - He's a man under the mask.
 
 9
-00:00:15,080 --> 00:00:16,760
- Yeah, he's the man under the mask.
+00:00:15,040 --> 00:00:16,980
+ - Yeah, he's the man under the mask.
 
 10
-00:00:16,760 --> 00:00:17,280
- Yes.
+00:00:16,980 --> 00:00:17,820
+ - Yes.
 
 11
-00:00:17,280 --> 00:00:20,320
- I've got to get close to his microphone.
+00:00:17,820 --> 00:00:19,120
+ - I gotta get close to his microphone.
 
 12
-00:00:20,320 --> 00:00:22,280
- Konrad, what are we doing here right now?
+00:00:19,120 --> 00:00:20,280
+ (laughing)
 
 13
-00:00:22,280 --> 00:00:24,720
- Right now, we are celebrating the 25th anniversary
+00:00:20,280 --> 00:00:22,240
+ - Konrad, what are we doing here right now?
 
 14
-00:00:24,720 --> 00:00:25,880
- of Jason X.
+00:00:22,240 --> 00:00:23,360
+ - Right now we are celebrating
 
 15
-00:00:25,880 --> 00:00:26,800
- Jason X, yes.
+00:00:23,360 --> 00:00:25,880
+ the 25th anniversary of Jason X.
 
 16
-00:00:26,800 --> 00:00:28,960
- With many people from the franchise,
+00:00:25,880 --> 00:00:26,800
+ - Jason X, yes.
 
 17
-00:00:28,960 --> 00:00:31,680
- including Derwin Jordan, who's here in person,
+00:00:26,800 --> 00:00:28,800
+ - With many people from the franchise,
 
 18
-00:00:31,680 --> 00:00:34,040
- who played Waylander over there.
+00:00:28,800 --> 00:00:31,600
+ including Derwin Jordan, who's here in person,
 
 19
-00:00:34,040 --> 00:00:36,920
- And then we also have legendary director Adam Marcus, who
+00:00:31,600 --> 00:00:33,960
+ who played Waylander over there,
 
 20
-00:00:36,920 --> 00:00:38,960
- directed Jason Goes to Hell.
+00:00:33,960 --> 00:00:36,760
+ and then we also have legendary director Adam Marcus,
 
 21
-00:00:38,960 --> 00:00:41,720
- And he also did some other stuff.
+00:00:36,760 --> 00:00:38,900
+ who directed Jason Goes to Hell,
 
 22
-00:00:41,720 --> 00:00:43,920
- I also had some things to drink.
+00:00:38,900 --> 00:00:41,640
+ and he also did some other stuff.
 
 23
-00:00:43,920 --> 00:00:49,320
- And also, we have virtually Lexa Doig,
+00:00:41,640 --> 00:00:43,840
+ I also had some things to drink.
 
 24
-00:00:49,320 --> 00:00:50,760
- who played Rowan, the final girl.
+00:00:43,840 --> 00:00:46,160
+ (laughing)
 
 25
-00:00:50,760 --> 00:00:51,520
- That's a big deal.
+00:00:46,160 --> 00:00:49,240
+ And also we have virtually Lexa Doig,
 
 26
-00:00:51,520 --> 00:00:55,960
- Filipina, final girl at that, first within the franchise.
+00:00:49,240 --> 00:00:50,720
+ who played Rowan, the final girl.
 
 27
-00:00:55,960 --> 00:00:58,600
- Then you also have a short playing before this, right?
+00:00:50,720 --> 00:00:51,560
+ - That's a big deal.
 
 28
-00:00:58,600 --> 00:01:01,080
- Yes, it is called Ghost in the Fog,
+00:00:51,560 --> 00:00:53,080
+ - Filipina, final girl at that.
 
 29
-00:01:01,080 --> 00:01:05,680
- which is a never hike alone part of that series,
+00:00:53,080 --> 00:00:53,920
+ - Yes.
 
 30
-00:01:05,680 --> 00:01:08,520
- directed by Vicente, my good friend Vicente.
+00:00:53,920 --> 00:00:55,880
+ - Was first within the franchise.
 
 31
-00:01:08,520 --> 00:01:09,760
- I just never hike.
+00:00:55,880 --> 00:00:58,520
+ - Then you also have a short playing before this, right?
 
 32
-00:01:09,760 --> 00:01:10,960
- He just never hikes at all.
+00:00:58,520 --> 00:01:01,080
+ - Yes, it is called Ghost in the Fog,
 
 33
-00:01:10,960 --> 00:01:12,240
- But Konrad, I have a question.
+00:01:01,080 --> 00:01:05,680
+ which is a Never Hike Alone part of that series,
 
 34
-00:01:12,240 --> 00:01:13,280
- How did you get into this?
+00:01:05,680 --> 00:01:08,480
+ directed by Vicente, my good friend Vicente.
 
 35
-00:01:13,280 --> 00:01:15,280
- Because honestly, we met Konrad.
+00:01:08,480 --> 00:01:09,760
+ - I just never hike.
 
 36
-00:01:15,280 --> 00:01:18,080
- And Konrad's been our biggest supporter
+00:01:09,760 --> 00:01:11,560
+ - He just never hikes at all, but Konrad,
 
 37
-00:01:18,080 --> 00:01:19,480
- since we started HorrorMeet.com.
+00:01:11,560 --> 00:01:13,280
+ I have a question, how did you get into this?
 
 38
-00:01:19,480 --> 00:01:20,920
- He's actually an admin on the HorrorMeet.com website.
+00:01:13,280 --> 00:01:15,320
+ Because honestly, we met Konrad,
 
 39
-00:01:20,920 --> 00:01:21,840
- He's an admin.
+00:01:15,320 --> 00:01:18,080
+ and Konrad's been like our biggest supporter
 
 40
-00:01:21,840 --> 00:01:23,400
- He literally owns everything.
+00:01:18,080 --> 00:01:19,760
+ since we started HorrorMeet.com.
 
 41
-00:01:23,400 --> 00:01:25,440
- You understand, this guy's a legend.
+00:01:19,760 --> 00:01:20,960
+ - He's actually an admin on the HorrorMeet.com website.
 
 42
-00:01:25,440 --> 00:01:27,640
- How'd you get into what you're doing right now?
+00:01:20,960 --> 00:01:23,360
+ - He's an admin, he literally owns everything.
 
 43
-00:01:27,640 --> 00:01:31,320
- Well, I was tired of seeing people get hung, shot, killed,
+00:01:23,360 --> 00:01:25,360
+ You understand me, this guy's a legend,
 
 44
-00:01:31,320 --> 00:01:32,480
- murdered, essay--
+00:01:25,360 --> 00:01:27,640
+ but how'd you get into what you're doing right now?
 
 45
-00:01:32,480 --> 00:01:34,480
- Did you say the name of your--
+00:01:27,640 --> 00:01:29,880
+ - Well, I was tired of seeing people get hung,
 
 46
-00:01:34,480 --> 00:01:36,240
- Oh, it's called Black Lives Made It.
+00:01:29,880 --> 00:01:32,400
+ shot, killed, murdered, essay--
 
 47
-00:01:36,240 --> 00:01:37,320
- Black Lives Made It.
+00:01:32,400 --> 00:01:34,440
+ - Did you say the name of your--
 
 48
-00:01:37,320 --> 00:01:38,120
- Let's give it up.
+00:01:34,440 --> 00:01:36,360
+ - Oh, it's called Black Lives Made It.
 
 49
-00:01:38,120 --> 00:01:39,480
- I was like, before you go into--
+00:01:36,360 --> 00:01:37,200
+ - Black Lives Made It.
 
 50
-00:01:39,480 --> 00:01:39,960
- Oh, man.
+00:01:37,200 --> 00:01:39,080
+ - Let's give it a-- - As well as for Happy Hour.
 
 51
-00:01:39,960 --> 00:01:40,760
- Let's talk about it.
+00:01:39,080 --> 00:01:41,760
+ - I was like, before you go into all that, let's talk about--
 
 52
-00:01:40,760 --> 00:01:41,720
- Everyone's dead.
+00:01:41,760 --> 00:01:42,680
+ - Everyone's dead.
 
 53
-00:01:41,720 --> 00:01:44,720
- He said everybody's done, and we love horror.
+00:01:42,680 --> 00:01:45,720
+ - He said everybody's done, and we love horror.
 
 54
-00:01:44,720 --> 00:01:46,400
- Basically, they kill off all the Black guys.
+00:01:45,720 --> 00:01:47,360
+ - Basically, they kill off all the Black guys,
 
 55
-00:01:46,400 --> 00:01:49,080
- So we're celebrating the films with the Black guy.
+00:01:47,360 --> 00:01:50,080
+ so we're celebrating the films with the Black guy.
 
 56
-00:01:49,080 --> 00:01:51,840
- When they survive to the end, or at least the last one to go.
+00:01:50,080 --> 00:01:51,280
+ - Where they survived to the end,
 
 57
-00:01:51,840 --> 00:01:53,160
- We got into it.
+00:01:51,280 --> 00:01:52,800
+ or at least the last one to go,
 
 58
-00:01:53,160 --> 00:01:57,280
- But guys, he is not only getting into all
+00:01:52,800 --> 00:01:56,600
+ and then if not that, then at least possibly made by a queer,
 
 59
-00:01:57,280 --> 00:02:00,400
- the horror genres, but also, tonight's--
+00:01:56,600 --> 00:02:00,280
+ whether it's a queer person or a queer director, writer,
 
 60
-00:02:00,400 --> 00:02:03,000
- to see all of this is $12.
+00:02:00,280 --> 00:02:02,400
+ hence the Happy Hour.
 
 61
-00:02:03,000 --> 00:02:03,880
- And $0.29.
+00:02:02,400 --> 00:02:04,920
+ And this weekend, I'm also doing They/Them
 
 62
-00:02:03,880 --> 00:02:07,600
- And $0.29 to be able to go to a premiere where you meet people
+00:02:04,920 --> 00:02:07,320
+ to Celebrate Trans Awareness Month,
 
 63
-00:02:07,600 --> 00:02:10,440
- who made the movie, made connections, like just--
+00:02:07,320 --> 00:02:09,880
+ with Bex Taylor-Klaus from Scream seasons one and two,
 
 64
-00:02:10,440 --> 00:02:12,520
- yeah, just have-- it's so impressive.
+00:02:09,880 --> 00:02:12,560
+ and Officer Trudy was actually in They/Them.
 
 65
-00:02:12,520 --> 00:02:14,040
- We've watched Konrad.
+00:02:12,560 --> 00:02:15,560
+ And also what's in They/Them is Kevin Bacon,
 
 66
-00:02:14,040 --> 00:02:16,480
- Obviously, he's growing, and he's doing his thing.
+00:02:15,560 --> 00:02:17,240
+ who was in the first Friday the 13th,
 
 67
-00:02:16,480 --> 00:02:18,880
- But he's also somebody you can come here and meet
+00:02:17,240 --> 00:02:18,440
+ so it's a whole--
 
 68
-00:02:18,880 --> 00:02:20,240
- and just have a good time with him.
+00:02:18,440 --> 00:02:20,440
+ - Where he gets stabbed through the neck.
 
 69
-00:02:20,240 --> 00:02:23,440
- We love him a lot, and he's a big part of HorrorMeet.
+00:02:20,440 --> 00:02:21,280
+ - Yes.
 
 70
-00:02:23,440 --> 00:02:25,600
- He's supported us since we started.
+00:02:21,280 --> 00:02:22,440
+ - See, we know our shit.
 
 71
-00:02:25,600 --> 00:02:27,240
- And so we're at his event.
+00:02:22,440 --> 00:02:24,960
+ Me and Konrad are superstar horror fans.
 
 72
-00:02:27,240 --> 00:02:28,560
- We would love you guys to go.
+00:02:24,960 --> 00:02:25,880
+ - I have no idea.
 
 73
-00:02:28,560 --> 00:02:31,120
- I'm posting it constantly, and we're going to do this.
+00:02:25,880 --> 00:02:26,880
+ - No, it's okay.
 
 74
-00:02:31,120 --> 00:02:33,560
- And we're going to meet some of the actors, directors.
+00:02:26,880 --> 00:02:27,720
+ (laughing)
 
 75
-00:02:33,560 --> 00:02:36,360
- Also, one of the guys, it's his first time
+00:02:27,720 --> 00:02:28,560
+ Landon's still looking.
 
 76
-00:02:36,360 --> 00:02:38,240
- ever appearing anything.
+00:02:28,560 --> 00:02:29,400
+ - I just have a mask.
 
 77
-00:02:38,240 --> 00:02:39,400
- Can you tell us about that?
+00:02:29,400 --> 00:02:30,720
+ - So that's how he got into it.
 
 78
-00:02:39,400 --> 00:02:41,400
- So Derwin Jordan, who played Waylander,
+00:02:30,720 --> 00:02:34,520
+ But guys, he is not only getting into
 
 79
-00:02:41,400 --> 00:02:45,800
- this is his first ever public appearance ever.
+00:02:34,520 --> 00:02:37,960
+ all the horror genres, but also tonight's,
 
 80
-00:02:45,800 --> 00:02:46,800
- Wow.
+00:02:37,960 --> 00:02:40,520
+ to see all of this is $12.
 
 81
-00:02:46,800 --> 00:02:49,880
- There have been other conventions for some odd reason.
+00:02:40,520 --> 00:02:41,360
+ - And 29 cents.
 
 82
-00:02:49,880 --> 00:02:53,680
- People have not reached out, and it makes me mad.
+00:02:41,360 --> 00:02:42,800
+ - And 29 cents.
 
 83
-00:02:53,680 --> 00:02:55,200
- But you know what, if I'm the first one,
+00:02:42,800 --> 00:02:45,160
+ To be able to go to a premiere where you meet people
 
 84
-00:02:55,200 --> 00:02:58,120
- and I'm the first one if it's the 25th anniversary of Jason X,
+00:02:45,160 --> 00:02:47,320
+ who made the movie, made connections.
 
 85
-00:02:58,120 --> 00:02:59,960
- it's the 25th anniversary of Jason X.
+00:02:47,320 --> 00:02:48,160
+ - Oh, it's pretty impressive.
 
 86
-00:02:59,960 --> 00:03:01,120
- It's Friday the 13th.
+00:02:48,160 --> 00:02:50,040
+ - Yeah, just have, it's so impressive.
 
 87
-00:03:01,120 --> 00:03:01,920
- I don't know if we know.
+00:02:50,040 --> 00:02:52,720
+ We've watched Konrad, obviously he's growing
 
 88
-00:03:01,920 --> 00:03:03,360
- We're at Friday the 13th.
+00:02:52,720 --> 00:02:54,040
+ and he's doing in his thing,
 
 89
-00:03:03,360 --> 00:03:05,440
- It's Friday the 13th, everybody who came.
+00:02:54,040 --> 00:02:56,440
+ but he's also somebody you can come here and meet
 
 90
-00:03:05,440 --> 00:03:07,760
- And I'm going to tell you something.
+00:02:56,440 --> 00:02:57,640
+ and just have a good time with him.
 
 91
-00:03:07,760 --> 00:03:11,080
- And this is just one of the most incredible things.
+00:02:57,640 --> 00:03:00,960
+ We love him a lot and he's a big part of Horror Meet.
 
 92
-00:03:11,080 --> 00:03:13,200
- We're getting into our adult age,
+00:03:00,960 --> 00:03:03,120
+ He's supported us since we started
 
 93
-00:03:13,200 --> 00:03:15,080
- where we watch movies from the '90s,
+00:03:03,120 --> 00:03:04,760
+ and so we're at his event.
 
 94
-00:03:15,080 --> 00:03:16,920
- movies from the 2000s.
+00:03:04,760 --> 00:03:06,040
+ We would love you guys to go.
 
 95
-00:03:16,920 --> 00:03:20,760
- There's nothing else like what he's doing here,
+00:03:06,040 --> 00:03:08,640
+ I'm posting it constantly and we're gonna do this.
 
 96
-00:03:20,760 --> 00:03:23,200
- and it is just fucking incredible.
+00:03:08,640 --> 00:03:11,080
+ And we're gonna meet some of the actors, directors.
 
 97
-00:03:23,200 --> 00:03:26,200
- I mean, from meeting people to seeing people you grew up with,
+00:03:11,080 --> 00:03:13,880
+ Also, one of the guys, it's his first time
 
 98
-00:03:26,200 --> 00:03:29,760
- to having first timers, to doing everything that you're doing.
+00:03:13,880 --> 00:03:15,120
+ ever appearing anything.
 
 99
-00:03:29,760 --> 00:03:32,120
- We support Konrad with everything.
+00:03:15,120 --> 00:03:15,940
+ - Yes.
 
 100
-00:03:32,120 --> 00:03:34,000
- And we just want to let you know we're really
+00:03:15,940 --> 00:03:16,920
+ - Can you tell us about that?
 
 101
-00:03:34,000 --> 00:03:35,280
- happy to be at this event.
+00:03:16,920 --> 00:03:18,920
+ - So Derwin Jordan, who played Waylander,
 
 102
-00:03:35,280 --> 00:03:36,840
- Thank you so much for coming.
+00:03:18,920 --> 00:03:21,600
+ this is his first ever--
 
 103
-00:03:36,840 --> 00:03:39,400
- And by the way, everything that you see here
+00:03:21,600 --> 00:03:22,440
+ - Appearance?
 
 104
-00:03:39,400 --> 00:03:42,640
- comes out of his heart, out of his bank account,
+00:03:22,440 --> 00:03:23,280
+ - Public appearance ever.
 
 105
-00:03:42,640 --> 00:03:44,280
- and out of everything that he does.
+00:03:23,280 --> 00:03:24,340
+ - Wow.
 
 106
-00:03:44,280 --> 00:03:45,080
- We put some into his bank account.
+00:03:24,340 --> 00:03:27,400
+ - There have been other conventions for some odd reason.
 
 107
-00:03:45,080 --> 00:03:46,120
- We need to put some in.
+00:03:27,400 --> 00:03:30,240
+ People have not reached out and it makes me mad.
 
 108
-00:03:46,120 --> 00:03:48,080
- So guys, come and see this stuff.
+00:03:31,200 --> 00:03:32,720
+ But you know what, if I'm the first one,
 
 109
-00:03:48,080 --> 00:03:49,160
- It's amazing we're here.
+00:03:32,720 --> 00:03:35,040
+ then I'm the first one if it's the 25th anniversary
 
 110
-00:03:49,160 --> 00:03:50,360
- There's tons of giveaways.
+00:03:35,040 --> 00:03:37,760
+ of Jason X, the 25th anniversary of Jason X.
 
 111
-00:03:50,360 --> 00:03:52,720
- What, you have about one a month, maybe two a month?
+00:03:37,760 --> 00:03:39,440
+ - It's Friday the 13th, I don't know if we know it.
 
 112
-00:03:52,720 --> 00:03:55,320
- So one a month here at the Culver Theater,
+00:03:39,440 --> 00:03:40,940
+ - We're at Friday the 13th.
 
 113
-00:03:55,320 --> 00:03:58,920
- and then another once a month at 33 Taps down the street.
+00:03:40,940 --> 00:03:43,000
+ - It's Friday the 13th, everybody who came.
 
 114
-00:03:58,920 --> 00:04:00,520
- This is a beautiful, I mean, shuttle theater, too.
+00:03:43,000 --> 00:03:45,280
+ - And I'm gonna tell you something.
 
 115
-00:04:00,520 --> 00:04:01,800
- Yeah, let's see it.
+00:03:45,280 --> 00:03:48,600
+ And this is just one of the most incredible things.
 
 116
-00:04:01,800 --> 00:04:02,680
- It's a beautiful venue.
+00:03:48,600 --> 00:03:50,720
+ We're getting into our adult age
 
 117
-00:04:06,320 --> 00:04:07,880
- We'll be done with him in a second.
+00:03:50,720 --> 00:03:52,600
+ where we watch movies from the '90s,
 
 118
-00:04:07,880 --> 00:04:08,800
- We've got to get his--
+00:03:52,600 --> 00:03:54,420
+ movies from the 2000s.
 
 119
-00:04:08,800 --> 00:04:11,480
- All right, we love going, we're keeping going.
+00:03:54,420 --> 00:03:58,280
+ There's nothing else like what he's doing here.
 
 120
-00:04:11,480 --> 00:04:14,360
- All right, so anyways, that just about wraps it up
+00:03:58,280 --> 00:04:00,720
+ And it is just fucking incredible.
 
 121
-00:04:14,360 --> 00:04:15,200
- for what we're doing.
+00:04:00,720 --> 00:04:03,760
+ I mean, from meeting people to seeing people you grew up with
 
 122
-00:04:15,200 --> 00:04:16,920
- But we just want to know the next event
+00:04:03,760 --> 00:04:06,120
+ to having first timers, to doing everything
 
 123
-00:04:16,920 --> 00:04:18,520
- that somebody else could see.
+00:04:06,120 --> 00:04:09,940
+ that you're doing, we support Konrad with everything.
 
 124
-00:04:18,520 --> 00:04:19,000
- For sure.
+00:04:09,940 --> 00:04:11,020
+ And we just want to let you know
 
 125
-00:04:19,000 --> 00:04:21,960
- So other than tomorrow's event at 33 Taps,
+00:04:11,020 --> 00:04:12,840
+ we're really happy to be at this event.
 
 126
-00:04:21,960 --> 00:04:24,040
- on Saturday, December 5th, we're celebrating
+00:04:12,840 --> 00:04:14,380
+ - Thank you so much for coming.
 
 127
-00:04:24,040 --> 00:04:26,800
- the 15th anniversary of Scream 4.
+00:04:14,380 --> 00:04:16,960
+ - And by the way, everything that you see here
 
 128
-00:04:26,800 --> 00:04:27,920
- Scream 4.
+00:04:16,960 --> 00:04:20,240
+ comes out of his heart, out of his bank account,
 
 129
-00:04:27,920 --> 00:04:28,440
- With--
+00:04:20,240 --> 00:04:21,920
+ and out of everything that he does.
 
 130
-00:04:37,440 --> 00:04:39,560
- Scream 4, tell them to--
+00:04:21,920 --> 00:04:23,160
+ - We need to put some into his bank account.
 
 131
-00:04:39,560 --> 00:04:41,520
- With Marianne Maddalena, the producer
+00:04:23,160 --> 00:04:24,000
+ - We need to put some in.
 
 132
-00:04:41,520 --> 00:04:44,240
- of the whole Scream series, in addition to she produced
+00:04:24,000 --> 00:04:25,600
+ So guys, come and see this stuff.
 
 133
-00:04:44,240 --> 00:04:46,880
- People Under the Stairs, Vampire in Brooklyn,
+00:04:25,600 --> 00:04:26,720
+ It's amazing, we're here.
 
 134
-00:04:46,880 --> 00:04:50,280
- Music of the Heart, I believe West Crema's new Nightmare.
+00:04:26,720 --> 00:04:27,920
+ There's tons of giveaways.
 
 135
-00:04:50,280 --> 00:04:51,040
- So it's just--
+00:04:27,920 --> 00:04:30,360
+ - Well, you have about one a month, maybe two a month.
 
 136
-00:04:51,040 --> 00:04:54,840
- So that's a Wes Craven superstar-studded event.
+00:04:30,360 --> 00:04:32,840
+ - One a month here at the Culver Theater,
 
 137
-00:04:54,840 --> 00:04:58,280
- We're talking People Under the Stairs, Wes Craven.
+00:04:32,840 --> 00:04:35,960
+ and then another once a month at 33 Taps
 
 138
-00:04:58,280 --> 00:04:59,360
- That is a big question.
+00:04:35,960 --> 00:04:37,440
+ down the street in Culver City.
 
 139
-00:04:59,360 --> 00:05:01,400
- Anyways, guys, it's awesome.
+00:04:37,440 --> 00:04:38,280
+ - This is a beautiful, I mean, show the theater, too.
 
 140
-00:05:01,400 --> 00:05:05,480
+00:04:38,280 --> 00:04:39,440
+ - Yeah, let's see it.
+
+141
+00:04:39,440 --> 00:04:40,640
+ - It's a beautiful venue.
+
+142
+00:04:43,880 --> 00:04:45,420
+ We'll be done with him in a second.
+
+143
+00:04:45,420 --> 00:04:46,260
+ We gotta get his--
+
+144
+00:04:46,260 --> 00:04:49,040
+ - He's very good looking, we're keeping our eye on him.
+
+145
+00:04:49,040 --> 00:04:51,960
+ - All right, so anyways, that just about wraps it up
+
+146
+00:04:51,960 --> 00:04:53,680
+ for what we're doing, but we just wanna know
+
+147
+00:04:53,680 --> 00:04:56,040
+ the next event that somebody else could see.
+
+148
+00:04:56,040 --> 00:04:59,440
+ - For sure, so other than tomorrow's event at 33 Taps,
+
+149
+00:04:59,440 --> 00:05:01,520
+ on Saturday, December 5th, we're celebrating
+
+150
+00:05:01,520 --> 00:05:04,240
+ the 15th anniversary of Scream 4.
+
+151
+00:05:04,240 --> 00:05:06,160
+ - Oh, yeah. - Scream 4, with--
+
+152
+00:05:06,160 --> 00:05:09,160
+ (audience laughing)
+
+153
+00:05:15,200 --> 00:05:19,320
+ Scream 4, tell 'em, tell 'em. - With Marianne Maddalena,
+
+154
+00:05:19,320 --> 00:05:20,160
+ the producer of the whole Scream series,
+
+155
+00:05:20,160 --> 00:05:23,240
+ in addition to she produced People Under the Stairs,
+
+156
+00:05:23,240 --> 00:05:26,160
+ Vampire in Brooklyn, Music of the Heart,
+
+157
+00:05:26,160 --> 00:05:28,520
+ I believe Wes Craven's New Nightmare, so it's just--
+
+158
+00:05:28,520 --> 00:05:32,320
+ - So that's a Wes Craven superstar-studded event.
+
+159
+00:05:32,320 --> 00:05:34,880
+ We're talking People Under the Stairs, Wes Craven.
+
+160
+00:05:35,800 --> 00:05:36,760
+ - That is a big Wes Craven.
+
+161
+00:05:36,760 --> 00:05:38,000
+ - Dude, are you kidding me?
+
+162
+00:05:38,000 --> 00:05:40,520
+ Like, we're about to interview, tell 'em real quick,
+
+163
+00:05:40,520 --> 00:05:42,800
+ but we're gonna interview last--
+
+164
+00:05:42,800 --> 00:05:43,640
+ - God dammit.
+
+165
+00:05:43,640 --> 00:05:44,880
+ - No, The Hills Have Eyes.
+
+166
+00:05:44,880 --> 00:05:48,280
+ So he forgot, but we're interviewing one of the actresses
+
+167
+00:05:48,280 --> 00:05:50,840
+ from The Hills Have Eyes on some Wes Craven stuff,
+
+168
+00:05:50,840 --> 00:05:53,520
+ and actually, that's how me and Konrad became super cool
+
+169
+00:05:53,520 --> 00:05:55,440
+ through Wes Craven, in a sense.
+
+170
+00:05:55,440 --> 00:05:57,520
+ Anyways, guys, it's awesome.
+
+171
+00:05:57,520 --> 00:06:01,040
  We're super excited to share this, and we'll see you soon.
+
+172
+00:06:01,040 --> 00:06:01,880
+ - Susan Lanier.
+
+173
+00:06:01,880 --> 00:06:02,960
+ - Susan Lanier. - Susan Lanier.
+
+174
+00:06:02,960 --> 00:06:05,640
+ - There she is, Susan. - I'm sorry, Susan Lanier.
+
+175
+00:06:05,640 --> 00:06:07,160
+ - Well, we're taking who that is, Susan.
+
+176
+00:06:07,160 --> 00:06:08,880
+ - Yeah. - Yeah, yeah, yeah.
+
+177
+00:06:08,880 --> 00:06:10,480
+ - Okay. - Okay.
+
+178
+00:06:10,480 --> 00:06:13,480
+ - All right, guys, so we are super Wes Craven fans,
+
+179
+00:06:13,480 --> 00:06:15,040
+ and pretty much in a nutshell,
+
+180
+00:06:15,040 --> 00:06:18,160
+ it's how I met Konrad through seeing,
+
+181
+00:06:18,160 --> 00:06:21,240
+ well, obviously, Freddy's Dead.
+
+182
+00:06:21,240 --> 00:06:23,240
+ Freddy's Dead had nothing to do with Wes Craven.
+
+183
+00:06:23,240 --> 00:06:26,280
+ He obviously had something to do with one, three,
+
+184
+00:06:26,280 --> 00:06:28,040
+ and then Wes Craven's New Nightmare,
+
+185
+00:06:28,040 --> 00:06:31,920
+ but he did write The Hills Have Eyes,
+
+186
+00:06:31,920 --> 00:06:34,840
+ and on HorrorMeet.com on Monday,
+
+187
+00:06:34,840 --> 00:06:36,560
+ we're gonna be interviewing who?
+
+188
+00:06:36,560 --> 00:06:38,800
+ - Susan Lanier from The Hills Have Eyes.
+
+189
+00:06:38,800 --> 00:06:39,640
+ - Amazing. - He'll be dropping
+
+190
+00:06:39,640 --> 00:06:40,840
+ Tuesday at noon.
+
+191
+00:06:40,840 --> 00:06:43,440
+ - And we're gonna have Konrad on that show with her.
+
+192
+00:06:43,440 --> 00:06:45,760
+ - Yeah, we have to have him on the podcast,
+
+193
+00:06:45,760 --> 00:06:49,080
+ 'cause Konrad's a super legend in our whole entire series.
+
+194
+00:06:49,080 --> 00:06:50,880
+ - I can feel his anxiety mounting,
+
+195
+00:06:50,880 --> 00:06:53,480
+ 'cause he's running his head in a van.
+
+196
+00:06:53,480 --> 00:06:54,520
+ - Is that true, Konrad?
+
+197
+00:06:54,520 --> 00:06:55,840
+ (laughing)
+
+198
+00:06:55,840 --> 00:06:56,760
+ - All right, let me help you.
 
